@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "run-p lint:*",
+    "lint:prettier": "prettier --ignore-path .gitignore --check ./src",
+    "lint:eslint": "eslint --ext .js,jsx,.ts,.tsx ./src",
+    "fix": "run-p fix:*",
+    "fix:prettier": "prettier --ignore-path .gitignore --write ./src",
+    "fix:lint": "eslint --ext .js,jsx,.ts,.tsx --fix ./src"
   },
   "dependencies": {
     "@types/node": "20.8.10",
@@ -23,5 +28,8 @@
   "volta": {
     "node": "21.1.0",
     "npm": "10.2.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3"
   }
 }
