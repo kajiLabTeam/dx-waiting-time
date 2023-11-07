@@ -1,4 +1,47 @@
-name: Yarn Build or Lint Error
+# name: Yarn Build or Lint Error
+
+# on:
+#   push:
+#     branches:
+#       - "*"
+
+# jobs:
+#   lint-and-build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install dependencies
+#         run: yarn install
+#         working-directory: ./frontend
+
+#       - name: Build
+#         run: yarn build
+#         working-directory: ./frontend
+#         if: always()
+
+#       - name: Run lint
+#         run: yarn lint
+#         working-directory: ./frontend
+#         if: always()
+
+#       - name: Notify Slack on error
+#         if: failure()
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2023-01-01/4582569248242_48.png
+#           SLACK_USERNAME: GitHub Action
+#           SLACK_COLOR: danger
+#         with:
+#           status: ${{ job.status }}
+#           message: |
+#             The build or lint has failed in branch main of repository ${GITHUB_REPOSITORY}:
+#             - Build exit code: ${{ job.steps.build.outputs.exit_code }}
+#             - Lint exit code: ${{ job.steps.lint.outputs.exit_code }}
+
+name: Yarn Build and Lint
 
 on:
   push:
@@ -6,7 +49,7 @@ on:
       - "*"
 
 jobs:
-  lint-and-build:
+  build-and-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -19,24 +62,35 @@ jobs:
       - name: Build
         run: yarn build
         working-directory: ./frontend
-        if: always()
 
       - name: Run lint
         run: yarn lint
         working-directory: ./frontend
-        if: always()
 
-      - name: Notify Slack on error
+      # Notify Slack on success
+      - name: Notify Slack on success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: good
+          SLACK_USERNAME: GitHub Action
+        with:
+          status: ${{ job.status }}
+          fields: repo,commit,author,action,eventName,ref,workflow,status
+          message: |
+            The build and lint succeeded in branch ${{ github.ref }} of repository ${{ github.repository }}.
+
+      # Notify Slack on failure
+      - name: Notify Slack on failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2023-01-01/4582569248242_48.png
-          SLACK_USERNAME: GitHub Action
           SLACK_COLOR: danger
+          SLACK_USERNAME: GitHub Action
         with:
           status: ${{ job.status }}
+          fields: repo,commit,author,action,eventName,ref,workflow,status
           message: |
-            The build or lint has failed in branch main of repository ${GITHUB_REPOSITORY}:
-            - Build exit code: ${{ job.steps.build.outputs.exit_code }}
-            - Lint exit code: ${{ job.steps.lint.outputs.exit_code }}
+            The build or lint has failed in branch ${{ github.ref }} of repository ${{ github.repository }}.
