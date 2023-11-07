@@ -5,7 +5,7 @@ on:
     branches:
       - "*"
 jobs:
-  lint:
+  lint-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
