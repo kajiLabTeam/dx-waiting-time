@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "*"
+
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
@@ -13,13 +14,16 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
+        working-directory: ./frontend
 
       - name: Build
         run: yarn build
+        working-directory: ./frontend
         if: always()
 
       - name: Run lint
         run: yarn lint
+        working-directory: ./frontend
         if: always()
 
       - name: Notify Slack on error
