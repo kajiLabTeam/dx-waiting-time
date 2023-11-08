@@ -6,5 +6,4 @@ export const theme = {
     honey: "FCDDA0",
     red: "#FF4444",
   },
-  
 };
