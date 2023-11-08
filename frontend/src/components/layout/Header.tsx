@@ -23,8 +23,6 @@ const MenuButton = styled.button`
 const Header = () => {
   const router = useRouter();
 
-  console.log(router.pathname);
-
   return (
     <HeaderContainer>
       <Title>
