@@ -16,7 +16,7 @@ func Init() {
 
 	r.GET("api/:ownerId/queue/position/", controller.GetCustomerPosition)
 
-	r.GET("api/:ownerId/queue/following/", controller.GetCustomerFollowing)
+	r.GET("api/:ownerId/queue/following/", controller.GetFollowing)
 
 	r.GET("api/:ownerId/queue/position/next/", controller.GetOwnerNextCustomer)
 
