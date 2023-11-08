@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { AiOutlineMenu } from "react-icons/ai";
-import { theme } from "../../utils/theme";
 import { useRouter } from "next/router";
+import { AiOutlineMenu } from "react-icons/ai";
+import styled from "styled-components";
+import { theme } from "../../utils/theme";
 
 const HeaderContainer = styled.header`
   display: flex;
