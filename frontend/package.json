@@ -27,7 +27,7 @@
   },
   "volta": {
     "node": "21.1.0",
-    "npm": "10.2.3"
+    "yarn": "1.22.19"
   },
   "devDependencies": {
     "prettier": "^3.0.3"
