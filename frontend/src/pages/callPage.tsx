@@ -14,10 +14,11 @@ const PassButton = styled.div`
 const EndButton = styled.div``;
 
 const CallPage: FC = () => {
+  const onCalling = () => {};
   return (
     <CallPageContainer>
       <PassButton>パス</PassButton>
-      <Circle message={"Call"} />
+      <Circle message={"Call"} onClick={onCalling} />
       <EndButton>完了</EndButton>
     </CallPageContainer>
   );

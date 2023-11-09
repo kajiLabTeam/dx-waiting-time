@@ -13,7 +13,7 @@ const StartPage: FC = () => {
   return (
     <StartPageContainer>
       <div>start page</div>
-      <Cricle message={"appName"} />
+      <Cricle message={"appName"} onClick={() => {}} />
       <div>日付</div>
       <Button message={"営業開始"} onClick={onStart} />
     </StartPageContainer>

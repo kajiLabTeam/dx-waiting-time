@@ -5,6 +5,7 @@ import { theme } from "../../utils/theme";
 
 type Props = {
   message: number | string;
+  onClick: () => void;
 };
 
 const CircleContainer = styled.div`
@@ -54,11 +55,11 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const Circle = ({ message }: Props) => {
+const Circle = ({ message, onClick }: Props) => {
   const appName = "簡単行列整理くん";
   if (message === "Call") {
     return (
-      <CircleContainer>
+      <CircleContainer onClick={onClick}>
         <InCircle>
           <Bell>
             <FaBell />
@@ -69,7 +70,7 @@ const Circle = ({ message }: Props) => {
     );
   }
   return (
-    <CircleContainer>
+    <CircleContainer onClick={onClick}>
       <InCircle>
         {typeof message === "number" ? (
           <Number>{message}</Number>
