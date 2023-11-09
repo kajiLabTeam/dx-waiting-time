@@ -1,7 +1,22 @@
 import { FC } from "react";
+import styled from "styled-components";
+import Button from "../components/layout/Button";
+import Cricle from "../components/layout/Cricle";
+
+const StartPageContainer = styled.div`
+    text-align: center;
+    overflow: hidden;
+`;
 
 const StartPage: FC = () => {
-  return <div>start</div>;
+    return (
+        <StartPageContainer>
+            <div>start page</div>
+            <Cricle message={"appName"} />
+            <div>日付</div>
+            <Button message={"営業開始"} />
+        </StartPageContainer>
+    );
 };
 
 export default StartPage;
