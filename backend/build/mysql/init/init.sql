@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS dx_waiting.owner(
     owner_id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(128),
     url VARCHAR(512),
     PRIMARY KEY (id)
 );
