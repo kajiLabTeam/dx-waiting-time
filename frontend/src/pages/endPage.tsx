@@ -10,8 +10,8 @@ const EndPage: FC = () => {
   return (
     <EndPageContainer>
       <div>end page</div>
-      <Button message={"営業記録を保存する"} onClick={onDownload}/>
-      <Button message={"営業終了"} onClick={onClose}/>
+      <Button message={"営業記録を保存する"} onClick={onDownload} />
+      <Button message={"営業終了"} onClick={onClose} />
     </EndPageContainer>
   );
 };

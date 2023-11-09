@@ -15,7 +15,7 @@ const StartPage: FC = () => {
       <div>start page</div>
       <Cricle message={"appName"} />
       <div>日付</div>
-      <Button message={"営業開始"} onClick={onStart}/>
+      <Button message={"営業開始"} onClick={onStart} />
     </StartPageContainer>
   );
 };

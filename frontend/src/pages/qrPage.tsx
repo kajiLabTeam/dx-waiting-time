@@ -9,7 +9,7 @@ const QrPage: FC = () => {
   return (
     <QrPageContainer>
       <div>QR Page</div>
-      <Button message={"画像をダウンロード"} onClick={onDownload}/>
+      <Button message={"画像をダウンロード"} onClick={onDownload} />
     </QrPageContainer>
   );
 };

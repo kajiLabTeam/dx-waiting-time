@@ -22,7 +22,7 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const Button = ({ message , onClick }: Props) => {
+const Button = ({ message, onClick }: Props) => {
   return (
     <ButtonContainer onClick={onClick}>
       <Text>{message}</Text>

@@ -22,7 +22,7 @@ const LoginPage: FC = () => {
         <Cricle message={"appName"} />
       </AppName>
       <Action>
-        <Button message={"ログイン"} onClick={onLogin}/>
+        <Button message={"ログイン"} onClick={onLogin} />
       </Action>
     </LoginPageContainer>
   );
