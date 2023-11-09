@@ -1,16 +1,19 @@
 package model
 
-type Owner struct{
-	ID int `json:"id"`
-	URL string `json:"url"`
-	Customer []Customer `gorm:"foreignkey:GenreID"`
+import "time"
+
+type Owner struct {
+	OwnerId   int        `json:"ownerId"`
+	OwnerName string     `json:"ownerName"`
+	Url       string     `json:"url"`
+	Customer  []Customer `gorm:"foreignkey:GenreID"`
 }
 
-type Customer struct{
-	ID int `json:"id"`
-	Position int `json:"position"`
-	Status string `json:"status"`
-	Data string `json:"data"`
-	FirebaseToken string `json:"firebaseToken"`
-	OwnerID int `json:"ownerId"`
+type Customer struct {
+	CustomerId    int       `json:"customerId"`
+	Position      int       `json:"position"`
+	WaitingStatus string    `json:"waitingStatus"`
+	Date          time.Time `json:"date"`
+	FirebaseToken string    `json:"firebaseToken"`
+	OwnerId       int       `json:"ownerId"`
 }
