@@ -5,10 +5,11 @@ import Button from "../components/layout/Button";
 const QrPageContainer = styled.div``;
 
 const QrPage: FC = () => {
+  const onDownload = () => {};
   return (
     <QrPageContainer>
       <div>QR Page</div>
-      <Button message={"画像をダウンロード"} />
+      <Button message={"画像をダウンロード"} onClick={onDownload}/>
     </QrPageContainer>
   );
 };

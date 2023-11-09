@@ -15,14 +15,14 @@ const AppName = styled.div`
 const Action = styled.div``;
 
 const LoginPage: FC = () => {
+  const onLogin = () => {};
   return (
     <LoginPageContainer>
       <AppName>
         <Cricle message={"appName"} />
       </AppName>
       <Action>
-        <Button message={"新規登録"} />
-        <Button message={"ログイン"} />
+        <Button message={"ログイン"} onClick={onLogin}/>
       </Action>
     </LoginPageContainer>
   );

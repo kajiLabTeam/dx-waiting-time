@@ -9,12 +9,13 @@ const StartPageContainer = styled.div`
 `;
 
 const StartPage: FC = () => {
+  const onStart = () => {};
   return (
     <StartPageContainer>
       <div>start page</div>
       <Cricle message={"appName"} />
       <div>日付</div>
-      <Button message={"営業開始"} />
+      <Button message={"営業開始"} onClick={onStart}/>
     </StartPageContainer>
   );
 };

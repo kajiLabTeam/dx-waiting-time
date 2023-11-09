@@ -4,6 +4,7 @@ import { theme } from "../../utils/theme";
 
 type Props = {
   message: string;
+  onClick: () => void;
 };
 
 const ButtonContainer = styled.button`
@@ -21,9 +22,9 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const Button = ({ message }: Props) => {
+const Button = ({ message , onClick }: Props) => {
   return (
-    <ButtonContainer>
+    <ButtonContainer onClick={onClick}>
       <Text>{message}</Text>
     </ButtonContainer>
   );
