@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS dx_waiting.owner(
 
 CREATE TABLE IF NOT EXISTS dx_waiting.customer(
     customer_id INT NOT NULL AUTO_INCREMENT,
-    number INT,
+    position INT,
     status VARCHAR(128),
     date VARCHAR(256),
     firebase_token VARCHAR(256),
