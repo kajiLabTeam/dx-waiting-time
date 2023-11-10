@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
-import Button from "../components/layout/Button";
-import Cricle from "../components/layout/Cricle";
+import { Button } from "../utils/Button";
+import { MessageCricle } from "../utils/MessageCricle";
 
 const LoginPageContainer = styled.div`
   text-align: center;
@@ -19,10 +19,10 @@ const LoginPage: FC = () => {
   return (
     <LoginPageContainer>
       <AppName>
-        <Cricle message={"appName"} />
+        <MessageCricle message={"appName"} />
       </AppName>
       <Action>
-        <Button message={"ログイン"} onClick={onLogin}/>
+        <Button message={"ログイン"} onClick={onLogin} />
       </Action>
     </LoginPageContainer>
   );

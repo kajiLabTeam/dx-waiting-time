@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import Circle from "../components/layout/Cricle";
+import { CallCircle } from "../utils/CallCricle";
 
 const CallPageContainer = styled.div`
   text-align: center;
@@ -14,10 +14,11 @@ const PassButton = styled.div`
 const EndButton = styled.div``;
 
 const CallPage: FC = () => {
+  const onCalling = () => {};
   return (
     <CallPageContainer>
       <PassButton>パス</PassButton>
-      <Circle message={"Call"} />
+      <CallCircle onClick={onCalling} />
       <EndButton>完了</EndButton>
     </CallPageContainer>
   );

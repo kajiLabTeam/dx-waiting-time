@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
-import { theme } from "../../utils/theme";
+import { theme } from "./theme";
 
 type Props = {
   message: string;
@@ -14,7 +14,6 @@ const ButtonContainer = styled.button`
   border: 0.2rem solid ${theme.colors.brown};
   border-radius: 2rem;
   padding: 0.2rem 0;
-  margin: 10% auto;
 `;
 
 const Text = styled.p`
@@ -22,12 +21,10 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const Button = ({ message , onClick }: Props) => {
+export const Button: FC<Props> = ({ message, onClick }) => {
   return (
     <ButtonContainer onClick={onClick}>
       <Text>{message}</Text>
     </ButtonContainer>
   );
 };
-
-export default Button;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
-import Button from "../components/layout/Button";
-import Cricle from "../components/layout/Cricle";
+import { Button } from "../utils/Button";
+import { MessageCricle } from "../utils/MessageCricle";
 
 const StartPageContainer = styled.div`
   text-align: center;
@@ -13,9 +13,9 @@ const StartPage: FC = () => {
   return (
     <StartPageContainer>
       <div>start page</div>
-      <Cricle message={"appName"} />
+      <MessageCricle message={"appName"} />
       <div>日付</div>
-      <Button message={"営業開始"} onClick={onStart}/>
+      <Button message={"営業開始"} onClick={onStart} />
     </StartPageContainer>
   );
 };
