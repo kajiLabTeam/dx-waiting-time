@@ -17,8 +17,6 @@ const QrCodeContainer = styled.div`
 
 export const QrCode: FC<Props> = ({ url }) => {
   const { Canvas } = useQRCode();
-  const darkColor = theme.colors.brown;
-  const lightColor = theme.colors.cream;
 
   return (
     <QrCodeContainer>
@@ -30,9 +28,8 @@ export const QrCode: FC<Props> = ({ url }) => {
           margin: 1,
           width: 300,
           color: {
-            // RGBAで色を決める。
-            dark: darkColor,
-            light: lightColor,
+            dark: theme.colors.brown,
+            light: theme.colors.cream,
           },
         }}
       />
