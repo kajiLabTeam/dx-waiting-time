@@ -8,7 +8,7 @@ import "github.com/kajiLabTeam/dx-waiting-time/service"
 // 1. ownerIdを元に、CustomerをPositionの昇順で検索
 // 2. 最大のPositionに＋1下値を引数のCustomer.Positionに付与
 // 3. CustomerをDBに登録
-func RegisterCustomer(ownerId int, token string) (Customer, error) {
+func CreateCustomer(ownerId, token string) (Customer, error) {
 	c := []Customer{}
 	db.Where("owner_id = ?", ownerId).Order("position asc").Find(&c)
 	nc := Customer{
@@ -27,7 +27,7 @@ func RegisterCustomer(ownerId int, token string) (Customer, error) {
 // 返り値：Customer, error
 // 1. OwnerIdとpositionを元に、Customerを検索
 // 2. Customerを削除
-func DeleteCustomer(ownerId int, position int) (Customer, error) {
+func DeleteCustomer(ownerId string, position int) (Customer, error) {
 	c := Customer{}
 	db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c)
 	db.Delete(&c)
@@ -38,7 +38,7 @@ func DeleteCustomer(ownerId int, position int) (Customer, error) {
 // 引数：OwnerId, position
 // 返り値：Customer, error
 // 1. OwnerIdとpositionを元に、Customerを検索
-func GetCustomer(ownerId int, position int) (Customer, error) {
+func GetCustomer(ownerId string, position int) (Customer, error) {
 	c := Customer{}
 	db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c)
 	return c, nil
@@ -49,7 +49,7 @@ func GetCustomer(ownerId int, position int) (Customer, error) {
 // 引数：OwnerId
 // 返り値：Customer, error
 // 1. OwnerIdを元に、statusが'waiting'または'IgnoreItOnce'であるCustomerを全て検索
-func GetOwnerFollowing(ownerId int) ([]Customer, error) {
+func GetOwnerFollowing(ownerId string) ([]Customer, error) {
 	c := []Customer{}
 	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'IgnoreItOnce')", ownerId).Find(&c)
 	return c, nil
@@ -60,7 +60,7 @@ func GetOwnerFollowing(ownerId int) ([]Customer, error) {
 // 返り値：Customer, error
 // 1. OwnerIdを元に、statusが'waiting'または'IgnoreItOnce'であるCustomerを全て検索
 // 2. positionが引数のpositionより小さいCustomerを全て検索
-func GetCustomerFollowing(ownerId int, position int) ([]Customer, error) {
+func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
 	c := []Customer{}
 	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'IgnoreItOnce') AND position < ?", ownerId, position).Find(&c)
 	return c, nil
@@ -71,7 +71,7 @@ func GetCustomerFollowing(ownerId int, position int) ([]Customer, error) {
 // 返り値：Customer, error
 // 1. OwnerIdを元に、statusが'waiting'または'IgnoreItOnce'であるCustomerを全て検索
 // 2. positionが最も小さいCustomerを検索
-func GetCustomerPosition(ownerId int) (Customer, error) {
+func GetCustomerPosition(ownerId string) (Customer, error) {
 	c := Customer{}
 	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'IgnoreItOnce')", ownerId).Order("position asc").First(&c)
 	return c, nil
@@ -81,7 +81,7 @@ func GetCustomerPosition(ownerId int) (Customer, error) {
 // 引数：OwnerId
 // 返り値：Customer, error
 // 1. OwnerIdを元に、Customerを全て検索
-func GetOwnerCustomer(ownerId int) ([]Customer, error) {
+func GetOwnerCustomer(ownerId string) ([]Customer, error) {
 	c := []Customer{}
 	db.Where("owner_id = ?", ownerId).Find(&c)
 	return c, nil
@@ -93,7 +93,7 @@ func GetOwnerCustomer(ownerId int) ([]Customer, error) {
 // 1. OwnerIdとpositionを元に、Customerを検索
 // 2. statusを引数のstatusに更新
 // 3. CustomerをDBに登録
-func UpdateCustomerStatus(ownerId int, position int, status string) (Customer, error) {
+func UpdateCustomerStatus(ownerId, status string, position int) (Customer, error) {
 	c := Customer{}
 	db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c)
 	c.WaitingStatus = status
