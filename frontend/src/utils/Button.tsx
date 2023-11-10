@@ -1,4 +1,4 @@
-import React , { FC } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { theme } from "./theme";
 
@@ -21,7 +21,7 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-export const Button: FC<Props> = ({ message , onClick }) => {
+export const Button: FC<Props> = ({ message, onClick }) => {
   return (
     <ButtonContainer onClick={onClick}>
       <Text>{message}</Text>
