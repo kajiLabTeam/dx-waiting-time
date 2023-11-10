@@ -1,6 +1,12 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/kajiLabTeam/dx-waiting-time/lib"
+)
+
+var db = lib.SqlConnect()
 
 type Owner struct {
 	OwnerId   int        `json:"ownerId"`
