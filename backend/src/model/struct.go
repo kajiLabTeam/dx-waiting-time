@@ -12,7 +12,7 @@ type Owner struct {
 	OwnerId   int        `json:"ownerId"`
 	OwnerName string     `json:"ownerName"`
 	Url       string     `json:"url"`
-	Customer  []Customer `gorm:"foreignkey:GenreID"`
+	Customer  []Customer `json:"customers"`
 }
 
 type Customer struct {
