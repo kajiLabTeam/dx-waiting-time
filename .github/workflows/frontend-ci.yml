@@ -2,8 +2,8 @@ name: Yarn Build and Lint
 
 on:
   push:
-    branches:
-      - "*"
+    paths:
+      - "frontend/**"
 
 jobs:
   build-and-lint:
@@ -23,33 +23,3 @@ jobs:
       - name: Run lint
         run: yarn lint
         working-directory: ./frontend
-
-      # Notify Slack on success
-      - name: Notify Slack on success
-        if: success()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_COLOR: good
-          SLACK_USERNAME: GitHub Action
-          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2023-01-01/4582569248242_48.png
-        with:
-          status: ${{ job.status }}
-          fields: repo,commit,author,action,eventName,ref,workflow,status
-          message: |
-            The build and lint succeeded in branch ${{ github.ref }} of repository ${{ github.repository }}.
-
-      # Notify Slack on failure
-      - name: Notify Slack on failure
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_COLOR: danger
-          SLACK_USERNAME: GitHub Action
-          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2023-01-01/4582569248242_48.png
-        with:
-          status: ${{ job.status }}
-          fields: repo,commit,author,action,eventName,ref,workflow,status
-          message: |
-            The build or lint has failed in branch ${{ github.ref }} of repository ${{ github.repository }}.
