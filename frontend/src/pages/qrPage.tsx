@@ -10,7 +10,8 @@ const QrCodeContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-    text-align: center;
+    display: flex;
+    justify-content: center;
 `;
 
 const QrPage: FC = () => {
