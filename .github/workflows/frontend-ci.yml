@@ -2,8 +2,8 @@ name: Yarn Build and Lint
 
 on:
   push:
-    branches:
-      - "*"
+    paths:
+      - "frontend/**"
 
 jobs:
   build-and-lint:
