@@ -1,0 +1,16 @@
+version: "3"
+services:
+  mysql:
+    container_name: GeekCamp_Nagoya_DB
+    image: mysql:8
+    volumes:
+      - ./build/mysql/mysqld_charset.cnf:/etc/mysql/conf.d/my.cnf
+      - ./build/mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3309:3309"
+    expose:
+      - 3309
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: dx_waiting
+      MYSQL_TCP_PORT: 3309
