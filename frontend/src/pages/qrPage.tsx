@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import Button from "../components/layout/Button";
+import { Button } from "../utils/Button";
 
 const QrPageContainer = styled.div``;
 
