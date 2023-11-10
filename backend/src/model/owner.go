@@ -10,6 +10,8 @@ func CreateOwner(ownerId, ownerName, url string) (Owner, error) {
 	db.Where("owner_id = ?", ownerId).First(&o)
 	if o.OwnerId == "" {
 		o.OwnerId = ownerId
+		o.OwnerName = ownerName
+		o.Url = url
 		db.Create(&o)
 	}
 	return o, nil
