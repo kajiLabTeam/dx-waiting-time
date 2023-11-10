@@ -1,10 +1,9 @@
-import React from "react";
-import { FaBell } from "react-icons/fa";
+import React, { FC } from "react";
 import styled from "styled-components";
-import { theme } from "../../utils/theme";
+import { theme } from "./theme";
 
 type Props = {
-  message: number | string;
+  message: number | "appName";
 };
 
 const CircleContainer = styled.div`
@@ -30,20 +29,6 @@ const InCircle = styled.div`
   border-radius: 50%;
 `;
 
-const Bell = styled.div`
-  display: block;
-  font-size: 18rem;
-  line-height: 0;
-  transform: translateY(0rem);
-  color: ${theme.colors.brown};
-`;
-
-const BellText = styled.p`
-  display: block;
-  font-size: 3rem;
-  color: ${theme.colors.brown};
-`;
-
 const Number = styled.p`
   font-size: 12rem;
   color: ${theme.colors.brown};
@@ -54,31 +39,16 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const Circle = ({ message }: Props) => {
-  const appName = "簡単行列整理くん";
-  if (message === "Call") {
-    return (
-      <CircleContainer>
-        <InCircle>
-          <Bell>
-            <FaBell />
-          </Bell>
-          <BellText>呼び出し</BellText>
-        </InCircle>
-      </CircleContainer>
-    );
-  }
+export const MessageCricle: FC<Props> = ({ message }) => {
   return (
     <CircleContainer>
       <InCircle>
         {typeof message === "number" ? (
           <Number>{message}</Number>
         ) : (
-          <Text>{appName}</Text>
+          <Text>簡単行列整理くん</Text>
         )}
       </InCircle>
     </CircleContainer>
   );
 };
-
-export default Circle;

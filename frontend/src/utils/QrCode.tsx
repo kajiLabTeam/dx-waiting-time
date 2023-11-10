@@ -1,7 +1,7 @@
 import { useQRCode } from "next-qrcode";
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
-import { theme } from "../../utils/theme";
+import { theme } from "./theme";
 
 type Props = {
     url: string;
@@ -10,13 +10,12 @@ type Props = {
 const QrCodeContainer = styled.div`
     text-align: center;
     padding: 1.5rem;
-    margin: 4rem 1rem;
     background-color: ${theme.colors.cream};
     border-radius: 2rem;
     border: 0.3rem solid ${theme.colors.brown};
 `;
 
-const QrCode = ({ url }: Props) => {
+export const QrCode: FC<Props> = ({ url }) => {
     const { Canvas } = useQRCode();
     const darkColor = theme.colors.brown;
     const lightColor = theme.colors.cream;
@@ -40,5 +39,3 @@ const QrCode = ({ url }: Props) => {
         </QrCodeContainer>
     );
 };
-
-export default QrCode;

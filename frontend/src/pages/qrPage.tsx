@@ -1,9 +1,17 @@
 import { FC } from "react";
 import styled from "styled-components";
-import Button from "../components/layout/Button";
-import QrCode from "../components/qrcode/QrCode";
+import { Button } from "../utils/Button";
+import { QrCode } from "../utils/QrCode";
 
 const QrPageContainer = styled.div``;
+
+const QrCodeContainer = styled.div`
+    margin: 4rem 1rem;
+`;
+
+const ButtonContainer = styled.div`
+    text-align: center;
+`;
 
 const QrPage: FC = () => {
     const onDownload = () => {
@@ -18,8 +26,12 @@ const QrPage: FC = () => {
     };
     return (
         <QrPageContainer>
-            <QrCode url={"https://www.google.com"} />
-            <Button message={"画像をダウンロード"} onClick={onDownload} />
+            <QrCodeContainer>
+                <QrCode url={"https://www.google.com/"} />
+            </QrCodeContainer>
+            <ButtonContainer>
+                <Button message={"画像をダウンロード"} onClick={onDownload} />
+            </ButtonContainer>
         </QrPageContainer>
     );
 };
