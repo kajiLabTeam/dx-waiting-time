@@ -32,6 +32,10 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=optional"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap"
+          rel="stylesheet"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="DX Waiting Time" />
         <meta property="og:description" content="DX Waiting Time" />

@@ -40,18 +40,19 @@ const Bell = styled.div`
   transform: translateY(0rem);
   color: ${theme.colors.brown};
   @media screen and (max-height: 700px) {
-    font-size: 16rem;
+    font-size: 14rem;
   }
 `;
 
 const BellText = styled.p`
   display: block;
   font-size: 3rem;
+  font-family: "Noto Sans JP", sans-serif;
   color: ${theme.colors.brown};
   margin-top: 0.5rem;
   @media screen and (max-height: 700px) {
     margin-top: 1rem;
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 `;
 
