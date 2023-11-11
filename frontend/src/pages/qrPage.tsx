@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import styled from "styled-components";
 import { Button } from "../utils/Button";
 import { QrCode } from "../utils/QrCode";
@@ -15,7 +15,7 @@ const ButtonContainer = styled.div`
 `;
 
 const QrPage: FC = () => {
-  const onDownload = () => {
+  const onDownload = useCallback(() => {
     const canvas = document.querySelector("canvas");
     const pngUrl = canvas?.toDataURL("image/png");
     const downloadLink = document.createElement("a");
@@ -24,7 +24,8 @@ const QrPage: FC = () => {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-  };
+  }, []);
+
   return (
     <QrPageContainer>
       <QrCodeContainer>
