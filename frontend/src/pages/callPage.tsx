@@ -48,14 +48,14 @@ const CallPage: FC = () => {
     return (
       <CallPageContainer>
         <PassButtonContainer>
-          <PassButton calling={calling} onClick={onWaiting} />
+          <PassButton $calling={calling} onClick={onWaiting} />
         </PassButtonContainer>
         <CallCircleContainer>
           <MessageCricle message={callNumber} />
         </CallCircleContainer>
         <FollowingContainer>{following} 人待ち</FollowingContainer>
         <EndButtonContainer>
-          <EndButton calling={calling} onClick={onWaiting} />
+          <EndButton $calling={calling} onClick={onWaiting} />
         </EndButtonContainer>
       </CallPageContainer>
     );
@@ -63,14 +63,14 @@ const CallPage: FC = () => {
   return (
     <CallPageContainer>
       <PassButtonContainer>
-        <PassButton calling={calling} onClick={onWaiting} />
+        <PassButton $calling={calling} onClick={onWaiting} />
       </PassButtonContainer>
       <CallCircleContainer>
         <CallCircle onClick={onCalling} />
       </CallCircleContainer>
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>
-        <EndButton calling={calling} onClick={onWaiting} />
+        <EndButton $calling={calling} onClick={onWaiting} />
       </EndButtonContainer>
     </CallPageContainer>
   );

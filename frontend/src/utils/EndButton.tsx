@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { theme } from "./theme";
 
 type Props = {
-  calling: boolean;
+  $calling: boolean;
   onClick: () => void;
 };
 
 const EndButtonContainer = styled.button<Props>`
-  background-color: ${(props) => (props.calling ? theme.colors.honey : theme.colors.cream)};
+  background-color: ${(props) => (props.$calling ? theme.colors.honey : theme.colors.cream)};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,19 +17,21 @@ const EndButtonContainer = styled.button<Props>`
   transform: translateX(-2vw);
   height: 15vh;
   border-radius: 2rem 2rem 0 0;
-  border-right: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
-  border-left: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
-  border-top: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
+  border-right: 0.8vh solid
+    ${(props) => (props.$calling ? theme.colors.brown : theme.colors.orenge)};
+  border-left: 0.8vh solid ${(props) => (props.$calling ? theme.colors.brown : theme.colors.orenge)};
+  border-top: 0.8vh solid ${(props) => (props.$calling ? theme.colors.brown : theme.colors.orenge)};
 `;
 
 const Text = styled.p`
-  padding: 0 1rem;
-  font-size: 2.4rem;
+  padding: 0 0 0.6rem 1.2rem;
+  font-size: 3rem;
+  font-family: "Noto Sans JP", sans-serif;
   color: ${theme.colors.brown};
 `;
-export const EndButton = ({ calling, onClick }: Props) => {
+export const EndButton = ({ $calling, onClick }: Props) => {
   return (
-    <EndButtonContainer calling={calling} onClick={onClick}>
+    <EndButtonContainer $calling={$calling} onClick={onClick}>
       <BsCheck2Circle size={50} color={theme.colors.brown} />
       <Text>完了</Text>
     </EndButtonContainer>

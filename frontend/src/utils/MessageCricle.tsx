@@ -33,7 +33,8 @@ const InCircle = styled.div`
 `;
 
 const Number = styled.p`
-  font-size: 12rem;
+  font-size: 14rem;
+  font-family: "Noto Sans JP", sans-serif;
   color: ${theme.colors.brown};
 `;
 
