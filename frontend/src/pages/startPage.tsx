@@ -42,7 +42,7 @@ const StartPage: FC = () => {
         <MessageCricle message={"appName"} />
       </MessageCricleContainer>
       <ThisDateContainer>
-      {thisMonth}月{thisDay}日({thisWeek})
+        {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
       <ButtonContainer>
         <Button message={"営業開始"} onClick={onStart} />

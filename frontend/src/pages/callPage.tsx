@@ -68,7 +68,7 @@ const CallPage: FC = () => {
         <PassButton $calling={calling} onClick={onWaiting} />
       </PassButtonContainer>
       <CallCircleContainer>
-        {!open ? <CallCircle onClick={onCalling} /> : <CallCircle onClick={()=>{}}/>}
+        {!open ? <CallCircle onClick={onCalling} /> : <CallCircle onClick={() => {}} />}
       </CallCircleContainer>
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>
