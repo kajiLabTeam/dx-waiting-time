@@ -1,10 +1,26 @@
 import { FC } from "react";
+import styled from "styled-components";
+import { CallCircle } from "../utils/CallCricle";
+
+const CallPageContainer = styled.div`
+  text-align: center;
+  overflow: hidden;
+`;
+
+const PassButton = styled.div`
+  margin-top: 2rem;
+`;
+
+const EndButton = styled.div``;
 
 const CallPage: FC = () => {
+  const onCalling = () => {};
   return (
-    <div>
-      <h1>callpage</h1>
-    </div>
+    <CallPageContainer>
+      <PassButton>パス</PassButton>
+      <CallCircle onClick={onCalling} />
+      <EndButton>完了</EndButton>
+    </CallPageContainer>
   );
 };
 
