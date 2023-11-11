@@ -16,6 +16,7 @@ const ButtonContainer = styled.div`
 
 const QrPage: FC = () => {
   const onDownload = useCallback(() => {
+    // useRefを使おうとしたが,QRCodeコンポーネントのuseQRCodeのCanvasがrefをサポートしていないため断念
     const canvas = document.querySelector("canvas");
     const pngUrl = canvas?.toDataURL("image/png");
     const downloadLink = document.createElement("a");
