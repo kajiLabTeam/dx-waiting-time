@@ -40,6 +40,7 @@ const Number = styled.p`
 
 const Text = styled.p`
   font-size: 6rem;
+  font-family: "Noto Sans JP", sans-serif;
   color: ${theme.colors.brown};
 `;
 
