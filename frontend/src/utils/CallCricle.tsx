@@ -35,7 +35,7 @@ const InCircle = styled.div`
 
 const Bell = styled.div`
   display: block;
-  font-size: 18rem;
+  font-size: 20rem;
   line-height: 0;
   transform: translateY(0rem);
   color: ${theme.colors.brown};

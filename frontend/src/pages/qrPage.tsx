@@ -1,15 +1,40 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import styled from "styled-components";
 import { Button } from "../utils/Button";
+import { QrCode } from "../utils/QrCode";
 
 const QrPageContainer = styled.div``;
 
+const QrCodeContainer = styled.div`
+  margin: 4rem 1rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const QrPage: FC = () => {
-  const onDownload = () => {};
+  const onDownload = useCallback(() => {
+    // useRefを使おうとしたが,QRCodeコンポーネントのuseQRCodeのCanvasがrefをサポートしていないため断念
+    const canvas = document.querySelector("canvas");
+    const pngUrl = canvas?.toDataURL("image/png");
+    const downloadLink = document.createElement("a");
+    downloadLink.href = pngUrl!;
+    downloadLink.download = "qr.png";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }, []);
+
   return (
     <QrPageContainer>
-      <div>QR Page</div>
-      <Button message={"画像をダウンロード"} onClick={onDownload} />
+      <QrCodeContainer>
+        <QrCode url={"https://www.google.com/"} />
+      </QrCodeContainer>
+      <ButtonContainer>
+        <Button message={"画像をダウンロード"} onClick={onDownload} />
+      </ButtonContainer>
     </QrPageContainer>
   );
 };
