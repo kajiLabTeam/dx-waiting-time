@@ -51,7 +51,7 @@ const CallPage: FC = () => {
           <PassButton calling={calling} onClick={onWaiting} />
         </PassButtonContainer>
         <CallCircleContainer>
-          <MessageCricle message={callNumber}/>
+          <MessageCricle message={callNumber} />
         </CallCircleContainer>
         <FollowingContainer>{following} 人待ち</FollowingContainer>
         <EndButtonContainer>

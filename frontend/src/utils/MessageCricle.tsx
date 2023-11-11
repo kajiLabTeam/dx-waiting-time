@@ -44,13 +44,9 @@ const Text = styled.p`
 
 export const MessageCricle: FC<Props> = ({ message }) => {
   return (
-    <CircleContainer >
+    <CircleContainer>
       <InCircle>
-        {typeof message === "number" ? (
-          <Number>{message}</Number>
-        ) : (
-          <Text>簡単行列整理くん</Text>
-        )}
+        {typeof message === "number" ? <Number>{message}</Number> : <Text>簡単行列整理くん</Text>}
       </InCircle>
     </CircleContainer>
   );
