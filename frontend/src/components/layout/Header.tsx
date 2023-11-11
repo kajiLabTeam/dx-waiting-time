@@ -8,15 +8,20 @@ const HeaderContainer = styled.header`
   justify-content: space-between;
   background-color: ${theme.colors.orenge};
   align-items: center;
+  height: 6vh;
 `;
 
 const Title = styled.h2`
+  margin-left: 1rem;
   color: ${theme.colors.brown};
 `;
 
 const MenuButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #602e1b;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-right: 0.5rem;
 `;
 
