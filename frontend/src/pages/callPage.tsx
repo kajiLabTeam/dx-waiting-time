@@ -3,55 +3,77 @@ import { useState } from "react";
 import styled from "styled-components";
 import { CallCircle } from "../utils/CallCricle";
 import { EndButton } from "../utils/EndButton";
+import { MessageCricle } from "../utils/MessageCricle";
 import { PassButton } from "../utils/PassButton";
+import { theme } from "../utils/theme";
 
 const CallPageContainer = styled.div`
-    text-align: center;
-    overflow: hidden;
+  text-align: center;
+  overflow: hidden;
 `;
 
 const PassButtonContainer = styled.div`
-    margin-bottom: 0.5rem;
+  margin-bottom: 1vh;
 `;
 
 const CallCircleContainer = styled.div``;
 
 const FollowingContainer = styled.div`
-  margin-top: 0.5rem;
+  margin-top: 1vh;
   font-size: 2rem;
+  height: 5vh;
+  color: ${theme.colors.red};
+  @media screen and (max-height: 700px) {
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
 `;
 
 const EndButtonContainer = styled.div`
-    margin-top: 0.5rem;
-    position: sticky;
+  position: sticky;
 `;
 
 const following = 123;
+const callNumber = 321;
 
 const CallPage: FC = () => {
-    const [calling, setCalling] = useState(false);
-    const onWaiting = () => {
-        setCalling(false);
-    };
-    const onCalling = () => {
-        setCalling(true);
-    };
+  const [calling, setCalling] = useState(false);
+  const onWaiting = () => {
+    setCalling(false);
+  };
+  const onCalling = () => {
+    setCalling(true);
+  };
+  if (calling) {
     return (
-        <CallPageContainer>
-            <PassButtonContainer>
-                <PassButton calling={calling} onClick={onWaiting} />
-            </PassButtonContainer>
-            <CallCircleContainer>
-                <CallCircle calling={calling} onClick={onCalling} />
-            </CallCircleContainer>
-            <FollowingContainer>
-              {following} 人待ち
-            </FollowingContainer>
-            <EndButtonContainer>
-                <EndButton calling={calling} onClick={onWaiting} />
-            </EndButtonContainer>
-        </CallPageContainer>
+      <CallPageContainer>
+        <PassButtonContainer>
+          <PassButton calling={calling} onClick={onWaiting} />
+        </PassButtonContainer>
+        <CallCircleContainer>
+          <MessageCricle message={callNumber}/>
+        </CallCircleContainer>
+        <FollowingContainer>{following} 人待ち</FollowingContainer>
+        <EndButtonContainer>
+          <EndButton calling={calling} onClick={onWaiting} />
+        </EndButtonContainer>
+      </CallPageContainer>
     );
+  }
+  return (
+    <CallPageContainer>
+      <PassButtonContainer>
+        <PassButton calling={calling} onClick={onWaiting} />
+      </PassButtonContainer>
+      <CallCircleContainer>
+        <CallCircle onClick={onCalling} />
+      </CallCircleContainer>
+      <FollowingContainer>{following} 人待ち</FollowingContainer>
+      <EndButtonContainer>
+        <EndButton calling={calling} onClick={onWaiting} />
+      </EndButtonContainer>
+    </CallPageContainer>
+  );
 };
 
 export default CallPage;

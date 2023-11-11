@@ -11,11 +11,11 @@ const PassButtonContainer = styled.button<Props>`
     background-color: ${(props) => (props.calling ? theme.colors.honey : theme.colors.cream)};
     width: 104vw;
     transform: translateX(-2vw);
-    height: 6rem;
+    height: 12vh;
     border-radius: 0 0 2rem 2rem;
-    border-right: 0.4rem solid ${theme.colors.brown};
-    border-left: 0.4rem solid ${theme.colors.brown};
-    border-bottom: 0.4rem solid ${theme.colors.brown};
+    border-right: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
+    border-left: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
+    border-bottom: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
 `;
 
 const Text = styled.p`

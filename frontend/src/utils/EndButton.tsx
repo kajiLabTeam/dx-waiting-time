@@ -15,11 +15,11 @@ const EndButtonContainer = styled.button<Props>`
     align-items: center;
     width: 104vw;
     transform: translateX(-2vw);
-    height: 8rem;
+    height: 15vh;
     border-radius: 2rem 2rem 0 0;
-    border-right: 0.4rem solid ${theme.colors.brown};
-    border-left: 0.4rem solid ${theme.colors.brown};
-    border-top: 0.4rem solid ${theme.colors.brown};
+    border-right: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
+    border-left: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
+    border-top: 0.8vh solid ${(props) => (props.calling ? theme.colors.brown : theme.colors.orenge)};
 `;
 
 const Text = styled.p`
