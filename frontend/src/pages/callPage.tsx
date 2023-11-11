@@ -21,10 +21,10 @@ const CallCircleContainer = styled.div``;
 const FollowingContainer = styled.div`
   margin-top: 1vh;
   font-size: 2rem;
-  height: 5vh;
+  height: 4.8vh;
   color: ${theme.colors.red};
   @media screen and (max-height: 700px) {
-    margin-top: 0;
+    margin-top: 0.9vh;
     font-size: 1.5rem;
   }
 `;
