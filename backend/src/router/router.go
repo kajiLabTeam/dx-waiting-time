@@ -14,15 +14,17 @@ func Init() {
 	// r.Use(cors.Default())
 	r := gin.Default()
 
-	r.GET("api/:ownerId/queue/position/", controller.GetCustomerPosition)
+	r.GET("api/:ownerId/queue/position/", controller.GetCustomer)
 
-	r.GET("api/:ownerId/queue/following/", controller.GetFollowing)
+	r.GET("api/:ownerId/queue/following/", controller.GetCustomerFollowing)
 
-	r.GET("api/:ownerId/queue/position/next/", controller.GetOwnerNextCustomer)
+	r.GET("api/owner/queue/following/", controller.GetFollowing)
 
-	r.PUT("api/:ownerId/queue/position/complete/:customerId", controller.PutOwnerCompleteCustomer)
+	r.GET("api/owner/queue/position/next/", controller.GetNextCustomer)
 
-	r.PUT("api/:ownerId/queue/position/pass/:customerId", controller.PutOwnerPassCustomer)
+	r.PUT("api/owner/queue/position/complete/:position", controller.PutOwnerCompleteCustomer)
+
+	r.PUT("api/owner/queue/position/pass/:position", controller.PutOwnerPassCustomer)
 
 	r.DELETE("api/:ownerId/queue/position/", controller.DeleteCustomerPosition)
 
