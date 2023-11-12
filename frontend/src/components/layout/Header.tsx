@@ -27,29 +27,33 @@ const MenuButton = styled.button`
 
 const Header = () => {
   const router = useRouter();
+  const pathParts = router.pathname.split("/");
+  const [, role, pageName] = pathParts;
 
   return (
     <HeaderContainer>
       <Title>
-        {router.pathname === "/"
+        {pageName === "/"
           ? "Start"
-          : router.pathname === "/loginPage"
+          : pageName === "loginPage"
           ? "ログイン"
-          : router.pathname === "/accountPage"
+          : pageName === "accountPage"
           ? "アカウント情報"
-          : router.pathname === "/endPage"
+          : pageName === "endPage"
           ? "業務を終わる"
-          : router.pathname === "/callPage"
+          : pageName === "callPage"
           ? "呼び出し"
-          : router.pathname === "/qrPage"
+          : pageName === "qrPage"
           ? "QRコード"
-          : router.pathname === "/startPage"
+          : pageName === "startPage"
           ? "業務を始める"
           : "not found"}
       </Title>
-      <MenuButton>
-        <AiOutlineMenu />
-      </MenuButton>
+      {role === "admin" && (
+        <MenuButton onClick={() => router.push("/adminPage")}>
+          <AiOutlineMenu />
+        </MenuButton>
+      )}
     </HeaderContainer>
   );
 };
