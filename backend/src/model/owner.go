@@ -5,13 +5,12 @@ package model
 // 返り値：Owner, error
 // 1. ownerIdを元に、Ownerを検索
 // 2. ownerIdが存在しない場合、Ownerを作成
-func CreateOwner(ownerId, ownerName, url string) (Owner, error) {
+func CreateOwner(ownerId, ownerName string) (Owner, error) {
 	o := Owner{}
 	db.Where("owner_id = ?", ownerId).First(&o)
 	if o.OwnerId == "" {
 		o.OwnerId = ownerId
 		o.OwnerName = ownerName
-		o.Url = url
 		db.Create(&o)
 	}
 	return o, nil
