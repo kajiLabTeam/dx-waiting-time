@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { CallCircle } from "../components/call/CallCricle";
-import { EndButton } from "../components/call/EndButton";
-import { PassButton } from "../components/call/PassButton";
-import { MessageCricle } from "../components/utils/MessageCricle";
-import { theme } from "../utils/theme";
+import { CallCircle } from "../../components/call/CallCricle";
+import { EndButton } from "../../components/call/EndButton";
+import { PassButton } from "../../components/call/PassButton";
+import { MessageCricle } from "../../components/utils/MessageCricle";
+import { theme } from "../../utils/theme";
 
 const CallPageContainer = styled.div`
   text-align: center;

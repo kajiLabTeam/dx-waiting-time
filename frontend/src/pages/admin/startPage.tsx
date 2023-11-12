@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Button } from "../components/utils/Button";
-import { MessageCricle } from "../components/utils/MessageCricle";
+import { Button } from "../../components/utils/Button";
+import { MessageCricle } from "../../components/utils/MessageCricle";
 
 const StartPageContainer = styled.div`
   text-align: center;

@@ -1,7 +1,7 @@
 import { FC, useCallback } from "react";
 import styled from "styled-components";
-import { QrCode } from "../components/qr/QrCode";
-import { Button } from "../components/utils/Button";
+import { QrCode } from "../../components/qr/QrCode";
+import { Button } from "../../components/utils/Button";
 
 const QrPageContainer = styled.div``;
 
