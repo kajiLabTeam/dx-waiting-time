@@ -1,27 +1,67 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kajiLabTeam/dx-waiting-time/model"
 )
 
-func GetCustomerPosition(c *gin.Context) {
-
+// customerが自分の番号を取得する
+// 1. urlからownerIdを取得する
+// 4. customerの作成
+func GetCustomer(c *gin.Context) {
+	token := c.Query("token")
+	ownerId := c.Param("ownerId")
+	customer,_ := model.CreateCustomer(ownerId, token)
+	c.JSON(http.StatusOK, 
+		gin.H{
+			"owner_id":customer.OwnerId,
+			"date"    :customer.Date,
+			"position":customer.Position,
+		})
 }
 
-func GetFollowing(c *gin.Context) {
+// func GetFollowing(c *gin.Context) {
+// 	var info model.Customer
+// 	if c.ShouldBind(&info) == nil {
+// 		GetCustomerFollowing(c, info)
+// 	} else {
+// 		GetOwnerFollowing(c)
+// 	}
+// }
+
+// customerが自分の前にいる人の情報を取得する
+// 1. urlからownerIdを取得する
+// 2. ownerIdとinfo.positionを元にcustomerを取得する
+// 3. customerのwaitingStatusを"waiting"に変更する
+// 4. スライスの長さを返す
+func GetCustomerFollowing(c *gin.Context) {
+	ownerId := c.Param("ownerId")
+
 	var info model.Customer
-	if c.ShouldBind(&info) == nil {
-		GetCustomerFollowing(c, info)
-	} else {
-		GetOwnerFollowing(c)
+	if c.ShouldBind(&info) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid parameter"})
 	}
+
+	customer := model.GetCustomerFollowing(ownerId, info.Position)
+
+	// customerのwaitingStatusを"waiting"に変更する
+
+	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
 
-func GetCustomerFollowing(c *gin.Context, info model.Customer) {
-
-}
-
+// customerを削除する
+// 1. urlからownerIdを取得する
+// 2. ownerIdとinfo.positionを元にcustomerを削除する
 func DeleteCustomerPosition(c *gin.Context) {
-
+	var info model.Customer
+	ownerId := c.Param("ownerId")
+	err := c.ShouldBind(&info)
+	if err == nil {
+		model.DeleteCustomer(ownerId, info.Position)
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "delete customer position"})
 }
