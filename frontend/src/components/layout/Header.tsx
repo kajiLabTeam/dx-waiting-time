@@ -47,6 +47,8 @@ const Header = () => {
           ? "QRコード"
           : pageName === "startPage"
           ? "業務を始める"
+          : pageName === "clientPage"
+          ? "行列簡単整理くん"
           : "not found"}
       </Title>
       {role === "enterprise" && (
