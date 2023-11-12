@@ -1,7 +1,7 @@
 import React from "react";
 import { BsCheck2Circle } from "react-icons/bs";
 import styled from "styled-components";
-import { theme } from "./theme";
+import { theme } from "../../utils/theme";
 
 type Props = {
   $calling: boolean;
