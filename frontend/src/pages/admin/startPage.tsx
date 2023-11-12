@@ -47,7 +47,7 @@ const StartPage: FC = () => {
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <Link href={"/callPage"}>
+      <Link href={"callPage"}>
         <ButtonContainer>
           <Button message={"営業開始"} onClick={onStart} />
         </ButtonContainer>
