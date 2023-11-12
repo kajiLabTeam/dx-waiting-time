@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Button } from "../utils/Button";
+import { Button } from "../components/utils/Button";
 
 const EndPageContainer = styled.div``;
 
