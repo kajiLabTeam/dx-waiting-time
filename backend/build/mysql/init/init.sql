@@ -1,8 +1,7 @@
 CREATE TABLE IF NOT EXISTS dx_waiting.owner(
     owner_id VARCHAR(128) NOT NULL,
     owner_name VARCHAR(128),
-    url VARCHAR(512),
-    PRIMARY KEY (id)
+    PRIMARY KEY (owner_id)
 );
 
 CREATE TABLE IF NOT EXISTS dx_waiting.customer(
