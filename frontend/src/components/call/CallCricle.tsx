@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { FaBell } from "react-icons/fa";
 import styled from "styled-components";
-import { theme } from "./theme";
+import { theme } from "../../utils/theme";
 
 type Props = {
   onClick: () => void;

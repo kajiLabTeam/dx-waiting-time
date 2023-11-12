@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { CallCircle } from "../utils/CallCricle";
-import { EndButton } from "../utils/EndButton";
-import { MessageCricle } from "../utils/MessageCricle";
-import { PassButton } from "../utils/PassButton";
+import { CallCircle } from "../components/call/CallCricle";
+import { EndButton } from "../components/call/EndButton";
+import { PassButton } from "../components/call/PassButton";
+import { MessageCricle } from "../components/utils/MessageCricle";
 import { theme } from "../utils/theme";
 
 const CallPageContainer = styled.div`
