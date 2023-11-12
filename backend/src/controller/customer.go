@@ -44,7 +44,7 @@ func GetCustomerFollowing(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid parameter"})
 	}
 
-	customer := model.GetCustomerFollowing(ownerId, info.Position)
+	customer,_ := model.GetCustomerFollowing(ownerId, info.Position)
 
 	// customerのwaitingStatusを"waiting"に変更する
 
