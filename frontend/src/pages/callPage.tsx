@@ -1,7 +1,6 @@
 import { FC } from "react";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { OpenContext } from "../context/open";
 import { CallCircle } from "../utils/CallCricle";
 import { EndButton } from "../utils/EndButton";
 import { MessageCricle } from "../utils/MessageCricle";
@@ -38,7 +37,6 @@ const following = 123;
 const callNumber = 321;
 
 const CallPage: FC = () => {
-  const { open } = useContext(OpenContext);
   const [calling, setCalling] = useState(false);
   const onWaiting = () => {
     setCalling(false);
@@ -68,8 +66,7 @@ const CallPage: FC = () => {
         <PassButton $calling={calling} onClick={onWaiting} />
       </PassButtonContainer>
       <CallCircleContainer>
-        {open ? <CallCircle onClick={onCalling} /> : <CallCircle onClick={() => {}} />}
-        {open ? "true" : "false"}
+        <CallCircle onClick={onCalling} />
       </CallCircleContainer>
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>

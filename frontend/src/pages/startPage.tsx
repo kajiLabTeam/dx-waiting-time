@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { FC, useContext } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
-import { OpenContext } from "../context/open";
 import { Button } from "../utils/Button";
 import { MessageCricle } from "../utils/MessageCricle";
 import { theme } from "../utils/theme";
@@ -28,10 +27,25 @@ const ButtonContainer = styled.div`
   margin-top: 1rem;
 `;
 
+function getOpenInfo() {
+  if (typeof window !== "undefined") {
+    const open = localStorage.getItem("open");
+    if (open === null) {
+      localStorage.setItem("open", JSON.stringify(false));
+    }
+    return false;
+  }
+}
+
 const StartPage: FC = () => {
-  const { open, setOpen } = useContext(OpenContext);
+  let openInfo = false;
+  useEffect(() => {
+    getOpenInfo();
+  }, []);
+
   const onStart = () => {
-    setOpen(true);
+    getOpenInfo();
+    openInfo = true;
   };
 
   // 今日の日付を取得
@@ -53,7 +67,7 @@ const StartPage: FC = () => {
       <Link href={"/callPage"}>
         <ButtonContainer>
           <Button message={"営業開始"} onClick={onStart} />
-          <div>{open ? "true" : "false"}</div>
+          <div>{openInfo ? "true" : "false"}</div>
         </ButtonContainer>
       </Link>
     </StartPageContainer>
