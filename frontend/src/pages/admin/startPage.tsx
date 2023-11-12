@@ -29,7 +29,7 @@ const ButtonContainer = styled.div`
 
 const StartPage: FC = () => {
   const onStart = () => {};
-  
+
   // 今日の日付を取得
   const thisDate = new Date();
   const thisMonth = thisDate.getMonth() + 1;
@@ -38,7 +38,6 @@ const StartPage: FC = () => {
   const week = ["日", "月", "火", "水", "木", "金", "土"];
   const thisWeek = week[thisDayOfWeek];
 
-  
   return (
     <StartPageContainer>
       <MessageCricleContainer>
