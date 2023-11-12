@@ -74,7 +74,7 @@ func GetNextCustomer(c *gin.Context) {
 	// customerに対して呼び出し通知を送る処理を書く
 
 	OwnerId := t.UID
-	customer := model.GetNextCustomer(OwnerId)
+	customer, _ := model.GetNextCustomer(OwnerId)
 	c.JSON(http.StatusOK, gin.H{"customer": customer})
 }
 
