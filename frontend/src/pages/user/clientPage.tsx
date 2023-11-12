@@ -1,5 +1,5 @@
 import { getMessaging, getToken } from "firebase/messaging";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
 import { MessageCricle } from "../../components/utils/MessageCricle";
@@ -24,6 +24,8 @@ const CircleText = styled.div`
   max-height: 0;
 `;
 
+const WaitingContainer = styled.div``;
+
 const Text = styled.p`
   margin-top: 1rem;
   font-size: 2rem;
@@ -47,6 +49,8 @@ const followingNumber = 3;
 const callNumber = 321;
 
 const useInitFirebase = async () => {
+  const [isNotification, setIsNotification] = useState(false);
+
   useEffect(() => {
     const requestNotificationPermission = async () => {
       const permission = await Notification.requestPermission();
@@ -59,27 +63,46 @@ const useInitFirebase = async () => {
       if (currentToken) {
         console.log("currentToken:");
         console.log(currentToken);
-      } else {
-        console.error("No Instance ID token available. Request permission to generate one.");
+        setIsNotification(true);
       }
+      console.error("No Instance ID token available. Request permission to generate one.");
+      setIsNotification(false);
     };
 
     requestNotificationPermission();
   }, []);
+
+  return isNotification;
 };
 
 const ClientPage: FC = () => {
   const onLogin = () => {};
-  useInitFirebase();
-
+  const isNotification = useInitFirebase();
+  if (!isNotification) {
+    return (
+      <ClientPageContainer>
+        <CircleContainer>
+          <MessageCricle message={""} />
+          <CircleText />
+        </CircleContainer>
+        <WaitingContainer>
+          <Text>通知をオンにしてください</Text>
+          <Text>列に並ぶことができません</Text>
+          <Number />
+        </WaitingContainer>
+      </ClientPageContainer>
+    );
+  }
   return (
     <ClientPageContainer>
       <CircleContainer>
         <MessageCricle message={callNumber} />
         <CircleText>あなたの呼出番号は</CircleText>
       </CircleContainer>
-      <Text>現在の待ち人数</Text>
-      <Number>{followingNumber}人</Number>
+      <WaitingContainer>
+        <Text>現在の待ち人数</Text>
+        <Number>{followingNumber}人</Number>
+      </WaitingContainer>
       <ButtonContainer>
         <GetOutButton onClick={onLogin} />
       </ButtonContainer>
