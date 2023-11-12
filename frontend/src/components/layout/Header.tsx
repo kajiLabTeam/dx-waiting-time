@@ -49,7 +49,7 @@ const Header = () => {
           ? "業務を始める"
           : "not found"}
       </Title>
-      {role === "admin" && (
+      {role === "enterprise" && (
         <MenuButton onClick={() => router.push("/adminPage")}>
           <AiOutlineMenu />
         </MenuButton>
