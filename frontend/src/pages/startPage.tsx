@@ -1,5 +1,7 @@
-import { FC } from "react";
+import Link from "next/link";
+import { FC, useContext } from "react";
 import styled from "styled-components";
+import { OpenContext } from "../context/open";
 import { Button } from "../utils/Button";
 import { MessageCricle } from "../utils/MessageCricle";
 import { theme } from "../utils/theme";
@@ -22,11 +24,15 @@ const ThisDateContainer = styled.p`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  text-decoration: none;
   margin-top: 1rem;
 `;
 
 const StartPage: FC = () => {
-  const onStart = () => {};
+  const { open, setOpen } = useContext(OpenContext);
+  const onStart = () => {
+    setOpen(true);
+  };
 
   // 今日の日付を取得
   const thisDate = new Date();
@@ -44,9 +50,12 @@ const StartPage: FC = () => {
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <ButtonContainer>
-        <Button message={"営業開始"} onClick={onStart} />
-      </ButtonContainer>
+      <Link href={"/callPage"}>
+        <ButtonContainer>
+          <Button message={"営業開始"} onClick={onStart} />
+          <div>{open ? "true" : "false"}</div>
+        </ButtonContainer>
+      </Link>
     </StartPageContainer>
   );
 };

@@ -38,7 +38,7 @@ const following = 123;
 const callNumber = 321;
 
 const CallPage: FC = () => {
-  const open = useContext(OpenContext);
+  const { open } = useContext(OpenContext);
   const [calling, setCalling] = useState(false);
   const onWaiting = () => {
     setCalling(false);
@@ -68,7 +68,8 @@ const CallPage: FC = () => {
         <PassButton $calling={calling} onClick={onWaiting} />
       </PassButtonContainer>
       <CallCircleContainer>
-        {!open ? <CallCircle onClick={onCalling} /> : <CallCircle onClick={() => {}} />}
+        {open ? <CallCircle onClick={onCalling} /> : <CallCircle onClick={() => {}} />}
+        {open ? "true" : "false"}
       </CallCircleContainer>
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>
