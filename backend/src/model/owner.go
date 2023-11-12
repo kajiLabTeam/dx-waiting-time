@@ -32,8 +32,11 @@ func DeleteOwner(ownerId string) (Owner, error) {
 // 引数：OwnerId
 // 返り値：Owner, error
 // 1. OwnerIdを元に、Ownerを検索
-func GetOwner(ownerId string) (Owner, error) {
+func GetOwner(ownerId string) (*Owner, error) {
 	o := Owner{}
-	db.Where("owner_id = ?", ownerId).Find(&o)
-	return o, nil
+	err := db.Where("owner_id = ?", ownerId).Find(&o)
+	if err != nil {
+		return nil, err.Error
+	}
+	return &o, nil
 }
