@@ -11,7 +11,7 @@ const firebaseApp = firebase.initializeApp({
   measurementId: "G-B3513M6L7T",
 });
 
-const messaging = firebase.messaging();
+const messaging = firebase.messaging(firebaseApp);
 
 messaging.onBackgroundMessage(function (payload) {
   console.log("[firebase-messaging-sw.js] Received background message ", payload);
