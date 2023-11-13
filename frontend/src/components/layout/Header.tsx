@@ -47,9 +47,7 @@ const Header = () => {
           ? "QRコード"
           : pageName === "startPage"
           ? "業務を始める"
-          : pageName === "clientPage"
-          ? "行列簡単整理くん"
-          : "not found"}
+          : "簡単行列整理くん"}
       </Title>
       {role === "enterprise" && (
         <MenuButton onClick={() => router.push("/adminPage")}>

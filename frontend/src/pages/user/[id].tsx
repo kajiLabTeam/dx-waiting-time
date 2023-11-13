@@ -2,9 +2,14 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
+import { ErrorCard } from "../../components/user/ErrorCard";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { app } from "../../utils/firebase";
 import { theme } from "../../utils/theme";
+
+const FalseContainer = styled.div`
+  opacity: 0.3;
+`;
 
 const ClientPageContainer = styled.div`
   text-align: center;
@@ -78,17 +83,20 @@ const ClientPage: FC = () => {
   const isNotification = useInitFirebase();
   if (!isNotification) {
     return (
-      <ClientPageContainer>
-        <CircleContainer>
-          <MessageCricle message={""} />
-          <CircleText />
-        </CircleContainer>
-        <WaitingContainer>
-          <Text>通知をオンにしてください</Text>
-          <Text>列に並ぶことができません</Text>
-          <Number />
-        </WaitingContainer>
-      </ClientPageContainer>
+      <>
+        <FalseContainer>
+          <ClientPageContainer>
+            <CircleContainer>
+              <MessageCricle message={""} />
+              <CircleText />
+            </CircleContainer>
+            <WaitingContainer>
+              <Number />
+            </WaitingContainer>
+          </ClientPageContainer>
+        </FalseContainer>
+        <ErrorCard />
+      </>
     );
   }
   return (
