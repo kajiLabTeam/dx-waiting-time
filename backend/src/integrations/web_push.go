@@ -63,3 +63,8 @@ func RegularUpdateNotification() {
 		}
 	}
 }
+
+func CallNotification(c model.Customer) {
+	m := MakeMessage(c.FirebaseToken, "お知らせ", "順番が来ました")
+	WebPushNotification(m)
+}
