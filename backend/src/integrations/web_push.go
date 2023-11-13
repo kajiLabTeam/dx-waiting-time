@@ -46,7 +46,7 @@ func RegularUpdateNotification() {
 	for {
 		time.Sleep(5 * time.Minute)
 		owners, _ := model.GetAllOwner()
-		for i, owner := range owners {
+		for _, owner := range owners {
 			go func(owner model.Owner) {
 				customers, _ := model.GetFollowing(owner.OwnerId)
 				for _, customer := range customers {
