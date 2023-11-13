@@ -17,7 +17,7 @@ func GetCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, 
 		gin.H{
 			"owner_id":customer.OwnerId,
-			"date"    :customer.Date,
+			"date"    :customer.Date.Format("2006-01-02"),
 			"position":customer.Position,
 		})
 }
