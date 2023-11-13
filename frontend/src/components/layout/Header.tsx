@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { AiOutlineMenu } from "react-icons/ai";
 import styled from "styled-components";
+import { useIsSigned } from "../../utils/auth";
 import { theme } from "../../utils/theme";
 
 const HeaderContainer = styled.header`
@@ -29,28 +30,31 @@ const Header = () => {
   const router = useRouter();
   const pathParts = router.pathname.split("/");
   const [, role, pageName] = pathParts;
+  const isSigned = useIsSigned();
 
   return (
     <HeaderContainer>
-      <Title>
-        {pageName === "/"
-          ? "Start"
-          : pageName === "loginPage"
-          ? "ログイン"
-          : pageName === "accountPage"
-          ? "アカウント情報"
-          : pageName === "endPage"
-          ? "業務を終わる"
-          : pageName === "callPage"
-          ? "呼び出し"
-          : pageName === "qrPage"
-          ? "QRコード"
-          : pageName === "startPage"
-          ? "業務を始める"
-          : pageName === "clientPage"
-          ? "行列簡単整理くん"
-          : "not found"}
-      </Title>
+      {isSigned ? (
+        <Title>
+          {pageName === "/"
+            ? "Start"
+            : pageName === "accountPage"
+            ? "アカウント情報"
+            : pageName === "endPage"
+            ? "業務を終わる"
+            : pageName === "callPage"
+            ? "呼び出し"
+            : pageName === "qrPage"
+            ? "QRコード"
+            : pageName === "startPage"
+            ? "業務を始める"
+            : pageName === "clientPage"
+            ? "行列簡単整理くん"
+            : "not found"}
+        </Title>
+      ) : (
+        <Title>ログイン</Title>
+      )}
       {role === "enterprise" && (
         <MenuButton onClick={() => router.push("/adminPage")}>
           <AiOutlineMenu />
