@@ -1,0 +1,8 @@
+// 待ち順に参加する
+GET http://localhost:8080/api/:word/queue/position/?token=token
+
+// あと何人かがわかる
+GET http://localhost:8080/api/:word/queue/following/?owner_id=firebase_uuid&position=31
+
+// 列から抜ける
+DELETE http://localhost:8080/api/:word/queue/position/?owner_id=firebase_uuid&dposition=31
