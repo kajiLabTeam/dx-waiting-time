@@ -12,7 +12,12 @@ const AppName = styled.div`
   margin-top: 2rem;
 `;
 
-const Action = styled.div``;
+const Action = styled.div`
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  margin-top: 4rem;
+`;
 
 const LoginPage: FC = () => {
   const onLogin = () => {};
