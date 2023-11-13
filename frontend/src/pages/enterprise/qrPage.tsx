@@ -2,6 +2,7 @@ import { FC, useCallback } from "react";
 import styled from "styled-components";
 import { QrCode } from "../../components/qr/QrCode";
 import { Button } from "../../components/utils/Button";
+import { useUserState } from "../../globalStates/firebaseUserState";
 
 const QrPageContainer = styled.div``;
 
@@ -15,6 +16,8 @@ const ButtonContainer = styled.div`
 `;
 
 const QrPage: FC = () => {
+  const user = useUserState();
+
   const onDownload = useCallback(() => {
     // useRefを使おうとしたが,QRCodeコンポーネントのuseQRCodeのCanvasがrefをサポートしていないため断念
     const canvas = document.querySelector("canvas");
@@ -30,7 +33,7 @@ const QrPage: FC = () => {
   return (
     <QrPageContainer>
       <QrCodeContainer>
-        <QrCode url={"https://www.google.com/"} />
+        <QrCode url={`https://dx-waiting-time.vercel.app/user/${user?.uid ? `${user.uid}` : ""}`} />
       </QrCodeContainer>
       <ButtonContainer>
         <Button message={"画像をダウンロード"} onClick={onDownload} />
