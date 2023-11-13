@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -23,18 +24,17 @@ func PostOwner(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	o := model.GetOwner(ownerId)
-	if o != nil {
+	_, err = model.GetOwner(ownerId)
+	if err == nil {
 		c.JSON(http.StatusOK, gin.H{"owner_id": ownerId, "owner_name": ""})
 		return
 	}
 
-
 	nameInterfase := t.Claims["name"]
 	ownerName := nameInterfase.(string)
 
-	owner := model.CreateOwner(ownerId, ownerName)
-	c.JSON(http.StatusOK,owner)
+	owner, _ := model.CreateOwner(ownerId, ownerName)
+	c.JSON(http.StatusOK, owner)
 }
 
 // 並んでいる人数を取得する
@@ -52,7 +52,7 @@ func GetFollowing(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	customer := model.GetOwnerFollowing(ownerId)
+	customer, _ := model.GetFollowing(ownerId)
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
 
@@ -74,7 +74,7 @@ func GetNextCustomer(c *gin.Context) {
 	// customerに対して呼び出し通知を送る処理を書く
 
 	OwnerId := t.UID
-	customer := model.GetNextCustomer(OwnerId)
+	customer, _ := model.GetNextCustomer(OwnerId)
 	c.JSON(http.StatusOK, gin.H{"customer": customer})
 }
 
@@ -94,8 +94,8 @@ func PutOwnerCompleteCustomer(c *gin.Context) {
 	}
 
 	OwnerId := t.UID
-	position := c.Param("position")
-	customer := model.UpdateCustomerStatus(OwnerId, "complete", position)
+	position, _ := strconv.Atoi(c.Param("position"))
+	customer, _ := model.UpdateCustomerStatus(OwnerId, "complete", position)
 	c.JSON(http.StatusOK, gin.H{"customer": customer})
 }
 
@@ -109,7 +109,7 @@ func PutOwnerPassCustomer(c *gin.Context) {
 	}
 
 	OwnerId := t.UID
-	position := c.Param("position")
-	customer := model.UpdateCustomerStatus(OwnerId, "non-waiting", position)
+	position, _ := strconv.Atoi(c.Param("position"))
+	customer, _ := model.UpdateCustomerStatus(OwnerId, "non-waiting", position)
 	c.JSON(http.StatusOK, gin.H{"customer": customer})
 }
