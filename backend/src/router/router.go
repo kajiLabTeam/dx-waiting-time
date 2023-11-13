@@ -22,6 +22,8 @@ func Init() {
 
 	r.GET("api/owner/queue/position/next/", controller.GetNextCustomer)
 
+	r.POST("api/owner/queue/create", controller.PostOwner)
+
 	r.PUT("api/owner/queue/position/complete/:position", controller.PutOwnerCompleteCustomer)
 
 	r.PUT("api/owner/queue/position/pass/:position", controller.PutOwnerPassCustomer)
