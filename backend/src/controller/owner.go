@@ -70,11 +70,10 @@ func GetNextCustomer(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-
-	// customerに対して呼び出し通知を送る処理を書く
-
 	OwnerId := t.UID
 	customer, _ := model.GetNextCustomer(OwnerId)
+	integrations.CallNotification(customer)
+
 	c.JSON(http.StatusOK, gin.H{"customer": customer})
 }
 
