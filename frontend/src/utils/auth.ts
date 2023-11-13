@@ -1,5 +1,6 @@
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { useUserMutators } from "../globalStates/firebaseUserState";
 import { app } from "./firebase";
 
 export const googleLogin = async (): Promise<void> => {
@@ -13,6 +14,7 @@ export const googleLogin = async (): Promise<void> => {
 
 export const useIsSigned = (): boolean | undefined => {
   const [isLogin, setIsLogin] = useState<boolean | undefined>();
+  const { setUserState } = useUserMutators();
 
   useEffect(() => {
     (async () => {
@@ -21,6 +23,7 @@ export const useIsSigned = (): boolean | undefined => {
         onAuthStateChanged(auth, (user) => {
           if (user) {
             setIsLogin(true);
+            setUserState(user);
           } else {
             setIsLogin(false);
           }
@@ -29,7 +32,7 @@ export const useIsSigned = (): boolean | undefined => {
         console.error(err);
       }
     })();
-  }, [isLogin]);
+  }, [isLogin, setUserState]);
 
   return isLogin;
 };
