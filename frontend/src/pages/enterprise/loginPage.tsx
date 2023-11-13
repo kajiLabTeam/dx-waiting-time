@@ -1,6 +1,5 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { Button } from "../../components/utils/Button";
 import { MessageCricle } from "../../components/utils/MessageCricle";
