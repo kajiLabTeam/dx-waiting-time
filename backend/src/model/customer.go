@@ -49,7 +49,7 @@ func GetCustomer(ownerId string, position int) (Customer, error) {
 // 引数：OwnerId
 // 返り値：Customer, error
 // 1. OwnerIdを元に、statusが'waiting'または'IgnoreItOnce'であるCustomerを全て検索
-func GetOwnerFollowing(ownerId string) ([]Customer, error) {
+func GetFollowing(ownerId string) ([]Customer, error) {
 	c := []Customer{}
 	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'IgnoreItOnce')", ownerId).Find(&c)
 	return c, nil
@@ -71,7 +71,7 @@ func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
 // 返り値：Customer, error
 // 1. OwnerIdを元に、statusが'waiting'または'IgnoreItOnce'であるCustomerを全て検索
 // 2. positionが最も小さいCustomerを検索
-func GetCustomerPosition(ownerId string) (Customer, error) {
+func GetNextCustomer(ownerId string) (Customer, error) {
 	c := Customer{}
 	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'IgnoreItOnce')", ownerId).Order("position asc").First(&c)
 	return c, nil

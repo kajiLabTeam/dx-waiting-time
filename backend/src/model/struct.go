@@ -11,7 +11,6 @@ var db = lib.SqlConnect()
 type Owner struct {
 	OwnerId   string     `json:"ownerId"`
 	OwnerName string     `json:"ownerName"`
-	Url       string     `json:"url"`
 	Customer  []Customer `json:"customers"`
 }
 
