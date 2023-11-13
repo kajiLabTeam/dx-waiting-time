@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kajiLabTeam/dx-waiting-time/integrations"
 	"github.com/kajiLabTeam/dx-waiting-time/model"
+	"github.com/kajiLabTeam/dx-waiting-time/service"
 )
 
 // Ownerの登録
@@ -17,7 +17,7 @@ import (
 func PostOwner(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
-	t, err := integrations.VerifyIDToken(tId)
+	t, err := service.VerifyIDToken(tId)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -45,7 +45,7 @@ func PostOwner(c *gin.Context) {
 func GetFollowing(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
-	t, err := integrations.VerifyIDToken(tId)
+	t, err := service.VerifyIDToken(tId)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -65,7 +65,7 @@ func GetFollowing(c *gin.Context) {
 func GetNextCustomer(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
-	t, err := integrations.VerifyIDToken(tId)
+	t, err := service.VerifyIDToken(tId)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -87,7 +87,7 @@ func GetNextCustomer(c *gin.Context) {
 func PutOwnerCompleteCustomer(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
-	t, err := integrations.VerifyIDToken(tId)
+	t, err := service.VerifyIDToken(tId)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -102,7 +102,7 @@ func PutOwnerCompleteCustomer(c *gin.Context) {
 func PutOwnerPassCustomer(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
-	t, err := integrations.VerifyIDToken(tId)
+	t, err := service.VerifyIDToken(tId)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
