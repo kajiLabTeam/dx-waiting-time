@@ -62,7 +62,7 @@ const useInitFirebase = async () => {
       if (permission !== "granted") {
         throw new Error("Permission not granted for Notification");
       }
-      
+
       const messaging = getMessaging(app);
       const currentToken = await getToken(messaging);
       if (currentToken) {
