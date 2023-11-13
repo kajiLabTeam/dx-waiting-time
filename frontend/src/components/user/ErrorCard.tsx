@@ -28,15 +28,14 @@ const Text = styled.textarea`
   color: ${theme.colors.brown};
 `;
 
+const message =
+  "通知が許可されていないため列に並ぶことができません。\n列に並ぶには設定から通知を許可してください。";
+
 export const ErrorCard: FC = () => {
   return (
     <CardContainer>
       <Titile>現在利用できません</Titile>
-      <Text>
-        通知が許可されていないため列に並ぶことができません。
-        列に並ぶには設定から通知を許可してください。
-      </Text>
-      <Text>このサービスではお客様の呼び出し以外に通知を送ることはありません。</Text>
+      <Text>{message}</Text>
     </CardContainer>
   );
 };

@@ -53,35 +53,43 @@ const ButtonContainer = styled.div`
 const followingNumber = 3;
 const callNumber = 321;
 
-const useInitFirebase = async () => {
+const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
-
   useEffect(() => {
     const requestNotificationPermission = async () => {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
-        throw new Error("Permission not granted for Notification");
+        console.error("Permission not granted for Notification");
+        return;
       }
-
       const messaging = getMessaging(app);
-      const currentToken = await getToken(messaging);
-      if (currentToken) {
-        setIsNotification(true);
-      }
-      console.error("No Instance ID token available. Request permission to generate one.");
-      setIsNotification(false);
+      getToken(messaging, {
+        vapidKey:
+          "BDOU99-h67HcA6JeFXHbSNMu7e2yNNu3RzoMj8TM4W88jITfq7ZmPvIM1Iv-4_l2LxQcYwhqby2xGpWwzjfAnG4",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            localStorage.setItem("token", currentToken);
+            setIsNotification(true);
+          } else {
+            console.error("No registration token available. Request permission to generate one.");
+            setIsNotification(false);
+          }
+        })
+        .catch((err) => {
+          console.error("An error occurred while retrieving token. ", err);
+        });
     };
-
     requestNotificationPermission();
   }, []);
-
   return isNotification;
 };
 
 const ClientPage: FC = () => {
   const onLogin = () => {};
-  const isNotification = useInitFirebase();
-  if (!isNotification) {
+  const isNoti = useInitFirebase();
+
+  if (!isNoti) {
     return (
       <>
         <FalseContainer>
