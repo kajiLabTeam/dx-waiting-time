@@ -31,7 +31,7 @@ func WebPushNotification(m *messaging.Message) {
 	fmt.Printf("response=%s\n", response)
 }
 
-func makeMessage(token, title, body string) *messaging.Message {
+func MakeMessage(token, title, body string) *messaging.Message {
 	return &messaging.Message{
 		Token: token,
 		Notification: &messaging.Notification{
@@ -55,8 +55,9 @@ func RegularUpdateNotification() {
 					} else {
 						model.UpdateCustomerStatus(customer.OwnerId, "ignoreItOnce", customer.Position)
 					}
-					
-					makeMessage(customer.FirebaseToken, "お知らせ", "順番が更新されました")
+
+					m := MakeMessage(customer.FirebaseToken, "お知らせ", "順番が更新されました")
+					WebPushNotification(m)
 				}
 			}(owner)
 		}
