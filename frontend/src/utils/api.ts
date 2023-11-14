@@ -28,9 +28,6 @@ export const useCustomSWR = <T>(url: string) => {
     return resonse.json();
   };
 
-  const { data, error } = useSWR<T>(url, fetcher, { suspense: true });
+  const { data, error } = useSWR<T>(url, fetcher);
   return { data, error };
 };
-
-
-
