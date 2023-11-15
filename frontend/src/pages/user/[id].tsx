@@ -70,9 +70,10 @@ const useInitFirebase = () => {
       const messaging = getMessaging(app);
       try {
         const currentToken = await getToken(messaging);
-        setIsNotification(true);
-        setIsToken(true);
-        if (!currentToken) {
+        if (currentToken) {
+          setIsNotification(true);
+          setIsToken(true);
+        } else {
           console.error("No Instance ID token available. Request permission to generate one.");
           setIsToken(false);
         }
