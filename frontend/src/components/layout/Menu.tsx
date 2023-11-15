@@ -21,12 +21,10 @@ const MenuList = styled.div`
 
 const link = "/enterprise/";
 
-const menus = [
-  {
-    name: ["アカウント情報", "QRコード印刷", "呼び出し", "業務を始める", "業務を終わる"],
-    url: ["accountPage", "qrPage", "callPage", "startPage", "endPage"],
-  },
-];
+const menus = {
+  name: ["アカウント情報", "QRコード印刷", "呼び出し", "業務を始める", "業務を終わる"],
+  url: ["accountPage", "qrPage", "callPage", "startPage", "endPage"],
+} as const;
 
 const Margin = styled.div`
   height: 60vh;
@@ -42,19 +40,15 @@ const Menu = () => {
   };
 
   // routerと同じ名前のmenusを消す
-  const filteredMenus = menus.map((menu) => ({
-    name: menu.name.filter((_, index) => menu.url[index] !== pageName),
-    url: menu.url.filter((url) => url !== pageName),
-  }));
+  const filteredMenus = {
+    name: menus.name.filter((_, index) => menus.url[index] !== pageName),
+    url: menus.url.filter((url) => url !== pageName),
+  };
 
   return (
     <MenuContainer>
-      {filteredMenus[0].name.map((value, index) => (
-        <Link
-          href={link + filteredMenus[0].url[index]}
-          key={index}
-          style={{ textDecoration: "none" }}
-        >
+      {filteredMenus.name.map((value, index) => (
+        <Link href={link + filteredMenus.url[index]} key={index} style={{ textDecoration: "none" }}>
           <MenuList>{value}</MenuList>
         </Link>
       ))}
