@@ -2,8 +2,10 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
+import { PositionResponse } from "../../components/types";
 import { ErrorCard } from "../../components/user/ErrorCard";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { useCustomSWR } from "../../utils/api";
 import { app } from "../../utils/firebase";
 import { theme } from "../../utils/theme";
 
@@ -87,6 +89,11 @@ const useInitFirebase = async () => {
 const ClientPage: FC = () => {
   const onLogin = () => {};
   const isNotification = useInitFirebase();
+
+  const { data: posionResponse, error } = useCustomSWR<PositionResponse>(
+    "http://localhost:3000/api/position"
+  );
+
   if (!isNotification) {
     return (
       <>
@@ -113,7 +120,7 @@ const ClientPage: FC = () => {
       </CircleContainer>
       <WaitingContainer>
         <Text>現在の待ち人数</Text>
-        <Number>{followingNumber}人</Number>
+        <Number>{posionResponse?.callNumber}人</Number>
       </WaitingContainer>
       <ButtonContainer>
         <GetOutButton onClick={onLogin} />
