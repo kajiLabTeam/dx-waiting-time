@@ -1,5 +1,5 @@
 @userUrl = http//localhot:8080/api/{{ownerId}}/queue
-@ownerId = twUYr3EHO2fm45THYXokG5OxcK63
+@ownerId = hogehoge12345hagehage6789
 @deviceToken = firebase_device_token
 
 ### 待ち順に参加する
