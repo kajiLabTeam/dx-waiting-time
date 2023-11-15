@@ -12,7 +12,7 @@ import (
 // 1. urlからownerIdを取得する
 // 4. customerの作成
 func GetCustomer(c *gin.Context) {
-	token := c.Query("token")
+	token := c.Query("deviceToken")
 	ownerId := c.Param("ownerId")
 	customer, _ := model.CreateCustomer(ownerId, token)
 	c.JSON(http.StatusOK,
