@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { FC } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
@@ -53,12 +54,13 @@ const callNumber = 321;
 
 const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
+  const deviceToken = localStorage.getItem("token");
+  const router = useRouter();
+  const ownerId = router.query.id;
   const getout = () => {};
 
-  const token = "hoge";
-  const ownerId = "hoge";
   const { data: posionResponse, error } = useDataWithLocalStorage<PositionResponse>(
-    `${baseURL}/${ownerId}/queue/position${token}`
+    `${baseURL}/${ownerId}/queue/position${deviceToken}`
   );
 
   if (error) return <div>エラーが発生しました</div>;
