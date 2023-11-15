@@ -1,5 +1,4 @@
-import { FC } from "react";
-import React from "react";
+import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../utils/theme";
 
@@ -7,9 +6,10 @@ type Props = {
   input: { title: string; placeholder: string };
 };
 
-const InputContainer = styled.div``;
+const EditContainer = styled.div``;
 
 const Input = styled.input`
+  display: inline-block;
   margin: 3% 0;
   padding: 0.5rem;
   font-size: 1.5rem;
@@ -22,17 +22,30 @@ const Input = styled.input`
 
 const Title = styled.p`
   font-size: 2rem;
-  padding: 0.3rem 0;
+  margin: 3% 0;
+  padding: 0.3rem 0.3rem;
   color: ${theme.colors.brown};
   font-family: "Noto Sans JP", sans-serif;
   border-bottom: 2px solid ${theme.colors.brown};
 `;
 
-export const InputText: FC<Props> = ({ input }) => {
+const InText = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const EditAccount: FC<Props> = ({ input }) => {
+  const [inputText, setInputText] = useState("");
+  useEffect(() => {
+    setInputText(inputText);
+  }, [inputText]);
+
   return (
-    <InputContainer>
+    <EditContainer>
       <Title>I {input.title}</Title>
-      <Input type="text" placeholder={`${input.placeholder}を入力してください`} />
-    </InputContainer>
+      <InText>
+        <Input type="text" placeholder={`${input.placeholder}`} />
+      </InText>
+    </EditContainer>
   );
 };

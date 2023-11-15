@@ -1,26 +1,40 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styled from "styled-components";
-// import { theme } from "../../utils/theme";
-import { InputText } from "../../components/account/Input";
+import { EditAccount } from "../../components/account/EditAccount";
+import { PrintAccount } from "../../components/account/PrintAccount";
+import { Button } from "../../components/utils/Button";
 
 const AccountPageContainer = styled.div`
   margin: 1rem 1rem 0rem 1rem;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+`;
+
 const inputList = [
   {
     title: "店名",
-    placeholder: "店名",
+    placeholder: "簡単行列整理くん",
   },
-  { title: "ホームページ", placeholder: "URL" },
+  { title: "ホームページ", placeholder: "https://google.com" },
 ];
 
 const AccountPage: FC = () => {
+  const [isEdit, setIsEdit] = useState(false);
+  const onEdit = () => {
+    setIsEdit(!isEdit);
+  };
   return (
     <AccountPageContainer>
-      {inputList.map((input, value) => (
-        <InputText key={value} input={input}/>
-      ))}
+      {isEdit
+        ? inputList.map((input, value) => <EditAccount key={value} input={input} />)
+        : inputList.map((input, value) => <PrintAccount key={value} input={input} />)}
+      <ButtonContainer>
+        <Button message={isEdit ? "元の画面に戻る" : "情報を編集"} onClick={onEdit} />
+      </ButtonContainer>
     </AccountPageContainer>
   );
 };
