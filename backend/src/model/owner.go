@@ -37,3 +37,13 @@ func GetOwner(ownerId string) (*Owner, error) {
 	}
 	return &o, nil
 }
+
+// Ownerを全件検索
+// 引数：なし
+// 返り値：[]Owner, error
+// 1. Ownerを全件検索
+func GetAllOwner() ([]Owner, error) {
+	var o []Owner
+	db.Find(&o)
+	return o, nil
+}

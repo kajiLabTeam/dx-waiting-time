@@ -1,4 +1,5 @@
 import { getMessaging, getToken } from "firebase/messaging";
+import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
@@ -55,11 +56,14 @@ const callNumber = 321;
 
 const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
+  const [isToken, setIsToken] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     const requestNotificationPermission = async () => {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
         console.error("Permission not granted for Notification");
+        setIsNotification(false);
         return;
       }
       const messaging = getMessaging(app);
@@ -70,26 +74,30 @@ const useInitFirebase = () => {
         .then((currentToken) => {
           if (currentToken) {
             localStorage.setItem("token", currentToken);
-            setIsNotification(true);
+            setIsToken(true);
           } else {
             console.error("No registration token available. Request permission to generate one.");
             setIsNotification(false);
+            setIsToken(false);
           }
         })
         .catch((err) => {
           console.error("An error occurred while retrieving token. ", err);
+          setIsToken(false);
+          router.reload();
         });
     };
     requestNotificationPermission();
-  }, []);
-  return isNotification;
+  }, [router]);
+
+  return [isNotification, isToken];
 };
 
 const ClientPage: FC = () => {
+  const [isNotification, isToken] = useInitFirebase();
   const onLogin = () => {};
-  const isNoti = useInitFirebase();
 
-  if (!isNoti) {
+  if (!isNotification) {
     return (
       <>
         <FalseContainer>
@@ -110,13 +118,19 @@ const ClientPage: FC = () => {
   return (
     <ClientPageContainer>
       <CircleContainer>
-        <MessageCricle message={callNumber} />
+        {isToken ? <MessageCricle message={callNumber} /> : <MessageCricle message={""} />}
         <CircleText>あなたの呼出番号は</CircleText>
       </CircleContainer>
-      <WaitingContainer>
-        <Text>現在の待ち人数</Text>
-        <Number>{followingNumber}人</Number>
-      </WaitingContainer>
+      {isToken ? (
+        <WaitingContainer>
+          <Text>現在の待ち人数</Text>
+          <Number>{followingNumber}人</Number>
+        </WaitingContainer>
+      ) : (
+        <WaitingContainer>
+          <Text>番号が発行されません</Text>
+        </WaitingContainer>
+      )}
       <ButtonContainer>
         <GetOutButton onClick={onLogin} />
       </ButtonContainer>

@@ -46,7 +46,7 @@ func GetCustomerFollowing(c *gin.Context) {
 
 	customer,_ := model.GetCustomerFollowing(ownerId, info.Position)
 
-	// customerのwaitingStatusを"waiting"に変更する
+	model.UpdateCustomerStatus(ownerId, "waiting", info.Position)
 
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
