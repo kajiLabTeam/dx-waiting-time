@@ -1,13 +1,13 @@
 @userUrl = http://localhost:8080/api/{{ownerId}}/queue
-@ownerId = twUYr3EHO2fm45THYXokG5OxcK63
+@ownerId = hugahuga8192hakeheke16384
 @deviceToken = cxiU2v9mQrNcccYgHWeL3X:APA91bHgVjVefqJyA471dtn5lJgY8d0qrPWY3Cvy9Z2M8iSkF3jbqeO2CCLqbMUT2RrW7P37OngPPL2jED2V10jxea7V6X6LY55B4d2EU4OSEQRbVAfPsacHFDD2_9uK-1IoXfXMdpm1
 
 ### 待ち順に参加する
-GET {{userUrl}}/position/?token={{deviceToken}}
+GET {{userUrl}}/position?token={{deviceToken}}
 
 
 ### あと何人かがわかる
-GET {{userUrl}}/following/?&position=2
+GET {{userUrl}}/following?&position=2
 
 ### 列から抜ける
-DELETE {{userUrl}}/position/?position=2
+DELETE {{userUrl}}/position?position=2
