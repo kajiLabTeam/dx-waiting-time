@@ -19,19 +19,17 @@ export const useAccountState = () => {
 export const useAccountMutators = () => {
   const [currentAccountState, setAccountState] = useRecoilState(accountState);
 
-  const setAccountInfo = () => {
-    (title: string, text: string) => {
-      const newAccountState = currentAccountState.map((account) => {
-        if (account.title === title) {
-          return {
-            ...account,
-            text: text,
-          };
-        }
-        return account;
-      });
-      setAccountState(newAccountState);
-    };
+  const setAccountInfo = (title: string, text: string) => {
+    const newAccountState = currentAccountState.map((account) => {
+      if (account.title === title) {
+        return {
+          ...account,
+          text: text,
+        };
+      }
+      return account;
+    });
+    setAccountState(newAccountState);
   };
 
   return {

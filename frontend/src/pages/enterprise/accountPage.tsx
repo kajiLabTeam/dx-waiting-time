@@ -27,7 +27,7 @@ const AccountPage: FC = () => {
         ? inputObj.map((input, value) => <EditAccount key={value} input={input} />)
         : inputObj.map((input, value) => <PrintAccount key={value} input={input} />)}
       <ButtonContainer>
-        <Button message={isEdit ? "変更内容を保存" : "情報を編集"} onClick={onEdit} />
+        <Button message={isEdit ? "元のページに戻る" : "情報を編集"} onClick={onEdit} />
       </ButtonContainer>
     </AccountPageContainer>
   );
