@@ -1,4 +1,5 @@
 import { getMessaging, getToken } from "firebase/messaging";
+import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
@@ -53,34 +54,46 @@ const ButtonContainer = styled.div`
 const followingNumber = 3;
 const callNumber = 321;
 
-const useInitFirebase = async () => {
+const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
+  const [isToken, setIsToken] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
-        throw new Error("Permission not granted for Notification");
+        console.error("Permission not granted for Notification");
+        setIsNotification(false);
+        return;
       }
-
       const messaging = getMessaging(app);
-      const currentToken = await getToken(messaging);
-      if (currentToken) {
-        setIsNotification(true);
+      try {
+        const currentToken = await getToken(messaging);
+        if (currentToken) {
+          setIsNotification(true);
+          setIsToken(true);
+        } else {
+          console.error("No Instance ID token available. Request permission to generate one.");
+          setIsToken(false);
+        }
+      } catch (error) {
+        console.error("Error getting token:", error);
+        setIsNotification(false);
+        router.reload();
       }
-      console.error("No Instance ID token available. Request permission to generate one.");
-      setIsNotification(false);
     };
 
     requestNotificationPermission();
-  }, []);
+  }, [router]);
 
-  return isNotification;
+  return [isNotification, isToken];
 };
 
 const ClientPage: FC = () => {
+  const [isNotification, isToken] = useInitFirebase();
   const onLogin = () => {};
-  const isNotification = useInitFirebase();
+
   if (!isNotification) {
     return (
       <>
@@ -102,13 +115,19 @@ const ClientPage: FC = () => {
   return (
     <ClientPageContainer>
       <CircleContainer>
-        <MessageCricle message={callNumber} />
+        {isToken ? <MessageCricle message={callNumber} /> : <MessageCricle message={""} />}
         <CircleText>あなたの呼出番号は</CircleText>
       </CircleContainer>
-      <WaitingContainer>
-        <Text>現在の待ち人数</Text>
-        <Number>{followingNumber}人</Number>
-      </WaitingContainer>
+      {isToken ? (
+        <WaitingContainer>
+          <Text>現在の待ち人数</Text>
+          <Number>{followingNumber}人</Number>
+        </WaitingContainer>
+      ) : (
+        <WaitingContainer>
+          <Text>番号が発行されません</Text>
+        </WaitingContainer>
+      )}
       <ButtonContainer>
         <GetOutButton onClick={onLogin} />
       </ButtonContainer>

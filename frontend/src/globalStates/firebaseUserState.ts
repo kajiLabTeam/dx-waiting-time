@@ -1,7 +1,7 @@
 import firebase from "firebase/auth";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
-const userState = atom<firebase.User | null>({
+export const userState = atom<firebase.User | null>({
   key: "userState",
   default: null,
   dangerouslyAllowMutability: true,
