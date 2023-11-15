@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS dx_waiting.customers(
     firebase_token VARCHAR(256),
     owner_id VARCHAR(128),
     PRIMARY KEY (customer_id),
-    foreign key (owner_id) references dx_waiting.owner(owner_id)
+    foreign key (owner_id) references dx_waiting.owners(owner_id)
 );
