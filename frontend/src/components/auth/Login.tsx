@@ -1,7 +1,8 @@
 import { User } from "firebase/auth";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { useUserState } from "../../globalStates/firebaseUserState";
+import { useLoginMutators } from "../../globalStates/loginState";
 import { baseURL } from "../../utils/api";
 import { googleLogin } from "../../utils/auth";
 import Layout from "../layout/layout";
@@ -48,6 +49,11 @@ const Login: FC = () => {
       console.error("Login failed: ", error);
     }
   };
+
+  const { setLoginOpenState } = useLoginMutators();
+  useEffect(() => {
+    setLoginOpenState(true);
+  }, [setLoginOpenState]);
 
   return (
     <Layout>

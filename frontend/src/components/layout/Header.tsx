@@ -1,6 +1,9 @@
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import styled from "styled-components";
+import { useLoginState } from "../../globalStates/loginState";
+import { useMenuMutators, useMenuState } from "../../globalStates/menuState";
+import { usePageName } from "../../hooks/usePageName";
 import { useIsSigned } from "../../utils/auth";
 import { theme } from "../../utils/theme";
 
@@ -26,11 +29,25 @@ const MenuButton = styled.button`
   margin-right: 0.5rem;
 `;
 
+const Text = styled.span`
+  font-family: "Noto Sans JP", sans-serif;
+`;
+
 const Header = () => {
-  const router = useRouter();
-  const pathParts = router.pathname.split("/");
-  const [, role, pageName] = pathParts;
+  const [role, pageName] = usePageName();
   const isSigned = useIsSigned();
+  const isMenuOpen = useMenuState();
+  const { setMenuOpenState } = useMenuMutators();
+  const isLoginOpen = useLoginState();
+
+  const onHideMenu = () => {
+    setMenuOpenState(!isMenuOpen);
+  };
+
+  // ルートの名前が変わったらメニューを閉じる
+  useEffect(() => {
+    setMenuOpenState(false);
+  }, [pageName, setMenuOpenState]);
 
   return (
     <HeaderContainer>
@@ -53,10 +70,14 @@ const Header = () => {
       ) : (
         <Title>ログイン</Title>
       )}
-      {role === "enterprise" && (
-        <MenuButton onClick={() => router.push("/adminPage")}>
-          <AiOutlineMenu />
-        </MenuButton>
+      {isLoginOpen ? (
+        <></>
+      ) : (
+        role === "enterprise" && (
+          <MenuButton onClick={onHideMenu}>
+            {isMenuOpen ? <Text>×</Text> : <AiOutlineMenu />}
+          </MenuButton>
+        )
       )}
     </HeaderContainer>
   );
