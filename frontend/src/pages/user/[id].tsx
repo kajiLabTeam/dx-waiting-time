@@ -53,7 +53,7 @@ const ButtonContainer = styled.div`
 const followingNumber = 3;
 const callNumber = 321;
 
-const useInitFirebase = async () => {
+const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
 
   useEffect(() => {
