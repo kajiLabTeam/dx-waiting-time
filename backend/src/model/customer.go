@@ -1,6 +1,10 @@
 package model
 
-import "github.com/kajiLabTeam/dx-waiting-time/service"
+import (
+	"fmt"
+
+	"github.com/kajiLabTeam/dx-waiting-time/service"
+)
 
 // customerの登録
 // 引数：ownerId
@@ -12,7 +16,7 @@ func CreateCustomer(ownerId, token string) (Customer, error) {
 	c := []Customer{}
 	db.Where("owner_id = ?", ownerId).Order("position asc").Find(&c)
 	nc := Customer{
-		Position:      c[len(c)-1].Position + 1,
+		Position:      len(c) + 1,
 		WaitingStatus: "waiting",
 		Date:          service.GetTime(),
 		FirebaseToken: token,
@@ -29,8 +33,9 @@ func CreateCustomer(ownerId, token string) (Customer, error) {
 // 2. Customerを削除
 func DeleteCustomer(ownerId string, position int) (Customer, error) {
 	c := Customer{}
-	db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c)
-	db.Delete(&c)
+	if err := db.Where("owner_id = ? AND position = ?", ownerId, position).Delete(&c).Error; err != nil {
+		fmt.Println(err)
+	}
 	return c, nil
 }
 
@@ -94,8 +99,11 @@ func GetOwnerCustomer(ownerId string) ([]Customer, error) {
 // 3. CustomerをDBに登録
 func UpdateCustomerStatus(ownerId, status string, position int) (Customer, error) {
 	c := Customer{}
-	db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c)
-	c.WaitingStatus = status
-	db.Save(&c)
+	// db.Where("owner_id = ? AND position = ?", ownerId, position).First(&c)
+	// c.WaitingStatus = status
+	if err := db.Model(&Customer{}).Where("owner_id = ? AND position = ?", ownerId, position).Update("waiting_status", status).Error; err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(c)
 	return c, nil
 }

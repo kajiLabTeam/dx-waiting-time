@@ -11,7 +11,7 @@ var db = lib.SqlConnect()
 type Owner struct {
 	OwnerId   string     `json:"ownerId"`
 	OwnerName string     `json:"ownerName"`
-	Customer  []Customer `json:"customers"`
+	// Customers  []Customer `gorm:"foreign key:OwnerId"`
 }
 
 type Customer struct {
