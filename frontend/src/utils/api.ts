@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 // ドメイン
-export const baseURL = "http://localhost:3000/api/";
+export const baseURL = "http://localhost:3000/api";
 
 export const endpoints = {
   // user
