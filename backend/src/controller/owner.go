@@ -74,7 +74,7 @@ func GetNextCustomer(c *gin.Context) {
 	customer, _ := model.GetNextCustomer(OwnerId)
 	integrations.CallNotification(customer)
 
-	c.JSON(http.StatusOK, gin.H{"position": customer.Position})
+	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position})
 }
 
 // customerのwaitingStatusを"complete"に変更する
@@ -95,7 +95,7 @@ func PutOwnerCompleteCustomer(c *gin.Context) {
 	OwnerId := t.UID
 	position, _ := strconv.Atoi(c.Param("position"))
 	customer, _ := model.UpdateCustomerStatus(OwnerId, "complete", position)
-	c.JSON(http.StatusOK, gin.H{"position": customer.Position, "status": customer.WaitingStatus})
+	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }
 
 func PutOwnerPassCustomer(c *gin.Context) {
@@ -110,5 +110,5 @@ func PutOwnerPassCustomer(c *gin.Context) {
 	OwnerId := t.UID
 	position, _ := strconv.Atoi(c.Param("position"))
 	customer, _ := model.UpdateCustomerStatus(OwnerId, "non-waiting", position)
-	c.JSON(http.StatusOK, gin.H{"position": customer.Position, "status": customer.WaitingStatus})
+	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }

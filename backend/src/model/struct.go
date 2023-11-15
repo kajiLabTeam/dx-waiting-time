@@ -16,7 +16,7 @@ type Owner struct {
 
 type Customer struct {
 	CustomerId    int       `json:"customerId"`
-	Position      int       `json:"position"`
+	Position      int       `json:"callNumber"`
 	WaitingStatus string    `json:"waitingStatus"`
 	Date          time.Time `json:"date"`
 	FirebaseToken string    `json:"firebaseToken"`

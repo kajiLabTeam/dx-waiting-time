@@ -17,9 +17,9 @@ func GetCustomer(c *gin.Context) {
 	customer, _ := model.CreateCustomer(ownerId, token)
 	c.JSON(http.StatusOK,
 		gin.H{
-			"owner_id": customer.OwnerId,
-			"date":     customer.Date.Format("2006-01-02"),
-			"position": customer.Position,
+			"owner_id":   customer.OwnerId,
+			"date":       customer.Date.Format("2006-01-02"),
+			"callNumber": customer.Position,
 		})
 }
 
@@ -56,5 +56,5 @@ func DeleteCustomerPosition(c *gin.Context) {
 	ownerId := c.Param("ownerId")
 	position, _ := strconv.Atoi(c.Query("position"))
 	model.DeleteCustomer(ownerId, position)
-	c.JSON(http.StatusOK, gin.H{"message": "delete customer position"})
+	c.JSON(http.StatusOK, gin.H{"message": "delete customer" + strconv.Itoa(position)})
 }
