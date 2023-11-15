@@ -5,6 +5,7 @@ import { GetOutButton } from "../../components/getout/GetOutButton";
 import { PositionResponse } from "../../components/types";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { useUserState } from "../../globalStates/firebaseUserState";
 import { useDataWithLocalStorage } from "../../hooks/useDataWithLocalStorage";
 import { useInitFirebase } from "../../hooks/useInitFirebase";
 import { baseURL } from "../../utils/api";
@@ -56,12 +57,14 @@ const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
   const deviceToken = localStorage.getItem("token");
   const router = useRouter();
-  const ownerId = "MX9QUxiol1";
+  const { ownerId } = router.query;
   const getout = () => {};
 
   const { data: posionResponse, error } = useDataWithLocalStorage<PositionResponse>(
     `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
   );
+
+  console.log(posionResponse);
 
   if (error) return <div>エラーが発生しました</div>;
   if (!posionResponse) return <div>読み込み中...</div>;
