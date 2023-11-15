@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useAccountMutators } from "../../globalStates/accountState";
 import { theme } from "../../utils/theme";
 
 type Props = {
-  input: { title: string; placeholder: string };
+  input: { title: string; text: string };
 };
 
 const EditContainer = styled.div``;
@@ -35,16 +36,24 @@ const InText = styled.div`
 `;
 
 export const EditAccount: FC<Props> = ({ input }) => {
-  const [inputText, setInputText] = useState("");
+  const { setAccountInfo } = useAccountMutators();
+  // 状態変数とその更新関数を作成
+  const [text, setText] = useState("");
+
+  // 入力フィールドのonChangeイベントハンドラ
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value);
+  };
+
   useEffect(() => {
-    setInputText(inputText);
-  }, [inputText]);
+    setAccountInfo(input.title, text);
+  }, [text, input, setAccountInfo]);
 
   return (
     <EditContainer>
       <Title>I {input.title}</Title>
       <InText>
-        <Input type="text" placeholder={`${input.placeholder}`} />
+        <Input type="text" placeholder={`${input.text}`} onChange={handleInputChange} />
       </InText>
     </EditContainer>
   );

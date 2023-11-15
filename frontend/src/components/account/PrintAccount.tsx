@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { theme } from "../../utils/theme";
 
 type Props = {
-  input: { title: string; placeholder: string };
+  input: { title: string; text: string };
 };
 
 const PrintContainer = styled.div``;
 
 const Title = styled.p`
-opacity: 0.7;
+  opacity: 0.7;
   font-size: 2rem;
   margin: 3% 0;
   padding: 0.3rem 0.3rem;
@@ -38,7 +38,7 @@ export const PrintAccount: FC<Props> = ({ input }) => {
   return (
     <PrintContainer>
       <Title>I {input.title}</Title>
-      <Text>{input.placeholder}</Text>
+      <Text>{input.text}</Text>
     </PrintContainer>
   );
 };
