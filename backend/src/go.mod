@@ -4,6 +4,7 @@ go 1.21.1
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/spf13/viper v1.17.0
 	google.golang.org/api v0.143.0
