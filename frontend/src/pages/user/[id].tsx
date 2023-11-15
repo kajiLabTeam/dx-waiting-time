@@ -1,4 +1,5 @@
 import { getMessaging, getToken } from "firebase/messaging";
+import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
@@ -53,8 +54,9 @@ const ButtonContainer = styled.div`
 const followingNumber = 3;
 const callNumber = 321;
 
-const useInitFirebase = async () => {
+const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
@@ -64,23 +66,30 @@ const useInitFirebase = async () => {
       }
 
       const messaging = getMessaging(app);
-      const currentToken = await getToken(messaging);
+      let currentToken;
+      try {
+        currentToken = await getToken(messaging);
+      } catch {
+        router.reload();
+      }
       if (currentToken) {
         setIsNotification(true);
+      } else {
+        console.error("No Instance ID token available. Request permission to generate one.");
+        setIsNotification(false);
       }
-      console.error("No Instance ID token available. Request permission to generate one.");
-      setIsNotification(false);
     };
 
     requestNotificationPermission();
-  }, []);
+  }, [router]);
 
   return isNotification;
 };
 
 const ClientPage: FC = () => {
-  const onLogin = () => {};
   const isNotification = useInitFirebase();
+  const onLogin = () => {};
+
   if (!isNotification) {
     return (
       <>
