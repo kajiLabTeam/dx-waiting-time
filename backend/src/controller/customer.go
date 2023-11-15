@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kajiLabTeam/dx-waiting-time/model"
@@ -13,12 +14,12 @@ import (
 func GetCustomer(c *gin.Context) {
 	token := c.Query("token")
 	ownerId := c.Param("ownerId")
-	customer,_ := model.CreateCustomer(ownerId, token)
-	c.JSON(http.StatusOK, 
+	customer, _ := model.CreateCustomer(ownerId, token)
+	c.JSON(http.StatusOK,
 		gin.H{
-			"owner_id":customer.OwnerId,
-			"date"    :customer.Date,
-			"position":customer.Position,
+			"owner_id":   customer.OwnerId,
+			"date":       customer.Date.Format("2006-01-02"),
+			"callNumber": customer.Position,
 		})
 }
 
@@ -39,14 +40,11 @@ func GetCustomer(c *gin.Context) {
 func GetCustomerFollowing(c *gin.Context) {
 	ownerId := c.Param("ownerId")
 
-	var info model.Customer
-	if c.ShouldBind(&info) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid parameter"})
-	}
+	position, _ := strconv.Atoi(c.Query("position"))
 
-	customer,_ := model.GetCustomerFollowing(ownerId, info.Position)
+	customer, _ := model.GetCustomerFollowing(ownerId, position)
 
-	model.UpdateCustomerStatus(ownerId, "waiting", info.Position)
+	model.UpdateCustomerStatus(ownerId, "waiting", position)
 
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
@@ -55,13 +53,8 @@ func GetCustomerFollowing(c *gin.Context) {
 // 1. urlからownerIdを取得する
 // 2. ownerIdとinfo.positionを元にcustomerを削除する
 func DeleteCustomerPosition(c *gin.Context) {
-	var info model.Customer
 	ownerId := c.Param("ownerId")
-	err := c.ShouldBind(&info)
-	if err == nil {
-		model.DeleteCustomer(ownerId, info.Position)
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "delete customer position"})
+	position, _ := strconv.Atoi(c.Query("position"))
+	model.DeleteCustomer(ownerId, position)
+	c.JSON(http.StatusOK, gin.H{"message": "delete customer" + strconv.Itoa(position)})
 }
