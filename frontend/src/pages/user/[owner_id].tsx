@@ -56,7 +56,7 @@ const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
   const deviceToken = localStorage.getItem("token");
   const router = useRouter();
-  const ownerId = router.query.id;
+  const { ownerId } = router.query;
   const getout = () => {};
 
   const { data: posionResponse, error } = useDataWithLocalStorage<PositionResponse>(
