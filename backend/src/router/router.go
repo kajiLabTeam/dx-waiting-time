@@ -22,9 +22,9 @@ func Init() {
 
 	r.GET("api/owner/queue/position/next/", controller.GetNextCustomer)
 
-	r.PUT("api/owner/queue/position/complete/:position", controller.PutOwnerCompleteCustomer)
+	r.POST("api/owner/queue/create", controller.PostOwner)
 
-	r.PUT("api/owner/queue/position/pass/:position", controller.PutOwnerPassCustomer)
+	r.PUT("api/owner/queue/position/status", controller.PutCustomerStatus)
 
 	r.DELETE("api/:ownerId/queue/position/", controller.DeleteCustomerPosition)
 

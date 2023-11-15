@@ -1,15 +1,12 @@
 import { getMessaging, getToken } from "firebase/messaging";
+import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
-import { ErrorCard } from "../../components/user/ErrorCard";
+import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { app } from "../../utils/firebase";
 import { theme } from "../../utils/theme";
-
-const FalseContainer = styled.div`
-  opacity: 0.3;
-`;
 
 const ClientPageContainer = styled.div`
   text-align: center;
@@ -53,64 +50,72 @@ const ButtonContainer = styled.div`
 const followingNumber = 3;
 const callNumber = 321;
 
-const useInitFirebase = async () => {
+const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
+  const [isToken, setIsToken] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        throw new Error("Permission not granted for Notification");
-      }
-
+      Notification.requestPermission().then((permission) => {
+        if (permission !== "granted") {
+          console.error("Permission not granted for Notification");
+          setIsNotification(false);
+          return;
+        }
+      });
       const messaging = getMessaging(app);
-      const currentToken = await getToken(messaging);
-      if (currentToken) {
-        setIsNotification(true);
-      }
-      console.error("No Instance ID token available. Request permission to generate one.");
-      setIsNotification(false);
+      getToken(messaging, {
+        vapidKey:
+          "BDOU99-h67HcA6JeFXHbSNMu7e2yNNu3RzoMj8TM4W88jITfq7ZmPvIM1Iv-4_l2LxQcYwhqby2xGpWwzjfAnG4",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            localStorage.setItem("token", currentToken);
+            setIsNotification(true);
+            setIsToken(true);
+          } else {
+            console.error("No registration token available. Request permission to generate one.");
+            setIsToken(false);
+          }
+        })
+        .catch((err) => {
+          console.error("An error occurred while retrieving token. ", err);
+          setIsToken(false);
+          router.reload();
+        });
     };
-
     requestNotificationPermission();
-  }, []);
+  }, [router]);
 
-  return isNotification;
+  return [isNotification, isToken];
 };
 
 const ClientPage: FC = () => {
-  const onLogin = () => {};
-  const isNotification = useInitFirebase();
+  const [isNotification, isToken] = useInitFirebase();
+  const getout = () => {};
+
   if (!isNotification) {
-    return (
-      <>
-        <FalseContainer>
-          <ClientPageContainer>
-            <CircleContainer>
-              <MessageCricle message={""} />
-              <CircleText />
-            </CircleContainer>
-            <WaitingContainer>
-              <Number />
-            </WaitingContainer>
-          </ClientPageContainer>
-        </FalseContainer>
-        <ErrorCard />
-      </>
-    );
+    return <NotificationErrorView />;
   }
   return (
     <ClientPageContainer>
       <CircleContainer>
-        <MessageCricle message={callNumber} />
+        {isToken ? <MessageCricle message={callNumber} /> : <MessageCricle message={""} />}
         <CircleText>あなたの呼出番号は</CircleText>
       </CircleContainer>
-      <WaitingContainer>
-        <Text>現在の待ち人数</Text>
-        <Number>{followingNumber}人</Number>
-      </WaitingContainer>
+      {isToken ? (
+        <WaitingContainer>
+          <Text>現在の待ち人数</Text>
+          <Number>{followingNumber}人</Number>
+        </WaitingContainer>
+      ) : (
+        <WaitingContainer>
+          <Text>お使いのブラウザでは番号が発行できません</Text>
+        </WaitingContainer>
+      )}
       <ButtonContainer>
-        <GetOutButton onClick={onLogin} />
+        <GetOutButton onClick={getout} />
       </ButtonContainer>
     </ClientPageContainer>
   );
