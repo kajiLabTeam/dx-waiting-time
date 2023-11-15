@@ -56,11 +56,11 @@ const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
   const deviceToken = localStorage.getItem("token");
   const router = useRouter();
-  const { ownerId } = router.query;
+  const ownerId = "MX9QUxiol1";
   const getout = () => {};
 
   const { data: posionResponse, error } = useDataWithLocalStorage<PositionResponse>(
-    `${baseURL}/${ownerId}/queue/position${deviceToken}`
+    `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
   );
 
   if (error) return <div>エラーが発生しました</div>;
