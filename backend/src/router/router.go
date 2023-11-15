@@ -18,10 +18,10 @@ func Init() {
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	// ルーティングの設定
-	router := gin.Default()
+	r := gin.Default()
 
 	// ここからCorsの設定
-	router.Use(cors.New(cors.Config{
+	r.Use(cors.New(cors.Config{
 		// アクセスを許可したいアクセス元
 		AllowOrigins: []string{
 			"https://dx-waiting-time.vercel.app/",
@@ -32,7 +32,8 @@ func Init() {
 		AllowMethods: []string{
 			"POST",
 			"GET",
-			"OPTIONS",
+			"PUT",
+			"DELETE",
 		},
 		// 許可したいHTTPリクエストヘッダ
 		AllowHeaders: []string{
@@ -41,6 +42,7 @@ func Init() {
 			"Content-Type",
 			"Content-Length",
 			"Accept-Encoding",
+			"Accept",
 			"Authorization",
 		},
 		// cookieなどの情報を必要とするかどうか
