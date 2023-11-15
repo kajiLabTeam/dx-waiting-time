@@ -56,6 +56,7 @@ const callNumber = 321;
 
 const useInitFirebase = () => {
   const [isNotification, setIsNotification] = useState(false);
+  const [isToken, setIsToken] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -70,8 +71,10 @@ const useInitFirebase = () => {
       try {
         const currentToken = await getToken(messaging);
         setIsNotification(true);
+        setIsToken(true);
         if (!currentToken) {
           console.error("No Instance ID token available. Request permission to generate one.");
+          setIsToken(false);
         }
       } catch (error) {
         console.error("Error getting token:", error);
@@ -83,11 +86,11 @@ const useInitFirebase = () => {
     requestNotificationPermission();
   }, [router]);
 
-  return isNotification;
+  return [isNotification, isToken];
 };
 
 const ClientPage: FC = () => {
-  const isNotification = useInitFirebase();
+  const [isNotification, isToken] = useInitFirebase();
   const onLogin = () => {};
 
   if (!isNotification) {
@@ -111,13 +114,19 @@ const ClientPage: FC = () => {
   return (
     <ClientPageContainer>
       <CircleContainer>
-        <MessageCricle message={callNumber} />
+        {isToken ? <MessageCricle message={callNumber} /> : <MessageCricle message={""} />}
         <CircleText>あなたの呼出番号は</CircleText>
       </CircleContainer>
-      <WaitingContainer>
-        <Text>現在の待ち人数</Text>
-        <Number>{followingNumber}人</Number>
-      </WaitingContainer>
+      {isToken ? (
+        <WaitingContainer>
+          <Text>現在の待ち人数</Text>
+          <Number>{followingNumber}人</Number>
+        </WaitingContainer>
+      ) : (
+        <WaitingContainer>
+          <Text>番号が発行されません</Text>
+        </WaitingContainer>
+      )}
       <ButtonContainer>
         <GetOutButton onClick={onLogin} />
       </ButtonContainer>
