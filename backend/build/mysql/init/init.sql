@@ -1,10 +1,10 @@
-CREATE TABLE IF NOT EXISTS dx_waiting.owner(
+CREATE TABLE IF NOT EXISTS dx_waiting.owners(
     owner_id VARCHAR(128) NOT NULL,
     owner_name VARCHAR(128),
     PRIMARY KEY (owner_id)
 );
 
-CREATE TABLE IF NOT EXISTS dx_waiting.customer(
+CREATE TABLE IF NOT EXISTS dx_waiting.customers(
     customer_id INT NOT NULL AUTO_INCREMENT,
     position INT,
     waiting_status VARCHAR(128),
