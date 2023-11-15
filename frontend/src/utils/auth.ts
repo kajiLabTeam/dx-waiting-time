@@ -1,12 +1,10 @@
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useUserMutators } from "../globalStates/firebaseUserState";
-import { app } from "./firebase";
+import { auth } from "./firebase";
 
 export const googleLogin = async (): Promise<void> => {
   const provider = new GoogleAuthProvider();
-  const auth = getAuth(app);
-
   signInWithRedirect(auth, provider).catch((error) => {
     console.error(error);
   });
