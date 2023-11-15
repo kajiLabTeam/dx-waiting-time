@@ -1,13 +1,11 @@
-import { getMessaging, getToken } from "firebase/messaging";
-import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
 import { PositionResponse } from "../../components/types";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { useInitFirebase } from "../../hooks/useInitFirebase";
 import { useCustomSWR } from "../../utils/api";
-import { app } from "../../utils/firebase";
 import { theme } from "../../utils/theme";
 
 const ClientPageContainer = styled.div`
@@ -51,42 +49,6 @@ const ButtonContainer = styled.div`
 
 const followingNumber = 3;
 const callNumber = 321;
-
-const useInitFirebase = () => {
-  const [isNotification, setIsNotification] = useState(false);
-  const [isToken, setIsToken] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    const requestNotificationPermission = async () => {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        console.error("Permission not granted for Notification");
-        setIsNotification(false);
-        return;
-      }
-      const messaging = getMessaging(app);
-      try {
-        const currentToken = await getToken(messaging);
-        if (currentToken) {
-          setIsNotification(true);
-          setIsToken(true);
-        } else {
-          console.error("No Instance ID token available. Request permission to generate one.");
-          setIsToken(false);
-        }
-      } catch (error) {
-        console.error("Error getting token:", error);
-        setIsNotification(false);
-        router.reload();
-      }
-    };
-
-    requestNotificationPermission();
-  }, [router]);
-
-  return [isNotification, isToken];
-};
 
 const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
