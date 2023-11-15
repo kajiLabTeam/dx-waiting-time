@@ -66,19 +66,17 @@ const useInitFirebase = () => {
         setIsNotification(false);
         return;
       }
-
       const messaging = getMessaging(app);
-      let currentToken;
       try {
-        currentToken = await getToken(messaging);
-      } catch {
-        router.reload();
-      }
-      if (currentToken) {
+        const currentToken = await getToken(messaging);
         setIsNotification(true);
-      } else {
-        console.error("No Instance ID token available. Request permission to generate one.");
+        if (!currentToken) {
+          console.error("No Instance ID token available. Request permission to generate one.");
+        }
+      } catch (error) {
+        console.error("Error getting token:", error);
         setIsNotification(false);
+        router.reload();
       }
     };
 
