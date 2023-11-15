@@ -64,22 +64,26 @@ const useInitFirebase = () => {
         return;
       }
       const messaging = getMessaging(app);
-      try {
-        const currentToken = await getToken(messaging);
-        if (currentToken) {
-          setIsNotification(true);
-          setIsToken(true);
-        } else {
-          console.error("No Instance ID token available. Request permission to generate one.");
+      getToken(messaging, {
+        vapidKey:
+          "BDOU99-h67HcA6JeFXHbSNMu7e2yNNu3RzoMj8TM4W88jITfq7ZmPvIM1Iv-4_l2LxQcYwhqby2xGpWwzjfAnG4",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            localStorage.setItem("token", currentToken);
+            setIsNotification(true);
+            setIsToken(true);
+          } else {
+            console.error("No registration token available. Request permission to generate one.");
+            setIsToken(false);
+          }
+        })
+        .catch((err) => {
+          console.error("An error occurred while retrieving token. ", err);
           setIsToken(false);
-        }
-      } catch (error) {
-        console.error("Error getting token:", error);
-        setIsNotification(false);
-        router.reload();
-      }
+          router.reload();
+        });
     };
-
     requestNotificationPermission();
   }, [router]);
 
@@ -106,7 +110,7 @@ const ClientPage: FC = () => {
         </WaitingContainer>
       ) : (
         <WaitingContainer>
-          <Text>番号が発行されません</Text>
+          <Text>お使いのブラウザでは番号が発行できません</Text>
         </WaitingContainer>
       )}
       <ButtonContainer>
