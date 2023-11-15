@@ -96,6 +96,9 @@ func PutCustomerStatus(c *gin.Context) {
 	if err := c.BindJSON(&customer); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+	if customer.WaitingStatus != "complete" && customer.WaitingStatus != "pass" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
+	}
 	customer, _ = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }
