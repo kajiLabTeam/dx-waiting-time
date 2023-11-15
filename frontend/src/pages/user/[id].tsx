@@ -58,18 +58,24 @@ const useInitFirebase = async () => {
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        throw new Error("Permission not granted for Notification");
-      }
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          throw new Error("Permission not granted for Notification");
+        }
 
-      const messaging = getMessaging(app);
-      const currentToken = await getToken(messaging);
-      if (currentToken) {
-        setIsNotification(true);
+        const messaging = getMessaging(app);
+        const currentToken = await getToken(messaging);
+        if (currentToken) {
+          setIsNotification(true);
+        } else {
+          console.error("No Instance ID token available. Request permission to generate one.");
+          setIsNotification(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setIsNotification(false);
       }
-      console.error("No Instance ID token available. Request permission to generate one.");
-      setIsNotification(false);
     };
 
     requestNotificationPermission();
