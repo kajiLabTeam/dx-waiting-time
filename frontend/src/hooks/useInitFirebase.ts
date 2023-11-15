@@ -10,29 +10,34 @@ export const useInitFirebase = () => {
 
   useEffect(() => {
     const requestNotificationPermission = async () => {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        console.error("Permission not granted for Notification");
-        setIsNotification(false);
-        return;
-      }
-      const messaging = getMessaging(app);
-      try {
-        const currentToken = await getToken(messaging);
-        if (currentToken) {
-          setIsNotification(true);
-          setIsToken(true);
-        } else {
-          console.error("No Instance ID token available. Request permission to generate one.");
-          setIsToken(false);
+      Notification.requestPermission().then((permission) => {
+        if (permission !== "granted") {
+          console.error("Permission not granted for Notification");
+          setIsNotification(false);
+          return;
         }
-      } catch (error) {
-        console.error("Error getting token:", error);
-        setIsNotification(false);
-        router.reload();
-      }
+      });
+      const messaging = getMessaging(app);
+      getToken(messaging, {
+        vapidKey:
+          "BDOU99-h67HcA6JeFXHbSNMu7e2yNNu3RzoMj8TM4W88jITfq7ZmPvIM1Iv-4_l2LxQcYwhqby2xGpWwzjfAnG4",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            localStorage.setItem("token", currentToken);
+            setIsNotification(true);
+            setIsToken(true);
+          } else {
+            console.error("No registration token available. Request permission to generate one.");
+            setIsToken(false);
+          }
+        })
+        .catch((err) => {
+          console.error("An error occurred while retrieving token. ", err);
+          setIsToken(false);
+          router.reload();
+        });
     };
-
     requestNotificationPermission();
   }, [router]);
 
