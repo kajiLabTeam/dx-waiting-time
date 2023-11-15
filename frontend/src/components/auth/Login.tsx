@@ -1,5 +1,8 @@
+import { User } from "firebase/auth";
 import { FC } from "react";
 import styled from "styled-components";
+import { useUserState } from "../../globalStates/firebaseUserState";
+import { baseURL } from "../../utils/api";
 import { googleLogin } from "../../utils/auth";
 import Layout from "../layout/layout";
 import { Button } from "../utils/Button";
@@ -22,6 +25,30 @@ const Action = styled.div`
 `;
 
 const Login: FC = () => {
+  const user = useUserState();
+  const handleLogin = async (user: User | null) => {
+    try {
+      await googleLogin();
+      console.log("login success");
+      // tokenを取得
+      const token = await user?.getIdToken();
+      // postする
+      const response = await fetch(`${baseURL}/owner/queue/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          " Authorization": `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      console.log("post success");
+    } catch (error) {
+      console.error("Login failed: ", error);
+    }
+  };
+
   return (
     <Layout>
       <LoginPageContainer>
@@ -32,7 +59,7 @@ const Login: FC = () => {
           <Button
             message={"ログイン"}
             onClick={() => {
-              googleLogin();
+              handleLogin(user);
             }}
           />
         </Action>
