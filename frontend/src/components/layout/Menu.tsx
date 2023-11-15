@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { menuState } from "../../globalStates/menuState";
+import { useMenuMutators, useMenuState } from "../../globalStates/menuState";
+import { usePageName } from "../../hooks/usePageName";
 import { theme } from "../../utils/theme";
 
 const MenuContainer = styled.div`
@@ -34,14 +33,12 @@ const Margin = styled.div`
 `;
 
 const Menu = () => {
-  const router = useRouter();
-  const pathParts = router.pathname.split("/");
-  const [, , pageName] = pathParts;
-
-  const [menu, setMenu] = useRecoilState(menuState);
+  const [, pageName] = usePageName();
+  const isMenuOpen = useMenuState();
+  const { setMenuOpenState } = useMenuMutators();
 
   const onHideMenu = () => {
-    setMenu(!menu);
+    setMenuOpenState(!isMenuOpen);
   };
 
   // routerと同じ名前のmenusを消す

@@ -1,19 +1,18 @@
 import { ReactNode } from "react";
-import { useRecoilState } from "recoil";
-import { menuState } from "../../globalStates/menuState";
+import { useMenuState } from "../../globalStates/menuState";
 import Header from "./Header";
 import Menu from "./Menu";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const [menu] = useRecoilState(menuState);
+  const isMenuOpen = useMenuState();
 
   return (
     <div>
       <Header />
-      {menu ? <Menu /> : null}
+      {isMenuOpen ? <Menu /> : null}
       <main
         style={
-          menu
+          isMenuOpen
             ? {
                 maxWidth: "100%",
                 opacity: 0.5,
