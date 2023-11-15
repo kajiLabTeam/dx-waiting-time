@@ -88,7 +88,7 @@ const useInitFirebase = () => {
 
 const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
-  const onLogin = () => {};
+  const getout = () => {};
 
   if (!isNotification) {
     return <NotificationErrorView />;
@@ -110,7 +110,7 @@ const ClientPage: FC = () => {
         </WaitingContainer>
       )}
       <ButtonContainer>
-        <GetOutButton onClick={onLogin} />
+        <GetOutButton onClick={getout} />
       </ButtonContainer>
     </ClientPageContainer>
   );
