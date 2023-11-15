@@ -3,14 +3,10 @@ import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
-import { ErrorCard } from "../../components/user/ErrorCard";
+import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { app } from "../../utils/firebase";
 import { theme } from "../../utils/theme";
-
-const FalseContainer = styled.div`
-  opacity: 0.3;
-`;
 
 const ClientPageContainer = styled.div`
   text-align: center;
@@ -95,22 +91,7 @@ const ClientPage: FC = () => {
   const onLogin = () => {};
 
   if (!isNotification) {
-    return (
-      <>
-        <FalseContainer>
-          <ClientPageContainer>
-            <CircleContainer>
-              <MessageCricle message={""} />
-              <CircleText />
-            </CircleContainer>
-            <WaitingContainer>
-              <Number />
-            </WaitingContainer>
-          </ClientPageContainer>
-        </FalseContainer>
-        <ErrorCard />
-      </>
-    );
+    return <NotificationErrorView />;
   }
   return (
     <ClientPageContainer>
