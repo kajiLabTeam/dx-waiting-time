@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -23,8 +24,9 @@ func PostOwner(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	_, err = model.GetOwner(ownerId)
-	if err == nil {
+	o, _ := model.GetOwner(ownerId)
+	if o != nil {
+		fmt.Println(o)
 		c.JSON(http.StatusOK, gin.H{"owner_id": ownerId, "owner_name": ""})
 		return
 	}
@@ -99,6 +101,9 @@ func PutCustomerStatus(c *gin.Context) {
 	if customer.WaitingStatus != "complete" && customer.WaitingStatus != "pass" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
 	}
-	customer, _ = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
+	_,err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }
