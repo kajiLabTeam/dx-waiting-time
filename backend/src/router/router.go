@@ -24,8 +24,8 @@ func Init() {
 	r.Use(cors.New(cors.Config{
 		// アクセスを許可したいアクセス元
 		AllowOrigins: []string{
-			"https://dx-waiting-time.vercel.app/",
-			"https://dxwaitingtime.vercel.app/",
+			"https://dx-waiting-time.vercel.app",
+			"https://dxwaitingtime.vercel.app",
 			"http://localhost:3000",
 		},
 		// アクセスを許可したいHTTPメソッド(以下の例だとPUTやDELETEはアクセスできません)
@@ -59,19 +59,19 @@ func Init() {
 	// r.Use(cors.Default())
 	// r := gin.Default()
 
-	r.GET("api/:ownerId/queue/position/", controller.GetCustomer)
+	r.GET("api/:ownerId/queue/position", controller.GetCustomer)
 
-	r.GET("api/:ownerId/queue/following/", controller.GetCustomerFollowing)
+	r.GET("api/:ownerId/queue/following", controller.GetCustomerFollowing)
 
-	r.GET("api/owner/queue/following/", controller.GetFollowing)
+	r.GET("api/owner/queue/following", controller.GetFollowing)
 
-	r.GET("api/owner/queue/position/next/", controller.GetNextCustomer)
+	r.GET("api/owner/queue/position/next", controller.GetNextCustomer)
 
 	r.POST("api/owner/queue/create", controller.PostOwner)
 
 	r.PUT("api/owner/queue/status", controller.PutCustomerStatus)
 
-	r.DELETE("api/:ownerId/queue/position/", controller.DeleteCustomerPosition)
+	r.DELETE("api/:ownerId/queue/position", controller.DeleteCustomerPosition)
 
 	r.Run()
 }
