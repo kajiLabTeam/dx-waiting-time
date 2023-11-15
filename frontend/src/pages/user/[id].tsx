@@ -62,7 +62,9 @@ const useInitFirebase = () => {
     const requestNotificationPermission = async () => {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") {
-        throw new Error("Permission not granted for Notification");
+        console.error("Permission not granted for Notification");
+        setIsNotification(false);
+        return;
       }
 
       const messaging = getMessaging(app);
