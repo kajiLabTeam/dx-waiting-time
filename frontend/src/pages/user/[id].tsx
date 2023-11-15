@@ -81,7 +81,7 @@ const ClientPage: FC = () => {
         </WaitingContainer>
       ) : (
         <WaitingContainer>
-          <Text>番号が発行されません</Text>
+          <Text>お使いのブラウザでは番号が発行できません</Text>
         </WaitingContainer>
       )}
       <ButtonContainer>
