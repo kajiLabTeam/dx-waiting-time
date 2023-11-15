@@ -6,7 +6,7 @@ export const fetcher = async (url: string) => {
   return response.json();
 };
 
-export const useDataWithLocalStorage = <T>(url: string, fetcher: any) => {
+export const useDataWithLocalStorage = <T>(url: string) => {
   const { data, error } = useSWR<T>(url, fetcher);
 
   useEffect(() => {

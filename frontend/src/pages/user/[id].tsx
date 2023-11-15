@@ -4,8 +4,9 @@ import { GetOutButton } from "../../components/getout/GetOutButton";
 import { PositionResponse } from "../../components/types";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { useDataWithLocalStorage } from "../../hooks/useDataWithLocalStorage";
 import { useInitFirebase } from "../../hooks/useInitFirebase";
-import { useCustomSWR } from "../../utils/api";
+import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
 const ClientPageContainer = styled.div`
@@ -54,9 +55,14 @@ const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
   const getout = () => {};
 
-  const { data: posionResponse, error } = useCustomSWR<PositionResponse>(
-    "http://localhost:3000/api/position"
+  const token = "hoge";
+  const ownerId = "hoge";
+  const { data: posionResponse, error } = useDataWithLocalStorage<PositionResponse>(
+    `${baseURL}/${ownerId}/queue/position${token}`
   );
+
+  if (error) return <div>エラーが発生しました</div>;
+  if (!posionResponse) return <div>読み込み中...</div>;
 
   if (!isNotification) {
     return <NotificationErrorView />;
