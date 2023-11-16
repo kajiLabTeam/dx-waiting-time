@@ -38,18 +38,19 @@ const EndButtonContainer = styled.div`
 const onCalling = async (user: User | null) => {
   try {
     const idToken = await user?.getIdToken();
+    console.log(idToken);
     const response = await fetch(`${baseURL}/owner/queue/position/next`, {
       headers: {
         authorization: `Bearer ${idToken}`,
       },
       method: "GET",
     });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+    console.log(response);
+
     const data = await response.json();
     return data.callNumber;
   } catch (error) {
+    console.error("Pass failed: ", error);
     throw new Error("Network response was not ok");
   }
 };
