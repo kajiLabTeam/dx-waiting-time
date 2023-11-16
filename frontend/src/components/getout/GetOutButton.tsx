@@ -1,5 +1,7 @@
+import { useRouter } from "next/router";
 import React, { FC } from "react";
 import styled from "styled-components";
+import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
 type Props = {
@@ -20,9 +22,30 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-export const GetOutButton: FC<Props> = ({ onClick }) => {
+export const GetOutButton: FC<Props> = () => {
+  const router = useRouter();
+  const { ownerId } = router.query;
+  const handleClick = async () => {
+    const { callNumber } = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}");
+    try {
+      const response = await fetch(
+        `${baseURL}/${ownerId}/queue/following?callNumber=${callNumber}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      console.error("GetOut failed: ", error);
+    }
+  };
+
   return (
-    <ButtonContainer onClick={onClick}>
+    <ButtonContainer onClick={handleClick}>
       <Text>列から抜ける</Text>
     </ButtonContainer>
   );
