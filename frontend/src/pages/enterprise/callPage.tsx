@@ -16,8 +16,6 @@ const PassButtonContainer = styled.div`
   margin-bottom: 1vh;
 `;
 
-const CallCircleContainer = styled.div``;
-
 const FollowingContainer = styled.div`
   margin-top: 1vh;
   font-size: 2rem;
@@ -50,9 +48,7 @@ const CallPage: FC = () => {
         <PassButtonContainer>
           <PassButton $calling={calling} onClick={onWaiting} />
         </PassButtonContainer>
-        <CallCircleContainer>
-          <MessageCricle message={callNumber} />
-        </CallCircleContainer>
+        <MessageCricle message={callNumber} />
         <FollowingContainer>{following} 人待ち</FollowingContainer>
         <EndButtonContainer>
           <EndButton $calling={calling} onClick={onWaiting} />
@@ -65,9 +61,7 @@ const CallPage: FC = () => {
       <PassButtonContainer>
         <PassButton $calling={calling} onClick={onWaiting} />
       </PassButtonContainer>
-      <CallCircleContainer>
-        <CallCircle onClick={onCalling} />
-      </CallCircleContainer>
+      <CallCircle onClick={onCalling} />
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>
         <EndButton $calling={calling} onClick={onWaiting} />
