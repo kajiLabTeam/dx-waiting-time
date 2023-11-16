@@ -38,7 +38,7 @@ const InText = styled.div`
 export const EditAccount: FC<Props> = ({ input }) => {
   const { setAccountInfo } = useAccountMutators();
   // 状態変数とその更新関数を作成
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string | null>(null);
 
   // 入力フィールドのonChangeイベントハンドラ
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +46,9 @@ export const EditAccount: FC<Props> = ({ input }) => {
   };
 
   useEffect(() => {
+    if (text === null) return;
     setAccountInfo(input.title, text);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, input.title]);
 
   return (
