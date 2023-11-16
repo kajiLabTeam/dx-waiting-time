@@ -22,30 +22,33 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
+const handleClick = async (ownerId: string) => {
+  const { callNumber } = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}");
+  try {
+    const response = await fetch(`${baseURL}/${ownerId}/queue/following?callNumber=${callNumber}`, {
+      method: "DELETE",
+    });
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+  } catch (error) {
+    console.error("GetOut failed: ", error);
+  }
+};
+
 export const GetOutButton: FC<Props> = () => {
   const router = useRouter();
   const { ownerId } = router.query;
-  const handleClick = async () => {
-    const { callNumber } = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}");
-    try {
-      const response = await fetch(
-        `${baseURL}/${ownerId}/queue/following?callNumber=${callNumber}`,
-        {
-          method: "DELETE",
-        }
-      );
-      console.log(response);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-    } catch (error) {
-      console.error("GetOut failed: ", error);
-    }
-  };
 
   return (
-    <ButtonContainer onClick={handleClick}>
+    <ButtonContainer
+      onClick={() => {
+        if (typeof ownerId !== "string") return;
+        handleClick(ownerId);
+      }}
+    >
       <Text>列から抜ける</Text>
     </ButtonContainer>
   );
