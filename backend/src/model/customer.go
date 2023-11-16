@@ -77,7 +77,7 @@ func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
 // 2. positionが最も小さいCustomerを検索
 func GetNextCustomer(ownerId string) (Customer, error) {
 	c := Customer{}
-	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).Order("position asc").First(&c)
+	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).First(&c)
 	return c, nil
 }
 
