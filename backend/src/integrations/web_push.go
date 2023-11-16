@@ -10,8 +10,9 @@ import (
 	"github.com/kajiLabTeam/dx-waiting-time/model"
 )
 
+var c = lib.MessageConnect()
+
 func WebPushNotification(m *messaging.Message) error {
-	c := lib.MessageConnect()
 	var response string
 	var err error
 	response, err = c.Send(context.Background(), m)
