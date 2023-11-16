@@ -1,6 +1,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import { useMenuMutators, useMenuState } from "../../globalStates/menuState";
+import { useSalesState } from "../../globalStates/salesState";
 import { usePageName } from "../../hooks/usePageName";
 import { theme } from "../../utils/theme";
 
@@ -34,16 +35,26 @@ const Menu = () => {
   const [, pageName] = usePageName();
   const isMenuOpen = useMenuState();
   const { setMenuOpenState } = useMenuMutators();
+  const isSales = useSalesState();
 
   const onHideMenu = () => {
     setMenuOpenState(!isMenuOpen);
   };
 
   // routerと同じ名前のmenusを消す
-  const filteredMenus = {
+  let filteredMenus = {
     name: menus.name.filter((_, index) => menus.url[index] !== pageName),
     url: menus.url.filter((url) => url !== pageName),
   };
+
+  // isSalesがtrueの時はstartPageを消す、isSalesがfalesの時はendPageを消す
+  if (isSales) {
+    filteredMenus.name = filteredMenus.name.filter((_, index) => filteredMenus.url[index] !== "startPage");
+    filteredMenus.url = filteredMenus.url.filter((url) => url !== "startPage");
+  } else {
+    filteredMenus.name = filteredMenus.name.filter((_, index) => filteredMenus.url[index] !== "endPage");
+    filteredMenus.url = filteredMenus.url.filter((url) => url !== "endPage");
+  } 
 
   return (
     <MenuContainer>

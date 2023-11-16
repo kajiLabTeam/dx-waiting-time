@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { FC } from "react";
 import styled from "styled-components";
 import { Button } from "../../components/utils/Button";
+import { useSalesMutators } from "../../globalStates/salesState";
 import { theme } from "../../utils/theme";
 
 const EndPageContainer = styled.div`
@@ -24,8 +26,10 @@ const ButtonContainer = styled.div`
 `;
 
 const EndPage: FC = () => {
-  // const onDownload = () => {};
-  const onClose = () => {};
+  const { setSales } = useSalesMutators();
+  const onClose = () => {
+    setSales(false);
+  };
   // 今日の日付を取得
   const thisDate = new Date();
   const thisMonth = thisDate.getMonth() + 1;
@@ -38,12 +42,11 @@ const EndPage: FC = () => {
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <ButtonContainer>
-        {/* <Button message={"営業記録を保存する"} onClick={onDownload} /> */}
-      </ButtonContainer>
+      <Link href={"callPage"} style={{textDecoration: "none"}}>
       <ButtonContainer>
         <Button message={"営業終了"} onClick={onClose} />
       </ButtonContainer>
+      </Link>
     </EndPageContainer>
   );
 };

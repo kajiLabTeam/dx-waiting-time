@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FC } from "react";
 import { useState } from "react";
 import styled from "styled-components";
@@ -5,6 +6,7 @@ import { CallCircle } from "../../components/call/CallCricle";
 import { EndButton } from "../../components/call/EndButton";
 import { PassButton } from "../../components/call/PassButton";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { useSalesState } from "../../globalStates/salesState";
 import { theme } from "../../utils/theme";
 
 const CallPageContainer = styled.div`
@@ -37,6 +39,7 @@ const following = 123;
 const callNumber = 321;
 
 const CallPage: FC = () => {
+  const isSales = useSalesState();
   const [calling, setCalling] = useState(false);
   const onWaiting = () => {
     setCalling(false);
@@ -65,9 +68,17 @@ const CallPage: FC = () => {
       <PassButtonContainer>
         <PassButton $calling={calling} onClick={onWaiting} />
       </PassButtonContainer>
-      <CallCircleContainer>
-        <CallCircle onClick={onCalling} />
-      </CallCircleContainer>
+      {isSales ? (
+        <CallCircleContainer>
+          <CallCircle onClick={onCalling} />
+        </CallCircleContainer>
+      ) : (
+        <Link href={"startPage"} style={{textDecoration: "none"}}>
+          <CallCircleContainer>
+            <CallCircle onClick={()=>{}} />
+          </CallCircleContainer>
+        </Link>
+      )}
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>
         <EndButton $calling={calling} onClick={onWaiting} />
