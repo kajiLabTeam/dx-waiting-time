@@ -11,12 +11,12 @@ var db = lib.SqlConnect()
 type Owner struct {
 	OwnerId   string     `json:"ownerId"`
 	OwnerName string     `json:"ownerName"`
-	Customer  []Customer `json:"customers"`
+	// Customers  []Customer `gorm:"foreign key:OwnerId"`
 }
 
 type Customer struct {
 	CustomerId    int       `json:"customerId"`
-	Position      int       `json:"position"`
+	Position      int       `json:"callNumber"`
 	WaitingStatus string    `json:"waitingStatus"`
 	Date          time.Time `json:"date"`
 	FirebaseToken string    `json:"firebaseToken"`

@@ -1,0 +1,33 @@
+@ownerUrl = http://localhost:8080/api/owner/queue
+@authToken = eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ0ZmJkZTdhZGY0ZTU3YWYxZWE4MzAzNmJmZjdkMzUxNTk3ZTMzNWEiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoi5p6X6Iiq5bmzIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0pYQ2VWZUtzMk9lLWwzZk41NWM4LTlla0FyNmU5cTVRcVgwc19IcVduV2czcz1zOTYtYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS93ZWItcHVzaC1ub3RpZmljYXRpb24tcHJhY3Rpc2UiLCJhdWQiOiJ3ZWItcHVzaC1ub3RpZmljYXRpb24tcHJhY3Rpc2UiLCJhdXRoX3RpbWUiOjE3MDAwMzcxNzAsInVzZXJfaWQiOiJ0d1VZcjNFSE8yZm00NVRIWVhva0c1T3hjSzYzIiwic3ViIjoidHdVWXIzRUhPMmZtNDVUSFlYb2tHNU94Y0s2MyIsImlhdCI6MTcwMDA0OTYzOSwiZXhwIjoxNzAwMDUzMjM5LCJlbWFpbCI6ImtvdWhlaTE0MDJAaWNsb3VkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTA3MDEyNzcyODE2Nzk5NDIwNTU2Il0sImVtYWlsIjpbImtvdWhlaTE0MDJAaWNsb3VkLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.r5bpVR172SPm4D0We9q4nBYLkWX4m_TVUpZ0IUg2hb5xgoenx8vgPrsTzkmH2Tg8Y11eP3mHyDWqdy636wQZg4tOsUvMcE9rVDj4K1CxjXP1yKVT0z0Lw7ML0wqqoSnaksaw3OPgRQ3ojkeGPOacN1vdvWv2tyx30X2VwPUN8muwfd2r7kfbs8usDwKQIVTNC9Dz393EOiFs8ZtVlcNacIgq5uUcCpTrwveBCK7IXeuo-OgcHs6UhEvJzb1pyBsKkLjlqeOSJOKEq5zcub5_FITY8m6qMlS8_T-7qgR4EEChS9lpk_AoUDmLQ2jPF3azp3LVbI-C2gM7U2e-KwUwkA
+
+### 事業者を登録
+POST {{ownerUrl}}/create
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+
+### 現在並んでいる人数を取得
+GET {{ownerUrl}}/following
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+### 先頭に並んでいる客の呼び出し
+GET {{ownerUrl}}/position/next
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+### 呼び出し完了&パス
+PUT {{ownerUrl}}/status
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "callNumber" :3,
+    "waitingStatus" :"complete"
+}
+

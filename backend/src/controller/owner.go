@@ -1,8 +1,8 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -24,8 +24,9 @@ func PostOwner(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	_, err = model.GetOwner(ownerId)
-	if err == nil {
+	o, _ := model.GetOwner(ownerId)
+	if o != nil {
+		fmt.Println(o)
 		c.JSON(http.StatusOK, gin.H{"owner_id": ownerId, "owner_name": ""})
 		return
 	}
@@ -70,21 +71,20 @@ func GetNextCustomer(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-
-	// customerに対して呼び出し通知を送る処理を書く
-
 	OwnerId := t.UID
 	customer, _ := model.GetNextCustomer(OwnerId)
-	c.JSON(http.StatusOK, gin.H{"customer": customer})
+	integrations.CallNotification(customer)
+
+	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position})
 }
 
 // customerのwaitingStatusを"complete"に変更する
 // 1. firebaseの認証をする
 // 2. tokenからownerIdを取得する
-// 3. urlのパラムからpositionを取得する
+// 3. リクエストbodyからcustomerを取得する
 // 4. ownerIdとpositionを元にcustomerのWaiting'statusを"complete"に変更する
 // 5. customerの情報を返す
-func PutOwnerCompleteCustomer(c *gin.Context) {
+func PutCustomerStatus(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
 	t, err := integrations.VerifyIDToken(tId)
@@ -94,22 +94,16 @@ func PutOwnerCompleteCustomer(c *gin.Context) {
 	}
 
 	OwnerId := t.UID
-	position, _ := strconv.Atoi(c.Param("position"))
-	customer, _ := model.UpdateCustomerStatus(OwnerId, "complete", position)
-	c.JSON(http.StatusOK, gin.H{"customer": customer})
-}
-
-func PutOwnerPassCustomer(c *gin.Context) {
-	auth := c.Request.Header.Get("Authorization")
-	tId := strings.TrimPrefix(auth, "Bearer ")
-	t, err := integrations.VerifyIDToken(tId)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
+	var customer model.Customer
+	if err := c.BindJSON(&customer); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-
-	OwnerId := t.UID
-	position, _ := strconv.Atoi(c.Param("position"))
-	customer, _ := model.UpdateCustomerStatus(OwnerId, "non-waiting", position)
-	c.JSON(http.StatusOK, gin.H{"customer": customer})
+	if customer.WaitingStatus != "complete" && customer.WaitingStatus != "pass" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
+	}
+	_,err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }

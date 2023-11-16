@@ -1,5 +1,6 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
+import { useLoginMutators } from "../../globalStates/loginState";
 import { googleLogin } from "../../utils/auth";
 import Layout from "../layout/layout";
 import { Button } from "../utils/Button";
@@ -22,6 +23,11 @@ const Action = styled.div`
 `;
 
 const Login: FC = () => {
+  const { setLoginOpenState } = useLoginMutators();
+  useEffect(() => {
+    setLoginOpenState(true);
+  }, [setLoginOpenState]);
+
   return (
     <Layout>
       <LoginPageContainer>
@@ -31,8 +37,8 @@ const Login: FC = () => {
         <Action>
           <Button
             message={"ログイン"}
-            onClick={() => {
-              googleLogin();
+            onClick={async () => {
+              await googleLogin();
             }}
           />
         </Action>
