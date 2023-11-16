@@ -30,4 +30,3 @@ Authorization: Bearer {{authToken}}
     "callNumber" :3,
     "waitingStatus" :"complete"
 }
-
