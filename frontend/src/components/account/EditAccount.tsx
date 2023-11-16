@@ -48,7 +48,7 @@ export const EditAccount: FC<Props> = ({ input }) => {
   useEffect(() => {
     if (text === null) return;
     setAccountInfo(input.title, text);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, input.title]);
 
   return (
