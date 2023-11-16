@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { FC } from "react";
 import styled from "styled-components";
 import { Button } from "../../components/utils/Button";
-import { useSalesMutators } from "../../globalStates/salesState";
+import { useSalesMutators, useSalesState } from "../../globalStates/salesState";
 import { theme } from "../../utils/theme";
 
 const EndPageContainer = styled.div`
@@ -25,7 +24,16 @@ const ButtonContainer = styled.div`
   margin: 10px;
 `;
 
+const Text = styled.p`
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  font-family: "Noto Sans JP", sans-serif;
+  color: ${theme.colors.brown};
+`;
+
 const EndPage: FC = () => {
+  const isSales = useSalesState();
   const { setSales } = useSalesMutators();
   const onClose = () => {
     setSales(false);
@@ -42,11 +50,10 @@ const EndPage: FC = () => {
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <Link href={"callPage"} style={{ textDecoration: "none" }}>
-        <ButtonContainer>
-          <Button message={"営業終了"} onClick={onClose} />
-        </ButtonContainer>
-      </Link>
+      <ButtonContainer>
+        <Button message={"営業終了"} onClick={onClose} />
+      </ButtonContainer>
+      {isSales ? "" : <Text>お疲れ様でした</Text>}
     </EndPageContainer>
   );
 };
