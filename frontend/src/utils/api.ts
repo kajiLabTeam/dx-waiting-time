@@ -22,7 +22,7 @@ export const endpoints = {
   pass: "owner/queue/position/pass/(ユーザID)",
 } as const;
 
-export const useCustomSWR = <T>(url: string) => {
+export const useCustomSWR = <T>(url: string | null) => {
   const fetcher = async (url: string): Promise<any> => {
     const resonse = await fetch(url);
     return resonse.json();
