@@ -4,10 +4,6 @@ import styled from "styled-components";
 import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
-type Props = {
-  onClick: () => void;
-};
-
 const ButtonContainer = styled.div`
   display: block;
   width: 70%;
@@ -25,7 +21,7 @@ const Text = styled.p`
 const handleClick = async (ownerId: string) => {
   const { callNumber } = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}");
   try {
-    const response = await fetch(`${baseURL}/${ownerId}/queue/following?callNumber=${callNumber}`, {
+    const response = await fetch(`${baseURL}/${ownerId}/queue/position?callNumber=${callNumber}`, {
       method: "DELETE",
     });
     console.log(response);
@@ -38,7 +34,7 @@ const handleClick = async (ownerId: string) => {
   }
 };
 
-export const GetOutButton: FC<Props> = () => {
+export const GetOutButton: FC = () => {
   const router = useRouter();
   const { ownerId } = router.query;
 

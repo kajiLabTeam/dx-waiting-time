@@ -54,7 +54,6 @@ const ClientPage: FC = () => {
   const deviceToken = localStorage.getItem("token");
   const router = useRouter();
   const { ownerId } = router.query;
-  const getout = () => {};
 
   const { data: posionResponse, error: positionError } = useDataWithLocalStorage<PositionResponse>(
     `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
@@ -96,7 +95,7 @@ const ClientPage: FC = () => {
         </WaitingContainer>
       )}
       <ButtonContainer>
-        <GetOutButton onClick={getout} />
+        <GetOutButton />
       </ButtonContainer>
     </ClientPageContainer>
   );
