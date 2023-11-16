@@ -3,6 +3,7 @@ import { FC } from "react";
 import styled from "styled-components";
 import { Button } from "../../components/utils/Button";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { useSalesMutators } from "../../globalStates/salesState";
 import { theme } from "../../utils/theme";
 
 const StartPageContainer = styled.div`
@@ -28,7 +29,10 @@ const ButtonContainer = styled.div`
 `;
 
 const StartPage: FC = () => {
-  const onStart = () => {};
+  const { setSales } = useSalesMutators();
+  const onStart = () => {
+    setSales(true);
+  };
 
   // 今日の日付を取得
   const thisDate = new Date();
@@ -46,7 +50,7 @@ const StartPage: FC = () => {
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <Link href={"callPage"}>
+      <Link href={"callPage"} style={{ textDecoration: "none" }}>
         <ButtonContainer>
           <Button message={"営業開始"} onClick={onStart} />
         </ButtonContainer>
