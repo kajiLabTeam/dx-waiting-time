@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { FC } from "react";
 import { useState } from "react";
 import styled from "styled-components";
@@ -36,32 +37,28 @@ const EndButtonContainer = styled.div`
 const following = 123;
 const callNumber = 321;
 
+const onCalling = async (user: User | null) => {
+  try {
+    const idToken = await user?.getIdToken();
+    const response = await fetch(`${baseURL}/wner/queue/position/next`, {
+      headers: {
+        authorization: `Bearer ${idToken}`,
+      },
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+  } catch (error) {
+    throw new Error("Network response was not ok");
+  }
+};
+
 const CallPage: FC = () => {
   const [isCalled, setCalled] = useState(false);
   const user = useUserState();
   const onWaiting = () => {
     setCalled(false);
-  };
-  const onCalling = async () => {
-    try {
-      const idToken = await user?.getIdToken();
-      const response = await fetch(`${baseURL}/owner/queue/position/next`, {
-        headers: {
-          authorization: `Bearer ${idToken}`,
-        },
-        method: "GET",
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      console.log(data);
-
-      setCalled(true);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   if (isCalled) {
@@ -83,7 +80,16 @@ const CallPage: FC = () => {
       <PassButtonContainer>
         <PassButton $calling={isCalled} onClick={onWaiting} />
       </PassButtonContainer>
-      <CallCircle onClick={onCalling} />
+      <CallCircle
+        onClick={async () => {
+          try {
+            await onCalling(user);
+            setCalled(true);
+          } catch (error) {
+            console.error(error);
+          }
+        }}
+      />
       <FollowingContainer>{following} 人待ち</FollowingContainer>
       <EndButtonContainer>
         <EndButton $calling={isCalled} onClick={onWaiting} />
