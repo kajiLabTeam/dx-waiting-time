@@ -47,13 +47,13 @@ export const EditAccount: FC<Props> = ({ input }) => {
 
   useEffect(() => {
     setAccountInfo(input.title, text);
-  }, [text, input, setAccountInfo]);
+  }, [text, input.title]);
 
   return (
     <EditContainer>
       <Title>I {input.title}</Title>
       <InText>
-        <Input type="text" placeholder={`${input.text}`} onChange={handleInputChange} />
+        <Input type="text" placeholder={input.text} onChange={handleInputChange} />
       </InText>
     </EditContainer>
   );

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, Key, useState } from "react";
 import styled from "styled-components";
 import { EditAccount } from "../../components/account/EditAccount";
 import { PrintAccount } from "../../components/account/PrintAccount";
@@ -24,8 +24,12 @@ const AccountPage: FC = () => {
   return (
     <AccountPageContainer>
       {isEdit
-        ? inputObj.map((input, value) => <EditAccount key={value} input={input} />)
-        : inputObj.map((input, value) => <PrintAccount key={value} input={input} />)}
+        ? inputObj.map((input: { title: string; text: string }, value: Key | null | undefined) => (
+            <EditAccount key={value} input={input} />
+          ))
+        : inputObj.map((input: { title: string; text: string }, value: Key | null | undefined) => (
+            <PrintAccount key={value} input={input} />
+          ))}
       <ButtonContainer>
         <Button message={isEdit ? "元のページに戻る" : "情報を編集"} onClick={onEdit} />
       </ButtonContainer>
