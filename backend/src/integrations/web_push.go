@@ -10,8 +10,9 @@ import (
 	"github.com/kajiLabTeam/dx-waiting-time/model"
 )
 
+var c = lib.MessageConnect()
+
 func WebPushNotification(m *messaging.Message) error {
-	c := lib.MessageConnect()
 	var response string
 	var err error
 	response, err = c.Send(context.Background(), m)
@@ -57,7 +58,7 @@ func RegularUpdateNotification() {
 }
 
 func CallNotification(c model.Customer) error {
-	m := MakeMessage(c.FirebaseToken, "お知らせ", "順番が来ました")
+	m := MakeMessage(c.FirebaseToken, "店舗からの呼び出し", "順番が来ました")
 	err := WebPushNotification(m)
 	if err != nil {
 		return err

@@ -14,16 +14,3 @@ CREATE TABLE IF NOT EXISTS dx_waiting.customers(
     PRIMARY KEY (customer_id),
     foreign key (owner_id) references dx_waiting.owners(owner_id)
 );
-
-INSERT INTO dx_waiting.owners(owner_id, owner_name)
-VALUES
-(
-    'hogehoge12345hagehage6789','ait-kjlb'
-);
-
-/* INSERT QUERY */
-INSERT INTO dx_waiting.owners(owner_id, owner_name)
-VALUES
-(
-    'hugahuga8192hakeheke16384','sysken'
-);
