@@ -62,7 +62,7 @@ const ClientPage: FC = () => {
 
   const followingURL =
     ownerId && posionResponse?.callNumber
-      ? `${baseURL}/${ownerId}/queue/following?position=${posionResponse?.callNumber}`
+      ? `${baseURL}/${ownerId}/queue/following?callNumber=${posionResponse?.callNumber}`
       : null;
 
   const { data: followingResponse, error: followingError } =
