@@ -2,13 +2,12 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
-import { PositionResponse } from "../../components/types";
+import { FollowingResponse, PositionResponse } from "../../components/types";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
-import { useUserState } from "../../globalStates/firebaseUserState";
 import { useDataWithLocalStorage } from "../../hooks/useDataWithLocalStorage";
 import { useInitFirebase } from "../../hooks/useInitFirebase";
-import { baseURL } from "../../utils/api";
+import { baseURL, useCustomSWR } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
 const ClientPageContainer = styled.div`
@@ -50,9 +49,6 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const followingNumber = 3;
-const callNumber = 321;
-
 const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebase();
   const deviceToken = localStorage.getItem("token");
@@ -60,14 +56,20 @@ const ClientPage: FC = () => {
   const { ownerId } = router.query;
   const getout = () => {};
 
-  const { data: posionResponse, error } = useDataWithLocalStorage<PositionResponse>(
+  const { data: posionResponse, error: positionError } = useDataWithLocalStorage<PositionResponse>(
     `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
   );
 
-  console.log(posionResponse);
+  const followingURL =
+    ownerId && posionResponse?.callNumber
+      ? `${baseURL}/${ownerId}/queue/following?position=${posionResponse?.callNumber}`
+      : null;
 
-  if (error) return <div>エラーが発生しました</div>;
-  if (!posionResponse) return <div>読み込み中...</div>;
+  const { data: followingResponse, error: followingError } =
+    useCustomSWR<FollowingResponse>(followingURL);
+
+  if (positionError || followingError) return <div>エラーが発生しました</div>;
+  if (!posionResponse || !followingResponse) return <div>読み込み中...</div>;
 
   if (!isNotification) {
     return <NotificationErrorView />;
@@ -76,13 +78,17 @@ const ClientPage: FC = () => {
   return (
     <ClientPageContainer>
       <CircleContainer>
-        {isToken ? <MessageCricle message={callNumber} /> : <MessageCricle message={""} />}
+        {isToken ? (
+          <MessageCricle message={posionResponse.callNumber} />
+        ) : (
+          <MessageCricle message={""} />
+        )}
         <CircleText>あなたの呼出番号は</CircleText>
       </CircleContainer>
       {isToken ? (
         <WaitingContainer>
           <Text>現在の待ち人数</Text>
-          <Number>{followingNumber}人</Number>
+          <Number>{followingResponse?.following}</Number>
         </WaitingContainer>
       ) : (
         <WaitingContainer>
