@@ -49,12 +49,16 @@ const Menu = () => {
 
   // isSalesがtrueの時はstartPageを消す、isSalesがfalesの時はendPageを消す
   if (isSales) {
-    filteredMenus.name = filteredMenus.name.filter((_, index) => filteredMenus.url[index] !== "startPage");
+    filteredMenus.name = filteredMenus.name.filter(
+      (_, index) => filteredMenus.url[index] !== "startPage"
+    );
     filteredMenus.url = filteredMenus.url.filter((url) => url !== "startPage");
   } else {
-    filteredMenus.name = filteredMenus.name.filter((_, index) => filteredMenus.url[index] !== "endPage");
+    filteredMenus.name = filteredMenus.name.filter(
+      (_, index) => filteredMenus.url[index] !== "endPage"
+    );
     filteredMenus.url = filteredMenus.url.filter((url) => url !== "endPage");
-  } 
+  }
 
   return (
     <MenuContainer>

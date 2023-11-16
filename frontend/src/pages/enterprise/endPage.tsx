@@ -42,10 +42,10 @@ const EndPage: FC = () => {
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <Link href={"callPage"} style={{textDecoration: "none"}}>
-      <ButtonContainer>
-        <Button message={"営業終了"} onClick={onClose} />
-      </ButtonContainer>
+      <Link href={"callPage"} style={{ textDecoration: "none" }}>
+        <ButtonContainer>
+          <Button message={"営業終了"} onClick={onClose} />
+        </ButtonContainer>
       </Link>
     </EndPageContainer>
   );

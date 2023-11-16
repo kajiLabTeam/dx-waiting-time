@@ -73,9 +73,9 @@ const CallPage: FC = () => {
           <CallCircle onClick={onCalling} />
         </CallCircleContainer>
       ) : (
-        <Link href={"startPage"} style={{textDecoration: "none"}}>
+        <Link href={"startPage"} style={{ textDecoration: "none" }}>
           <CallCircleContainer>
-            <CallCircle onClick={()=>{}} />
+            <CallCircle onClick={() => {}} />
           </CallCircleContainer>
         </Link>
       )}
