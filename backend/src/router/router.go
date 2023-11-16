@@ -24,7 +24,7 @@ func Init() {
 
 	r.POST("api/owner/queue/create", controller.PostOwner)
 
-	r.PUT("api/owner/queue/position/status", controller.PutCustomerStatus)
+	r.PUT("api/owner/queue/status", controller.PutCustomerStatus)
 
 	r.DELETE("api/:ownerId/queue/position/", controller.DeleteCustomerPosition)
 
