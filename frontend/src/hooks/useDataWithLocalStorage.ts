@@ -2,15 +2,16 @@ import { useEffect } from "react";
 import useSWR from "swr";
 
 export const filterfetcher = async (url: string) => {
-  const nowDate = new Date();
-  console.log(localStorage.getItem("token"));
+  const currentDate = new Date().toLocaleDateString("ja-JP").split("/").join("-");
   // ローカルストレージのdateを取得
   const localDate = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").date;
 
-  // ローカルストレージと現在の日付が違う場合はAPIを叩く
-  if (localDate != null || localDate !== nowDate.toDateString()) {
+  // ローカルストレージにdxWaitingTimeがない場合 or ローカルストレージと現在の日付が違う場合はAPIを叩く
+  if (localDate == null || localDate !== currentDate) {
     const response = await fetch(url);
     const data = await response.json();
+    // ローカルストレージにdataを保存
+    localStorage.setItem("dxWaitingTime", JSON.stringify(data));
     return data;
   }
   // ローカルストレージと現在の日付が同じ場合はローカルストレージを返す
