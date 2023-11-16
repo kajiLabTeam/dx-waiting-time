@@ -7,6 +7,7 @@ import { EndButton } from "../../components/call/EndButton";
 import { PassButton } from "../../components/call/PassButton";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { useUserState } from "../../globalStates/firebaseUserState";
+import { usePosition } from "../../hooks/usePositon";
 import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
@@ -34,13 +35,10 @@ const EndButtonContainer = styled.div`
   position: sticky;
 `;
 
-const following = 123;
-const callNumber = 321;
-
 const onCalling = async (user: User | null) => {
   try {
     const idToken = await user?.getIdToken();
-    const response = await fetch(`${baseURL}/wner/queue/position/next`, {
+    const response = await fetch(`${baseURL}/owner/queue/position/next`, {
       headers: {
         authorization: `Bearer ${idToken}`,
       },
@@ -49,6 +47,8 @@ const onCalling = async (user: User | null) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
+    const data = await response.json();
+    return data.callNumber;
   } catch (error) {
     throw new Error("Network response was not ok");
   }
@@ -56,10 +56,14 @@ const onCalling = async (user: User | null) => {
 
 const CallPage: FC = () => {
   const [isCalled, setCalled] = useState(false);
+  const [callNumber, setCallNumber] = useState(0); // TODO: ここはAPIから取得する
   const user = useUserState();
   const onWaiting = () => {
     setCalled(false);
   };
+
+  const { followingResponse } = usePosition(user);
+  if (!followingResponse) return <div>読み込み中...</div>;
 
   if (isCalled) {
     return (
@@ -68,7 +72,7 @@ const CallPage: FC = () => {
           <PassButton $calling={isCalled} onClick={onWaiting} />
         </PassButtonContainer>
         <MessageCricle message={callNumber} />
-        <FollowingContainer>{following} 人待ち</FollowingContainer>
+        <FollowingContainer>{followingResponse?.following} 人待ち</FollowingContainer>
         <EndButtonContainer>
           <EndButton $calling={isCalled} onClick={onWaiting} />
         </EndButtonContainer>
@@ -83,14 +87,15 @@ const CallPage: FC = () => {
       <CallCircle
         onClick={async () => {
           try {
-            await onCalling(user);
+            const callNumber = await onCalling(user);
             setCalled(true);
+            setCallNumber(callNumber);
           } catch (error) {
             console.error(error);
           }
         }}
       />
-      <FollowingContainer>{following} 人待ち</FollowingContainer>
+      <FollowingContainer>{followingResponse.following}人待ち</FollowingContainer>
       <EndButtonContainer>
         <EndButton $calling={isCalled} onClick={onWaiting} />
       </EndButtonContainer>
