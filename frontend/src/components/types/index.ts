@@ -3,3 +3,7 @@ export interface PositionResponse {
   date: string;
   callNumber: number;
 }
+
+export interface FollowingResponse {
+  following: number;
+}
