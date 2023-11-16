@@ -13,10 +13,10 @@ import (
 // 2. 最大のPositionに＋1下値を引数のCustomer.Positionに付与
 // 3. CustomerをDBに登録
 func CreateCustomer(ownerId, token string) (Customer, error) {
-	c := []Customer{}
-	db.Where("owner_id = ?", ownerId).Order("position asc").Find(&c)
+	c := Customer{}
+	db.Where("owner_id = ?", ownerId).Last(&c)
 	nc := Customer{
-		Position:      len(c) + 1,
+		Position:      c.Position+1,
 		WaitingStatus: "waiting",
 		Date:          service.GetTime(),
 		FirebaseToken: token,
@@ -77,7 +77,7 @@ func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
 // 2. positionが最も小さいCustomerを検索
 func GetNextCustomer(ownerId string) (Customer, error) {
 	c := Customer{}
-	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).Order("position asc").First(&c)
+	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).First(&c)
 	return c, nil
 }
 
