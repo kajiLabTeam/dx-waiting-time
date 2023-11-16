@@ -7,7 +7,7 @@ GET {{userUrl}}/position?token={{deviceToken}}
 
 
 ### あと何人かがわかる
-GET {{userUrl}}/following?&position=2
+GET {{userUrl}}/following?&callNumber=2
 
 ### 列から抜ける
-DELETE {{userUrl}}/position?position=1
+DELETE {{userUrl}}/position?callNumber=1
