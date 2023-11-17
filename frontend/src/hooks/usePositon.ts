@@ -30,8 +30,9 @@ export const usePosition = (user: User | null) => {
         setFollowingResponse(data);
       }
     };
-
-    fetchFollowing();
+    if (idToken) {
+      fetchFollowing();
+    }
   }, [idToken]);
 
   return { followingResponse };

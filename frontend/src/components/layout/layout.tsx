@@ -38,6 +38,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
     handleRedirectResult();
   }, []);
 
+  console.log("事業者のuuid=", user?.uid);
+
   return (
     <div>
       <Header />
