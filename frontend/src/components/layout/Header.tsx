@@ -67,8 +67,10 @@ const Header = () => {
             ? "業務を始める"
             : "簡単行列整理くん"}
         </Title>
-      ) : (
+      ) : role === "enterprise" ? (
         <Title>ログイン</Title>
+      ) : (
+        <Title>簡単行列整理くん</Title>
       )}
       {isLoginOpen ? (
         <></>
