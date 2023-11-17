@@ -48,7 +48,7 @@ export const useFetchQueueData = (
     if (positionResponseState?.callNumber && ownerId && deviceToken) {
       fetchAndSetFollowing();
     }
-  }, [ownerId, deviceToken]);
+  }, [ownerId, deviceToken, positionResponseState?.callNumber]);
 
   return { positionResponseState, followingResponse };
 };
