@@ -37,8 +37,12 @@ export const useFetchQueueData = (
     if (ownerId && deviceToken) {
       const currentDate = new Date().toLocaleDateString("ja-JP").split("/").join("-");
       const localDate = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").date;
-
-      if (localDate == null || localDate !== currentDate) {
+      const localOwnerId = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").ownerId;
+      if (
+        localDate == null ||
+        localDate !== currentDate ||
+        (localOwnerId && localOwnerId !== ownerId)
+      ) {
         fetchAndSetPosition();
       } else {
         setPositionResponseState(JSON.parse(localStorage.getItem("dxWaitingTime") || "{}"));
