@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { User } from "firebase/auth";
 import { FC } from "react";
 import { useState } from "react";
 import styled from "styled-components";
@@ -6,7 +6,9 @@ import { CallCircle } from "../../components/call/CallCricle";
 import { EndButton } from "../../components/call/EndButton";
 import { PassButton } from "../../components/call/PassButton";
 import { MessageCricle } from "../../components/utils/MessageCricle";
-import { useSalesState } from "../../globalStates/salesState";
+import { useUserState } from "../../globalStates/firebaseUserState";
+import { usePosition } from "../../hooks/usePositon";
+import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
 const CallPageContainer = styled.div`
@@ -17,8 +19,6 @@ const CallPageContainer = styled.div`
 const PassButtonContainer = styled.div`
   margin-bottom: 1vh;
 `;
-
-const CallCircleContainer = styled.div``;
 
 const FollowingContainer = styled.div`
   margin-top: 1vh;
@@ -35,30 +35,104 @@ const EndButtonContainer = styled.div`
   position: sticky;
 `;
 
-const following = 123;
-const callNumber = 321;
+const onCalling = async (user: User | null) => {
+  const idToken = await user?.getIdToken();
+  if (!idToken) return;
+  try {
+    const response = await fetch(`${baseURL}/owner/queue/position/next`, {
+      headers: {
+        authorization: `Bearer ${idToken}`,
+      },
+      method: "GET",
+    });
+
+    const data = await response.json();
+    return data.callNumber;
+  } catch (error) {
+    console.error("Pass failed: ", error);
+  }
+};
 
 const CallPage: FC = () => {
-  const isSales = useSalesState();
-  const [calling, setCalling] = useState(false);
-  const onWaiting = () => {
-    setCalling(false);
+  const [isCalled, setCalled] = useState(false);
+  const [callNumber, setCallNumber] = useState(0); // TODO: ここはAPIから取得する
+  const user = useUserState();
+  const onPass = async (user: User | null) => {
+    try {
+      const idToken = await user?.getIdToken();
+      const response = await fetch(`${baseURL}/owner/queue/status`, {
+        headers: {
+          authorization: `Bearer ${idToken}`,
+        },
+        method: "PUT",
+        body: JSON.stringify({
+          callNumber: callNumber,
+          waitingStatus: "pass",
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      console.error("Pass failed: ", error);
+    }
+
+    setCalled(false);
   };
-  const onCalling = () => {
-    setCalling(true);
+
+  const onFinish = async (user: User | null) => {
+    try {
+      const idToken = await user?.getIdToken();
+      const response = await fetch(`${baseURL}/owner/queue/status`, {
+        headers: {
+          authorization: `Bearer ${idToken}`,
+        },
+        method: "PUT",
+        body: JSON.stringify({
+          callNumber: callNumber,
+          waitingStatus: "complete",
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+    } catch (error) {
+      console.error("Pass failed: ", error);
+    }
+
+    setCalled(false);
   };
-  if (calling) {
+
+  const { followingResponse } = usePosition(user);
+
+  if (isCalled) {
     return (
       <CallPageContainer>
         <PassButtonContainer>
-          <PassButton $calling={calling} onClick={onWaiting} />
+          <PassButton
+            $calling={isCalled}
+            onClick={async () => {
+              try {
+                onPass(user);
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+          />
         </PassButtonContainer>
-        <CallCircleContainer>
-          <MessageCricle message={callNumber} />
-        </CallCircleContainer>
-        <FollowingContainer>{following} 人待ち</FollowingContainer>
+        <MessageCricle message={callNumber} />
+        <FollowingContainer>{followingResponse?.following} 人待ち</FollowingContainer>
         <EndButtonContainer>
-          <EndButton $calling={calling} onClick={onWaiting} />
+          <EndButton
+            $calling={isCalled}
+            onClick={async () => {
+              try {
+                onFinish(user);
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+          />
         </EndButtonContainer>
       </CallPageContainer>
     );
@@ -66,22 +140,40 @@ const CallPage: FC = () => {
   return (
     <CallPageContainer>
       <PassButtonContainer>
-        <PassButton $calling={calling} onClick={onWaiting} />
+        <PassButton
+          $calling={isCalled}
+          onClick={async () => {
+            try {
+              onPass(user);
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+        />
       </PassButtonContainer>
-      {isSales ? (
-        <CallCircleContainer>
-          <CallCircle onClick={onCalling} />
-        </CallCircleContainer>
-      ) : (
-        <Link href={"startPage"} style={{ textDecoration: "none" }}>
-          <CallCircleContainer>
-            <CallCircle onClick={() => {}} />
-          </CallCircleContainer>
-        </Link>
-      )}
-      <FollowingContainer>{following} 人待ち</FollowingContainer>
+      <CallCircle
+        onClick={async () => {
+          try {
+            const callNumber = await onCalling(user);
+            setCalled(true);
+            setCallNumber(callNumber);
+          } catch (error) {
+            console.error(error);
+          }
+        }}
+      />
+      <FollowingContainer>{followingResponse?.following}人待ち</FollowingContainer>
       <EndButtonContainer>
-        <EndButton $calling={calling} onClick={onWaiting} />
+        <EndButton
+          $calling={isCalled}
+          onClick={async () => {
+            try {
+              onFinish(user);
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+        />
       </EndButtonContainer>
     </CallPageContainer>
   );

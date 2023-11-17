@@ -27,6 +27,7 @@ const Login: FC = () => {
   useEffect(() => {
     setLoginOpenState(true);
   }, [setLoginOpenState]);
+
   return (
     <Layout>
       <LoginPageContainer>
@@ -36,8 +37,8 @@ const Login: FC = () => {
         <Action>
           <Button
             message={"ログイン"}
-            onClick={() => {
-              googleLogin();
+            onClick={async () => {
+              await googleLogin();
             }}
           />
         </Action>

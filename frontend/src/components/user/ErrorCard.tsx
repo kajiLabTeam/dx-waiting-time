@@ -32,11 +32,12 @@ export const ErrorCard: FC = () => {
   return (
     <CardContainer>
       <Titile>現在利用できません</Titile>
-      <Text>
-        通知が許可されていないため列に並ぶことができません。
-        列に並ぶには設定から通知を許可してください。
-      </Text>
-      <Text>このサービスではお客様の呼び出し以外に通知を送ることはありません。</Text>
+      <Text
+        defaultValue={
+          "通知が許可されていないため列に並ぶことができません。列に並ぶには設定から通知を許可してください。"
+        }
+      />
+      <Text defaultValue={"このサービスではお客様の呼び出し以外に通知を送ることはありません。"} />
     </CardContainer>
   );
 };

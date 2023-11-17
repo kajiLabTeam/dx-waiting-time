@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { theme } from "../../utils/theme";
 
 type Props = {
-  message: number | "appName" | "";
+  message: number | "appName" | "" | undefined;
 };
 
 const CircleContainer = styled.div`
