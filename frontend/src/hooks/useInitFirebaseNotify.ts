@@ -11,6 +11,7 @@ export const useInitFirebaseNotify = () => {
   useEffect(() => {
     const requestNotificationPermission = async () => {
       Notification.requestPermission().then((permission) => {
+        console.log(permission);
         if (permission !== "granted") {
           console.error("Permission not granted for Notification");
           setIsNotification(false);

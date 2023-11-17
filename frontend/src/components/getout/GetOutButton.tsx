@@ -24,7 +24,6 @@ const handleClick = async (ownerId: string) => {
     const response = await fetch(`${baseURL}/${ownerId}/queue/position?callNumber=${callNumber}`, {
       method: "DELETE",
     });
-    console.log(response);
 
     if (!response.ok) {
       throw new Error("Network response was not ok");

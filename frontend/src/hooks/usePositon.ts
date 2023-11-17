@@ -20,14 +20,18 @@ export const usePosition = (user: User | null) => {
 
   useEffect(() => {
     const fetchFollowing = async () => {
-      if (idToken) {
-        const response = await fetch(`${baseURL}/owner/queue/following`, {
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        });
-        const data = await response.json();
-        setFollowingResponse(data);
+      try {
+        if (idToken) {
+          const response = await fetch(`${baseURL}/owner/queue/following`, {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+          const data = await response.json();
+          setFollowingResponse(data);
+        }
+      } catch (e) {
+        console.error(e);
       }
     };
     if (idToken) {

@@ -33,7 +33,8 @@ const QrPage: FC = () => {
   return (
     <QrPageContainer>
       <QrCodeContainer>
-        <QrCode url={`https://dx-waiting-time.vercel.app/user/${user?.uid ? `${user.uid}` : ""}`} />
+        <QrCode url={`192.168.101.21:3000/user/${user?.uid ? `${user.uid}` : ""}`} />
+        {/* <QrCode url={`https://dx-waiting-time.vercel.app/user/${user?.uid ? `${user.uid}` : ""}`} /> */}
       </QrCodeContainer>
       <ButtonContainer>
         <Button message={"画像をダウンロード"} onClick={onDownload} />

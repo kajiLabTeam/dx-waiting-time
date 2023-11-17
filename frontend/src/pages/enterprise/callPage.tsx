@@ -36,22 +36,20 @@ const EndButtonContainer = styled.div`
 `;
 
 const onCalling = async (user: User | null) => {
+  const idToken = await user?.getIdToken();
+  if (!idToken) return;
   try {
-    const idToken = await user?.getIdToken();
-    console.log(idToken);
     const response = await fetch(`${baseURL}/owner/queue/position/next`, {
       headers: {
         authorization: `Bearer ${idToken}`,
       },
       method: "GET",
     });
-    console.log(response);
 
     const data = await response.json();
     return data.callNumber;
   } catch (error) {
     console.error("Pass failed: ", error);
-    throw new Error("Network response was not ok");
   }
 };
 
@@ -106,7 +104,6 @@ const CallPage: FC = () => {
   };
 
   const { followingResponse } = usePosition(user);
-  if (!followingResponse) return <div>読み込み中...</div>;
 
   if (isCalled) {
     return (
@@ -165,7 +162,7 @@ const CallPage: FC = () => {
           }
         }}
       />
-      <FollowingContainer>{followingResponse.following}人待ち</FollowingContainer>
+      <FollowingContainer>{followingResponse?.following}人待ち</FollowingContainer>
       <EndButtonContainer>
         <EndButton
           $calling={isCalled}

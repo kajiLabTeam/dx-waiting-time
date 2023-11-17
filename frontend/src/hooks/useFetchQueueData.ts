@@ -12,18 +12,26 @@ export const useFetchQueueData = (
 
   useEffect(() => {
     const fetchAndSetPosition = async () => {
-      const positionResponse = await axios.get<PositionResponse>(
-        `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
-      );
-      setPositionResponseState(positionResponse.data);
-      localStorage.setItem("dxWaitingTime", JSON.stringify(positionResponse.data));
+      try {
+        const positionResponse = await axios.get<PositionResponse>(
+          `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
+        );
+        setPositionResponseState(positionResponse.data);
+        localStorage.setItem("dxWaitingTime", JSON.stringify(positionResponse.data));
+      } catch (e) {
+        console.error(e);
+      }
     };
 
     const fetchAndSetFollowing = async () => {
-      const followingResponse = await axios.get<FollowingResponse>(
-        `${baseURL}/${ownerId}/queue/following?callNumber=${positionResponseState?.callNumber}`
-      );
-      setFollowingResponse(followingResponse.data);
+      try {
+        const followingResponse = await axios.get<FollowingResponse>(
+          `${baseURL}/${ownerId}/queue/following?callNumber=${positionResponseState?.callNumber}`
+        );
+        setFollowingResponse(followingResponse.data);
+      } catch (e) {
+        console.error(e);
+      }
     };
 
     if (ownerId && deviceToken) {

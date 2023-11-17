@@ -5,7 +5,7 @@ import { GetOutButton } from "../../components/getout/GetOutButton";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { useFetchQueueData } from "../../hooks/useFetchQueueData";
-import { useInitFirebaseNotify } from "../../hooks/useInitFirebase";
+import { useInitFirebaseNotify } from "../../hooks/useInitFirebaseNotify";
 import { theme } from "../../utils/theme";
 
 const ClientPageContainer = styled.div`

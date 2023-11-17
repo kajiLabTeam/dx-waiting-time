@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
-// ドメイン
-export const baseURL = "http://localhost:8080/api";
+// envファイルから取得
+export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const endpoints = {
   // user
