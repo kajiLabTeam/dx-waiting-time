@@ -14,4 +14,12 @@ module.exports = withPWA({
   compiler: {
     styledComponents: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/__/auth/:path*",
+        destination: `https://web-push-notification-practise.firebaseapp.com/__/auth/:path*`,
+      },
+    ];
+  },
 });
