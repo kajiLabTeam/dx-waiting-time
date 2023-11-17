@@ -40,11 +40,11 @@ func GetCustomer(c *gin.Context) {
 func GetCustomerFollowing(c *gin.Context) {
 	ownerId := c.Param("ownerId")
 
-	position, _ := strconv.Atoi(c.Query("position"))
+	callNumber, _ := strconv.Atoi(c.Query("callNumber"))
 
-	customer, _ := model.GetCustomerFollowing(ownerId, position)
+	customer, _ := model.GetCustomerFollowing(ownerId, callNumber)
 
-	model.UpdateCustomerStatus(ownerId, "waiting", position)
+	model.UpdateCustomerStatus(ownerId, "waiting", callNumber)
 
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
@@ -54,7 +54,7 @@ func GetCustomerFollowing(c *gin.Context) {
 // 2. ownerIdとinfo.positionを元にcustomerを削除する
 func DeleteCustomerPosition(c *gin.Context) {
 	ownerId := c.Param("ownerId")
-	position, _ := strconv.Atoi(c.Query("position"))
-	model.DeleteCustomer(ownerId, position)
-	c.JSON(http.StatusOK, gin.H{"message": "delete customer" + strconv.Itoa(position)})
+	callNumber, _ := strconv.Atoi(c.Query("callNumber"))
+	model.DeleteCustomer(ownerId, callNumber)
+	c.JSON(http.StatusOK, gin.H{"message": "delete customer" + strconv.Itoa(callNumber)})
 }

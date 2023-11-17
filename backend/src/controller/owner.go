@@ -73,7 +73,11 @@ func GetNextCustomer(c *gin.Context) {
 	}
 	OwnerId := t.UID
 	customer, _ := model.GetNextCustomer(OwnerId)
-	integrations.CallNotification(customer)
+	err = integrations.CallNotification(customer)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position})
 }
@@ -97,13 +101,16 @@ func PutCustomerStatus(c *gin.Context) {
 	var customer model.Customer
 	if err := c.BindJSON(&customer); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	if customer.WaitingStatus != "complete" && customer.WaitingStatus != "pass" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
+		return
 	}
-	_,err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
+	_, err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }

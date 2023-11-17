@@ -1,12 +1,13 @@
-@userUrl = http://localhost:8080/api/{{ownerId}}/queue
+@userUrl = https://dxwaitingtime-backend.kajilab.tk/api/{{ownerId}}/queue
 @ownerId = hugahuga8192hakeheke16384
 @deviceToken = cxiU2v9mQrNcccYgHWeL3X:APA91bHgVjVefqJyA471dtn5lJgY8d0qrPWY3Cvy9Z2M8iSkF3jbqeO2CCLqbMUT2RrW7P37OngPPL2jED2V10jxea7V6X6LY55B4d2EU4OSEQRbVAfPsacHFDD2_9uK-1IoXfXMdpm1
 
 ### 待ち順に参加する
-GET {{userUrl}}/position?deviceToken={{deviceToken}}
+GET {{userUrl}}/position?token={{deviceToken}}
+
 
 ### あと何人かがわかる
 GET {{userUrl}}/following?&callNumber=2
 
 ### 列から抜ける
-DELETE {{userUrl}}/position?callNumber=2
+DELETE {{userUrl}}/position?callNumber=1

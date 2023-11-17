@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { app } from "../utils/firebase";
 
-export const useInitFirebase = () => {
+export const useInitFirebaseNotify = () => {
   const [isNotification, setIsNotification] = useState(false);
   const [isToken, setIsToken] = useState(false);
   const router = useRouter();
@@ -11,6 +11,7 @@ export const useInitFirebase = () => {
   useEffect(() => {
     const requestNotificationPermission = async () => {
       Notification.requestPermission().then((permission) => {
+        console.log(permission);
         if (permission !== "granted") {
           console.error("Permission not granted for Notification");
           setIsNotification(false);

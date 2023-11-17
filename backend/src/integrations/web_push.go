@@ -3,7 +3,6 @@ package integrations
 import (
 	"context"
 	"fmt"
-	"math/rand"
 	"time"
 
 	"firebase.google.com/go/messaging"
@@ -11,24 +10,18 @@ import (
 	"github.com/kajiLabTeam/dx-waiting-time/model"
 )
 
-func WebPushNotification(m *messaging.Message) {
-	c := lib.MessageConnect()
+var c = lib.MessageConnect()
+
+func WebPushNotification(m *messaging.Message) error {
 	var response string
 	var err error
-	for i := 0; i < 3; i++ {
-		response, err = c.Send(context.Background(), m)
-		if err == nil {
-			break
-		}
-		// 待ち時間はどんどん倍にしていく
-		waitTime := (1<<i)*1000 + rand.Intn(1000)
-		time.Sleep(time.Duration(waitTime) * time.Millisecond)
-	}
+	response, err = c.Send(context.Background(), m)
 	if err != nil {
 		fmt.Printf("Failed to send message: %s", err)
-		return
+		return err
 	}
 	fmt.Printf("response=%s\n", response)
+	return nil
 }
 
 func MakeMessage(token, title, body string) *messaging.Message {
@@ -64,7 +57,11 @@ func RegularUpdateNotification() {
 	}
 }
 
-func CallNotification(c model.Customer) {
-	m := MakeMessage(c.FirebaseToken, "お知らせ", "順番が来ました")
-	WebPushNotification(m)
+func CallNotification(c model.Customer) error {
+	m := MakeMessage(c.FirebaseToken, "店舗からの呼び出し", "順番が来ました")
+	err := WebPushNotification(m)
+	if err != nil {
+		return err
+	}
+	return nil
 }

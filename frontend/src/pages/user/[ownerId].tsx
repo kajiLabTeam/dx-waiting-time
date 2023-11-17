@@ -2,12 +2,10 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
-import { FollowingResponse, PositionResponse } from "../../components/types";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
-import { useDataWithLocalStorage } from "../../hooks/useDataWithLocalStorage";
-import { useInitFirebase } from "../../hooks/useInitFirebase";
-import { baseURL, useCustomSWR } from "../../utils/api";
+import { useFetchQueueData } from "../../hooks/useFetchQueueData";
+import { useInitFirebaseNotify } from "../../hooks/useInitFirebaseNotify";
 import { theme } from "../../utils/theme";
 
 const ClientPageContainer = styled.div`
@@ -50,26 +48,11 @@ const ButtonContainer = styled.div`
 `;
 
 const ClientPage: FC = () => {
-  const [isNotification, isToken] = useInitFirebase();
+  const [isNotification, isToken] = useInitFirebaseNotify();
   const deviceToken = localStorage.getItem("token");
   const router = useRouter();
   const { ownerId } = router.query;
-  const getout = () => {};
-
-  const { data: posionResponse, error: positionError } = useDataWithLocalStorage<PositionResponse>(
-    `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
-  );
-
-  const followingURL =
-    ownerId && posionResponse?.callNumber
-      ? `${baseURL}/${ownerId}/queue/following?position=${posionResponse?.callNumber}`
-      : null;
-
-  const { data: followingResponse, error: followingError } =
-    useCustomSWR<FollowingResponse>(followingURL);
-
-  if (positionError || followingError) return <div>エラーが発生しました</div>;
-  if (!posionResponse || !followingResponse) return <div>読み込み中...</div>;
+  const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
 
   if (!isNotification) {
     return <NotificationErrorView />;
@@ -79,7 +62,7 @@ const ClientPage: FC = () => {
     <ClientPageContainer>
       <CircleContainer>
         {isToken ? (
-          <MessageCricle message={posionResponse.callNumber} />
+          <MessageCricle message={positionResponseState?.callNumber} />
         ) : (
           <MessageCricle message={""} />
         )}
@@ -96,7 +79,7 @@ const ClientPage: FC = () => {
         </WaitingContainer>
       )}
       <ButtonContainer>
-        <GetOutButton onClick={getout} />
+        <GetOutButton />
       </ButtonContainer>
     </ClientPageContainer>
   );
