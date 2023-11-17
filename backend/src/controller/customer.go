@@ -17,7 +17,7 @@ func GetCustomer(c *gin.Context) {
 	customer, _ := model.CreateCustomer(ownerId, token)
 	c.JSON(http.StatusOK,
 		gin.H{
-			"owner_id":   customer.OwnerId,
+			"ownerId":   customer.OwnerId,
 			"date":       customer.Date.Format("2006-01-02"),
 			"callNumber": customer.Position,
 		})
