@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
@@ -54,11 +54,6 @@ const ClientPage: FC = () => {
   const { ownerId } = router.query;
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
 
-  useEffect(() => {
-    //ローカルストレージにowenrIdを保存
-    localStorage.setItem("ownerId", ownerId as string);
-  }, []);
-
   if (!isNotification) {
     return <NotificationErrorView />;
   }
@@ -72,7 +67,6 @@ const ClientPage: FC = () => {
           <MessageCricle message={""} />
         )}
         <CircleText>あなたの呼出番号は</CircleText>
-        {ownerId}
       </CircleContainer>
       {isToken ? (
         <WaitingContainer>
