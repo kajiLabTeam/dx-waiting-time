@@ -16,13 +16,16 @@ func CreateCustomer(ownerId, token string) (Customer, error) {
 	c := Customer{}
 	db.Where("owner_id = ?", ownerId).Last(&c)
 	nc := Customer{
-		Position:      c.Position+1,
+		Position:      c.Position + 1,
 		WaitingStatus: "waiting",
 		Date:          service.GetTime(),
 		FirebaseToken: token,
 		OwnerId:       ownerId,
 	}
-	db.Create(&nc)
+	if err := db.Create(&nc).Error; err != nil {
+		fmt.Println(err)
+		return nc, err
+	}
 	return nc, nil
 }
 
@@ -35,6 +38,7 @@ func DeleteCustomer(ownerId string, position int) (Customer, error) {
 	c := Customer{}
 	if err := db.Where("owner_id = ? AND position = ?", ownerId, position).Delete(&c).Error; err != nil {
 		fmt.Println(err)
+		return c, err
 	}
 	return c, nil
 }
@@ -45,7 +49,10 @@ func DeleteCustomer(ownerId string, position int) (Customer, error) {
 // 1. OwnerIdとpositionを元に、Customerを検索
 func GetCustomer(ownerId string, position int) (Customer, error) {
 	c := Customer{}
-	db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c)
+	if err := db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c).Error; err != nil {
+		fmt.Println(err)
+		return c, err
+	}
 	return c, nil
 }
 
@@ -55,7 +62,11 @@ func GetCustomer(ownerId string, position int) (Customer, error) {
 // 1. OwnerIdを元に、statusが'waiting'または'ignoreItOnce'であるCustomerを全て検索
 func GetFollowing(ownerId string) ([]Customer, error) {
 	c := []Customer{}
-	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).Find(&c)
+	if err := db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).Find(&c).Error; err != nil {
+		fmt.Println(err)
+		return c, err
+	}
+
 	return c, nil
 }
 
@@ -66,7 +77,10 @@ func GetFollowing(ownerId string) ([]Customer, error) {
 // 2. positionが引数のpositionより小さいCustomerを全て検索
 func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
 	c := []Customer{}
-	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce') AND position < ?", ownerId, position).Find(&c)
+	if err := db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce') AND position < ?", ownerId, position).Find(&c).Error; err != nil {
+		fmt.Println(err)
+		return c, err
+	}
 	return c, nil
 }
 
@@ -77,7 +91,10 @@ func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
 // 2. positionが最も小さいCustomerを検索
 func GetNextCustomer(ownerId string) (Customer, error) {
 	c := Customer{}
-	db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).First(&c)
+	if err := db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce')", ownerId).First(&c).Error; err != nil {
+		fmt.Println(err)
+		return c, err
+	}
 	return c, nil
 }
 
@@ -87,7 +104,10 @@ func GetNextCustomer(ownerId string) (Customer, error) {
 // 1. OwnerIdを元に、Customerを全て検索
 func GetOwnerCustomer(ownerId string) ([]Customer, error) {
 	c := []Customer{}
-	db.Where("owner_id = ?", ownerId).Find(&c)
+	if err := db.Where("owner_id = ?", ownerId).Find(&c).Error; err != nil {
+		fmt.Println(err)
+		return c, err
+	}
 	return c, nil
 }
 
@@ -103,7 +123,8 @@ func UpdateCustomerStatus(ownerId, status string, position int) (Customer, error
 	// c.WaitingStatus = status
 	if err := db.Model(&Customer{}).Where("owner_id = ? AND position = ?", ownerId, position).Update("waiting_status", status).Error; err != nil {
 		fmt.Println(err)
+		return c, err
 	}
-	fmt.Println(c)
+	// fmt.Println(c)
 	return c, nil
 }
