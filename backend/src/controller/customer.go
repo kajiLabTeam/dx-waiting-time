@@ -14,10 +14,14 @@ import (
 func GetCustomer(c *gin.Context) {
 	token := c.Query("deviceToken")
 	ownerId := c.Param("ownerId")
-	customer, _ := model.CreateCustomer(ownerId, token)
+	customer, err := model.CreateCustomer(ownerId, token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK,
 		gin.H{
-			"ownerId":   customer.OwnerId,
+			"ownerId":    customer.OwnerId,
 			"date":       customer.Date.Format("2006-01-02"),
 			"callNumber": customer.Position,
 		})
@@ -44,7 +48,9 @@ func GetCustomerFollowing(c *gin.Context) {
 
 	customer, _ := model.GetCustomerFollowing(ownerId, callNumber)
 
-	model.UpdateCustomerStatus(ownerId, "waiting", callNumber)
+	if _, err := model.UpdateCustomerStatus(ownerId, "waiting", callNumber); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
@@ -55,6 +61,9 @@ func GetCustomerFollowing(c *gin.Context) {
 func DeleteCustomerPosition(c *gin.Context) {
 	ownerId := c.Param("ownerId")
 	callNumber, _ := strconv.Atoi(c.Query("callNumber"))
-	model.DeleteCustomer(ownerId, callNumber)
-	c.JSON(http.StatusOK, gin.H{"message": "delete customer" + strconv.Itoa(callNumber)})
+	if _, err := model.DeleteCustomer(ownerId, callNumber); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "delete customer " + strconv.Itoa(callNumber)})
 }
