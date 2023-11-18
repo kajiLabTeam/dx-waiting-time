@@ -73,5 +73,7 @@ func Init() {
 
 	r.DELETE("api/:ownerId/queue/position", controller.DeleteCustomerPosition)
 
+	r.POST(("api/migration"), controller.Migration)
+
 	r.Run()
 }
