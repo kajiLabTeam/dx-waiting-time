@@ -10,19 +10,13 @@ export const useFetchQueueData = (
   const [positionResponseState, setPositionResponseState] = useState<PositionResponse>();
   const [followingResponse, setFollowingResponse] = useState<FollowingResponse>();
 
-  // Step 1: Check if ownerId is undefined
-  if (ownerId === undefined) {
-    // Step 2: Get value from local storage
-    const storedOwnerId = localStorage.getItem("storedOwnerId");
-    // Step 3: Set the value from local storage to ownerId
-    ownerId = storedOwnerId ? JSON.parse(storedOwnerId) : undefined;
-  }
-
   useEffect(() => {
     const fetchAndSetPosition = async () => {
+      const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
+      console.log(effectedOwnerId);
       try {
         const positionResponse = await axios.get<PositionResponse>(
-          `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
+          `${baseURL}/${effectedOwnerId}/queue/position?deviceToken=${deviceToken}`
         );
         setPositionResponseState(positionResponse.data);
         localStorage.setItem("dxWaitingTime", JSON.stringify(positionResponse.data));
@@ -33,8 +27,10 @@ export const useFetchQueueData = (
 
     const fetchAndSetFollowing = async () => {
       try {
+        const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
+        console.log(effectedOwnerId);
         const followingResponse = await axios.get<FollowingResponse>(
-          `${baseURL}/${ownerId}/queue/following?callNumber=${positionResponseState?.callNumber}`
+          `${baseURL}/${effectedOwnerId}/queue/following?callNumber=${positionResponseState?.callNumber}`
         );
         setFollowingResponse(followingResponse.data);
       } catch (e) {

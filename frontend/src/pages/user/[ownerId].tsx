@@ -55,6 +55,7 @@ const ClientPage: FC = () => {
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
 
   useEffect(() => {
+    console.log("ownerId", ownerId);
     //ownerIdがある時ローカルストレージに保存
     if (ownerId) {
       localStorage.setItem("ownerId", ownerId as string);
