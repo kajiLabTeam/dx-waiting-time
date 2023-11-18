@@ -39,18 +39,8 @@ export const useFetchQueueData = (
     };
 
     if (ownerId && deviceToken) {
-      const currentDate = new Date().toLocaleDateString("ja-JP").split("/").join("-");
-      const localDate = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").date;
-      const localOwnerId = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").ownerId;
-      if (
-        localDate == null ||
-        localDate !== currentDate ||
-        (localOwnerId && localOwnerId !== ownerId)
-      ) {
-        fetchAndSetPosition();
-      } else {
-        setPositionResponseState(JSON.parse(localStorage.getItem("dxWaitingTime") || "{}"));
-      }
+      fetchAndSetPosition();
+      setPositionResponseState(JSON.parse(localStorage.getItem("dxWaitingTime") || "{}"));
     }
 
     if (positionResponseState?.callNumber && ownerId && deviceToken) {
