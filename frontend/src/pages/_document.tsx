@@ -52,7 +52,11 @@ export default function Document() {
         />
         <meta name="twitter:site" content="@Fafner_sou" />
       </Head>
-      <body>
+      <body
+        style={{
+          backgroundColor: "#fff7f2",
+        }}
+      >
         <Main />
         <NextScript />
       </body>
