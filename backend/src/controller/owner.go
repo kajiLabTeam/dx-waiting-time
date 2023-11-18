@@ -24,18 +24,19 @@ func PostOwner(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	o, _ := model.GetOwner(ownerId)
-	if o != nil {
-		fmt.Println(o)
-		c.JSON(http.StatusOK, gin.H{"owner_id": ownerId, "owner_name": ""})
+	var o model.Owner
+	o, err = model.GetOwner(ownerId)
+	if err != nil {
+		nameInterfase := t.Claims["name"]
+		ownerName := nameInterfase.(string)
+
+		no, _ := model.CreateOwner(ownerId, ownerName)
+		c.JSON(http.StatusOK, no)
 		return
 	}
 
-	nameInterfase := t.Claims["name"]
-	ownerName := nameInterfase.(string)
-
-	owner, _ := model.CreateOwner(ownerId, ownerName)
-	c.JSON(http.StatusOK, owner)
+	fmt.Println(o)
+	c.JSON(http.StatusOK, o)
 }
 
 // 並んでいる人数を取得する
@@ -53,7 +54,11 @@ func GetFollowing(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	customer, _ := model.GetFollowing(ownerId)
+	customer, err := model.GetFollowing(ownerId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
 
@@ -72,9 +77,12 @@ func GetNextCustomer(c *gin.Context) {
 		return
 	}
 	OwnerId := t.UID
-	customer, _ := model.GetNextCustomer(OwnerId)
-	err = integrations.CallNotification(customer)
+	customer, err := model.GetNextCustomer(OwnerId)
 	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err = integrations.CallNotification(customer); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
