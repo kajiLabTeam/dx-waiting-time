@@ -10,6 +10,14 @@ export const useFetchQueueData = (
   const [positionResponseState, setPositionResponseState] = useState<PositionResponse>();
   const [followingResponse, setFollowingResponse] = useState<FollowingResponse>();
 
+  // Step 1: Check if ownerId is undefined
+  if (ownerId === undefined) {
+    // Step 2: Get value from local storage
+    const storedOwnerId = localStorage.getItem("storedOwnerId");
+    // Step 3: Set the value from local storage to ownerId
+    ownerId = storedOwnerId ? JSON.parse(storedOwnerId) : undefined;
+  }
+
   useEffect(() => {
     const fetchAndSetPosition = async () => {
       try {

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
@@ -53,6 +53,13 @@ const ClientPage: FC = () => {
   const router = useRouter();
   const { ownerId } = router.query;
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
+
+  useEffect(() => {
+    //ownerIdがある時ローカルストレージに保存
+    if (ownerId) {
+      localStorage.setItem("ownerId", ownerId as string);
+    }
+  }, []);
 
   if (!isNotification) {
     return <NotificationErrorView />;
