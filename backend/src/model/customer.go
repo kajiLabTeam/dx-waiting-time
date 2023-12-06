@@ -128,3 +128,32 @@ func UpdateCustomerStatus(ownerId, status string, position int) (Customer, error
 	// fmt.Println(c)
 	return c, nil
 }
+
+// customer
+// 引数：OwnerId
+// 返り値：Customer, error
+// 1. OwnerIdを元に、Customerの件数を取得
+// 2. Customerの件数を返す
+func GetCustomerCount(ownerId string) (int64, error) {
+	var number int64
+	if err := db.Model(&Customer{}).Where("owner_id = ?", ownerId).Count(&number).Error; err != nil {
+		fmt.Println(err)
+		return number, err
+	}
+	return number, nil
+}
+
+// customer
+// 引数：OwnerId
+// 返り値：[]int64, error
+// 1. OwnerIdを元に、dateから1時間ごとの件数を取得する
+// 2. 1時間ごとの件数を返す
+func GetCustomerCountByHour(ownerId string,i int) (int64, error) {
+	var result int64
+	if err := db.Model(&Customer{}).Where("owner_id = ? AND date = ?", ownerId, i).Count(&result).Error; err != nil {
+		fmt.Println(err)
+		return result, err
+	}
+	return result, nil
+}
+

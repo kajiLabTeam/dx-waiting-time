@@ -75,5 +75,7 @@ func Init() {
 
 	r.POST(("api/migration"), controller.Migration)
 
+	r.GET("api/owner/queue/result", controller.GetResult)
+
 	r.Run()
 }
