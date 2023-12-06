@@ -1,14 +1,17 @@
-import { FC } from "react";
+import { User } from "firebase/auth";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Customer } from "../../components/gragh/Customer";
 import { Graph } from "../../components/gragh/Gragh";
 import { Button } from "../../components/utils/Button";
+import { useUserState } from "../../globalStates/firebaseUserState";
 import { useSalesMutators, useSalesState } from "../../globalStates/salesState";
+import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
 export type CustomersData = {
   counter: number;
-  data: Customer[];
+  result: Customer[];
 };
 
 const EndPageContainer = styled.div`
@@ -43,24 +46,26 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const customers: CustomersData = {
-  counter: 0,
-  data: [
-    { time: 10, count: 20 },
-    { time: 11, count: 50 },
-    { time: 12, count: 80 },
-    { time: 13, count: 60 },
-    { time: 14, count: 10 },
-    { time: 15, count: 20 },
-    { time: 16, count: 40 },
-    { time: 17, count: 30 },
-    { time: 18, count: 60 },
-    { time: 19, count: 40 },
-  ],
+const getResults = async (user:User | null) => {
+  const idToken = await user?.getIdToken();
+  try {
+    const response = await fetch(`${baseURL}/owner/queue/result`, {
+      headers: {
+        authorization: `Bearer ${idToken}`,
+      },
+      method: "GET",
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error: ", error);
+  }
 };
 
 const EndPage: FC = () => {
+  const [customers, setCustomers] = useState<CustomersData | undefined>();
   const isSales = useSalesState();
+  const user = useUserState();
   const { setSales } = useSalesMutators();
   const onClose = () => {
     setSales(false);
@@ -72,14 +77,25 @@ const EndPage: FC = () => {
   const thisDayOfWeek = thisDate.getDay();
   const week = ["日", "月", "火", "水", "木", "金", "土"];
   const thisWeek = week[thisDayOfWeek];
+
+  // ページが開かれた時に、リザルトを取得する
+  useEffect(() => {
+    const fetchResults = async () => {
+      const result = await getResults(user);
+      setCustomers(result);
+    };
+
+    fetchResults();
+  },[user]);
+
   return (
     <EndPageContainer>
       <ThisDateContainer>
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
-      <ThisDateContainer>本日の来客数：{customers.counter}人</ThisDateContainer>
+      {customers && <ThisDateContainer>本日の来客数：{customers.counter}人</ThisDateContainer>}
       <GraphContainer>
-        <Graph customers={customers.data} />
+      {customers && <Graph customers={customers.result} />}
       </GraphContainer>
       <ButtonContainer>
         <Button message={"営業終了"} onClick={onClose} />
