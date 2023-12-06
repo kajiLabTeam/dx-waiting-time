@@ -1,4 +1,4 @@
 export type Customer = {
-    time: number;
-    count: number;
-  };
+  time: number;
+  count: number;
+};

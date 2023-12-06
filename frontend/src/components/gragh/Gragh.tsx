@@ -5,7 +5,7 @@ import { theme } from "../../utils/theme";
 import { Customer } from "./Customer";
 
 type Props = {
-    customers: Customer[];
+  customers: Customer[];
 };
 
 const LineContainer = styled.div`
@@ -13,7 +13,7 @@ const LineContainer = styled.div`
   justify-content: center;
 `;
 
-export const Graph: FC<Props> = ({customers}) => {
+export const Graph: FC<Props> = ({ customers }) => {
   return (
     <LineContainer>
       <BarChart
