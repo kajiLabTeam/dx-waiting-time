@@ -46,7 +46,7 @@ const Text = styled.p`
   color: ${theme.colors.brown};
 `;
 
-const getResults = async (user:User | null) => {
+const getResults = async (user: User | null) => {
   const idToken = await user?.getIdToken();
   try {
     const response = await fetch(`${baseURL}/owner/queue/result`, {
@@ -86,7 +86,7 @@ const EndPage: FC = () => {
     };
 
     fetchResults();
-  },[user]);
+  }, [user]);
 
   return (
     <EndPageContainer>
@@ -94,9 +94,7 @@ const EndPage: FC = () => {
         {thisMonth}月{thisDay}日({thisWeek})
       </ThisDateContainer>
       {customers && <ThisDateContainer>本日の来客数：{customers.counter}人</ThisDateContainer>}
-      <GraphContainer>
-      {customers && <Graph customers={customers.result} />}
-      </GraphContainer>
+      <GraphContainer>{customers && <Graph customers={customers.result} />}</GraphContainer>
       <ButtonContainer>
         <Button message={"営業終了"} onClick={onClose} />
       </ButtonContainer>
