@@ -122,3 +122,46 @@ func PutCustomerStatus(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
 }
+
+// customer
+// 1. firebaseの認証をする
+// 2. tokenからownerIdを取得する
+// 3. ownerIdを元に件数を取得する
+// 4. dateから1時間ごとの件数を取得する
+// 5. jsonにして返す
+// 
+func GetResult(c *gin.Context){
+	auth := c.Request.Header.Get("Authorization")
+	tId := strings.TrimPrefix(auth, "Bearer ")
+	t, err := integrations.VerifyIDToken(tId)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	OwnerId := t.UID
+	var counter int64
+	counter, err = model.GetCustomerCount(OwnerId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 0時から23時まで1時間毎の件数を取得する
+	var result []int64
+	for i := 0; i < 24; i++ {
+		var counter int64
+		counter, err = model.GetCustomerCountByHour(OwnerId, i)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		result = append(result, counter)
+	}
+	
+	var results []gin.H
+	for i, count := range result {
+		results = append(results, gin.H{"time": i, "count": count})
+	}
+	c.JSON(http.StatusOK, gin.H{"counter": counter, "result": results})
+}

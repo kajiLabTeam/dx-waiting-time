@@ -30,3 +30,9 @@ Authorization: Bearer {{authToken}}
     "callNumber" :3,
     "waitingStatus" :"complete"
 }
+
+### 営業結果の取得
+GET {{ownerUrl}}/result
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{authToken}}
