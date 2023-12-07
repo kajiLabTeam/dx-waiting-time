@@ -129,7 +129,6 @@ func PutCustomerStatus(c *gin.Context) {
 // 3. ownerIdを元に件数を取得する
 // 4. dateから1時間ごとの件数を取得する
 // 5. jsonにして返す
-// 
 func GetResult(c *gin.Context){
 	auth := c.Request.Header.Get("Authorization")
 	tId := strings.TrimPrefix(auth, "Bearer ")
@@ -148,20 +147,20 @@ func GetResult(c *gin.Context){
 	}
 
 	// 0時から23時まで1時間毎の件数を取得する
-	var result []int64
-	for i := 0; i < 24; i++ {
-		var counter int64
-		counter, err = model.GetCustomerCountByHour(OwnerId, i)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		result = append(result, counter)
-	}
-	
-	var results []gin.H
-	for i, count := range result {
-		results = append(results, gin.H{"time": i, "count": count})
-	}
-	c.JSON(http.StatusOK, gin.H{"counter": counter, "result": results})
+    var result []int64
+    for i := 0; i < 24; i++ {
+        var hourlyCounter int64
+        hourlyCounter, err = model.GetCustomerCountByHour(OwnerId, i)
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
+        result = append(result, hourlyCounter)
+    }
+    
+    var results []gin.H
+    for i, count := range result {
+        results = append(results, gin.H{"time": i, "count": count})
+    }
+    c.JSON(http.StatusOK, gin.H{"counter": counter, "result": results})
 }
