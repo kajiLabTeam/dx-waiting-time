@@ -25,8 +25,8 @@ func PostOwner(c *gin.Context) {
 
 	ownerId := t.UID
 	var o model.Owner
-	o, err = model.GetOwner(ownerId)
-	if err != nil {
+	o, _ = model.GetOwner(ownerId)
+	if o.OwnerName == "" {
 		nameInterfase := t.Claims["name"]
 		ownerName := nameInterfase.(string)
 
