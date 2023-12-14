@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import { FollowingResponse, PositionResponse } from "../components/types";
 import { baseURL } from "../utils/api";
+
 export const useFetchQueueData = (
   ownerId: string | string[] | undefined,
   deviceToken: string | null
@@ -10,6 +11,7 @@ export const useFetchQueueData = (
   const [positionResponseState, setPositionResponseState] = useState<PositionResponse>();
   const [followingResponse, setFollowingResponse] = useState<FollowingResponse>();
 
+  // 最初のデータ取得
   useEffect(() => {
     const fetchAndSetPosition = async () => {
       try {
@@ -22,6 +24,13 @@ export const useFetchQueueData = (
       }
     };
 
+    if (ownerId && deviceToken) {
+      fetchAndSetPosition();
+    }
+  }, [ownerId, deviceToken]); // このuseEffectはownerIdとdeviceTokenが変更された時のみ実行されます
+
+  // positionResponseStateが更新されたときに追加のデータを取得
+  useEffect(() => {
     const fetchAndSetFollowing = async () => {
       try {
         const followingResponse = await axios.get<FollowingResponse>(
@@ -33,14 +42,10 @@ export const useFetchQueueData = (
       }
     };
 
-    if (ownerId && deviceToken) {
-      fetchAndSetPosition();
-    }
-
-    if (positionResponseState?.callNumber && ownerId && deviceToken) {
+    if (positionResponseState?.callNumber) {
       fetchAndSetFollowing();
     }
-  }, [ownerId, deviceToken, positionResponseState?.callNumber]);
+  }, [positionResponseState?.callNumber]); // このuseEffectはpositionResponseState.callNumberが変更された時のみ実行されます
 
   return { positionResponseState, followingResponse };
 };
