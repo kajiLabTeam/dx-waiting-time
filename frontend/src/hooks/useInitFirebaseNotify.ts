@@ -34,17 +34,11 @@ export const useInitFirebaseNotify = () => {
         .catch((err) => {
           console.error("An error occurred while retrieving token. ", err);
           setIsToken(false);
+          router.reload();
         });
     };
     requestNotificationPermission();
   }, []);
-
-  useEffect(() => {
-    // isNotification と isToken が両方 true の場合のみリロード
-    if (isNotification && isToken) {
-      router.reload();
-    }
-  }, [isNotification, isToken]); // 依存配列に isToken も追加
 
   return [isNotification, isToken];
 };
