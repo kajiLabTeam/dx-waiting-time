@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { CartesianGrid, Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Bar, BarChart, Tooltip, XAxis } from "recharts";
 import styled from "styled-components";
 import { theme } from "../../utils/theme";
 import { Customer } from "./Customer";
@@ -10,6 +10,7 @@ type Props = {
 
 const LineContainer = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
 export const Graph: FC<Props> = ({ customers }) => {
@@ -21,9 +22,13 @@ export const Graph: FC<Props> = ({ customers }) => {
         data={customers}
         margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
       >
-        <CartesianGrid  vertical={false} />
-        <XAxis dataKey="time" axisLine tickLine={false} tick={{ fontSize: 16, fill: "#000" }} />
-        <YAxis dataKey="count" axisLine={false} tickLine={false} tick={{ fontSize: 16, fill: "#000" }} />
+        <CartesianGrid horizontal={false} vertical={false} />
+        <XAxis
+          dataKey="time"
+          axisLine={false}
+          tickLine={false}
+          tick={{ fontSize: 16, fill: "#000" }}
+        />
         <Bar dataKey="count" fill={theme.colors.brown} />
         <Tooltip
           contentStyle={{ backgroundColor: "#fff", border: "none" }}
