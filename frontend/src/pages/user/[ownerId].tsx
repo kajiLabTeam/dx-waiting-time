@@ -76,7 +76,6 @@ const ClientPage: FC = () => {
       <Head>
         <link rel="manifest" href={manifestLink} />
       </Head>
-
       {ownerId}
       <CircleContainer>
         {isToken ? (
@@ -85,7 +84,6 @@ const ClientPage: FC = () => {
           <MessageCricle message={""} />
         )}
         <CircleText>あなたの呼出番号は</CircleText>
-        {ownerId}
       </CircleContainer>
       {isToken ? (
         <WaitingContainer>

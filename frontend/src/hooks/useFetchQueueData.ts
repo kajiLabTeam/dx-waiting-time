@@ -38,7 +38,7 @@ export const useFetchQueueData = (
         const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
         console.log(effectedOwnerId);
         const followingResponse = await axios.get<FollowingResponse>(
-          `${baseURL}/${effectedOwnerId}/queue/following?callNumber=${positionResponseState?.callNumber}`
+          `${baseURL}/${effectedOwnerId}/queue/following?deviceToken=${deviceToken}`
         );
         setFollowingResponse(followingResponse.data);
       } catch (e) {
@@ -46,7 +46,7 @@ export const useFetchQueueData = (
       }
     };
 
-    if (positionResponseState?.callNumber) {
+    if (positionResponseState?.callNumber && deviceToken) {
       fetchAndSetFollowing();
     }
   }, [positionResponseState?.callNumber]); // このuseEffectはpositionResponseState.callNumberが変更された時のみ実行されます
