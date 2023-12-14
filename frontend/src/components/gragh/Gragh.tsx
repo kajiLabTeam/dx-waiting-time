@@ -21,9 +21,14 @@ export const Graph: FC<Props> = ({ customers }) => {
         data={customers}
         margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
       >
-        <CartesianGrid  vertical={false} />
+        <CartesianGrid vertical={false} />
         <XAxis dataKey="time" axisLine tickLine={false} tick={{ fontSize: 16, fill: "#000" }} />
-        <YAxis dataKey="count" axisLine={false} tickLine={false} tick={{ fontSize: 16, fill: "#000" }} />
+        <YAxis
+          dataKey="count"
+          axisLine={false}
+          tickLine={false}
+          tick={{ fontSize: 16, fill: "#000" }}
+        />
         <Bar dataKey="count" fill={theme.colors.brown} />
         <Tooltip
           contentStyle={{ backgroundColor: "#fff", border: "none" }}
