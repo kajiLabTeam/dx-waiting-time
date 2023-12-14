@@ -1,9 +1,13 @@
+import router from "next/router";
 import { FC } from "react";
 import styled from "styled-components";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { theme } from "../../utils/theme";
 import { ErrorCard } from "./ErrorCard";
 
+const ClickContainer = styled.div`
+  cursor: pointer;
+`;
 const FalseContainer = styled.div`
   opacity: 0.3;
 `;
@@ -36,8 +40,12 @@ const Number = styled.p`
 `;
 
 export const NotificationErrorView: FC = () => {
+  const onReload = () => {
+    router.reload();
+  };
+
   return (
-    <>
+    <ClickContainer onClick={onReload}>
       <FalseContainer>
         <ClientPageContainer>
           <CircleContainer>
@@ -50,6 +58,6 @@ export const NotificationErrorView: FC = () => {
         </ClientPageContainer>
       </FalseContainer>
       <ErrorCard />
-    </>
+    </ClickContainer>
   );
 };
