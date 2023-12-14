@@ -62,6 +62,11 @@ const ClientPage: FC = () => {
     }
   }, [ownerId]);
 
+  useEffect(() => {
+    //ローカルストレージにowenrIdを保存
+    localStorage.setItem("ownerId", ownerId as string);
+  }, []);
+
   if (!isNotification) {
     return <NotificationErrorView />;
   }
@@ -80,6 +85,7 @@ const ClientPage: FC = () => {
           <MessageCricle message={""} />
         )}
         <CircleText>あなたの呼出番号は</CircleText>
+        {ownerId}
       </CircleContainer>
       {isToken ? (
         <WaitingContainer>

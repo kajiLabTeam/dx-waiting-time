@@ -94,7 +94,7 @@ func GetNextCustomer(c *gin.Context) {
 // 1. firebaseの認証をする
 // 2. tokenからownerIdを取得する
 // 3. リクエストbodyからcustomerを取得する
-// 4. ownerIdとpositionを元にcustomerのWaiting'statusを"complete"に変更する
+// 4. ownerIdとdeviceTokenを元にcustomerのWaiting'statusを"complete"に変更する
 // 5. customerの情報を返す
 func PutCustomerStatus(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
@@ -115,7 +115,7 @@ func PutCustomerStatus(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
 		return
 	}
-	_, err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
+	_, err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.FirebaseToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
