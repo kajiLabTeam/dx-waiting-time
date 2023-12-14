@@ -35,10 +35,11 @@ export const useInitFirebaseNotify = () => {
         .catch((err) => {
           console.error("An error occurred while retrieving token. ", err);
           setIsToken(false);
+          router.reload();
         });
     };
     requestNotificationPermission();
-  }, [router]);
+  }, []);
 
   return [isNotification, isToken];
 };
