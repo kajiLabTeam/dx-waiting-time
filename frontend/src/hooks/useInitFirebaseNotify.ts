@@ -35,7 +35,10 @@ export const useInitFirebaseNotify = () => {
         .catch((err) => {
           console.error("An error occurred while retrieving token. ", err);
           setIsToken(false);
-          router.reload();
+          //3秒後にリロード
+          setTimeout(() => {
+            router.reload();
+          }, 3000);
         });
     };
     requestNotificationPermission();
