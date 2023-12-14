@@ -20,7 +20,7 @@ func GetCustomer(c *gin.Context) {
 	ownerId := c.Param("ownerId")
 
 	customer, _ := model.GetCustomer(ownerId, token)
-	if customer.FirebaseToken != "" {
+	if customer.FirebaseToken != "" || customer.WaitingStatus == "completed" {
 		c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position,})
 		return
 	}
