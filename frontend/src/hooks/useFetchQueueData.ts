@@ -17,7 +17,6 @@ export const useFetchQueueData = (
           `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
         );
         setPositionResponseState(positionResponse.data);
-        localStorage.setItem("dxWaitingTime", JSON.stringify(positionResponse.data));
       } catch (e) {
         console.error(e);
       }
@@ -35,18 +34,7 @@ export const useFetchQueueData = (
     };
 
     if (ownerId && deviceToken) {
-      const currentDate = new Date().toLocaleDateString("ja-JP").split("/").join("-");
-      const localDate = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").date;
-      const localOwnerId = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").ownerId;
-      if (
-        localDate == null ||
-        localDate !== currentDate ||
-        (localOwnerId && localOwnerId !== ownerId)
-      ) {
-        fetchAndSetPosition();
-      } else {
-        setPositionResponseState(JSON.parse(localStorage.getItem("dxWaitingTime") || "{}"));
-      }
+      fetchAndSetPosition();
     }
 
     if (positionResponseState?.callNumber && ownerId && deviceToken) {
