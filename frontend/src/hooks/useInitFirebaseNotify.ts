@@ -40,8 +40,11 @@ export const useInitFirebaseNotify = () => {
   }, []);
 
   useEffect(() => {
-    router.reload();
-  }, [isToken]);
+    // isNotification と isToken が両方 true の場合のみリロード
+    if (isNotification && isToken) {
+      router.reload();
+    }
+  }, [isNotification, isToken]); // 依存配列に isToken も追加
 
   return [isNotification, isToken];
 };
