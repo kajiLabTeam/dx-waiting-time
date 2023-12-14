@@ -1,4 +1,5 @@
 import { getMessaging, getToken } from "firebase/messaging";
+import router from "next/router";
 import { useEffect, useState } from "react";
 import { app } from "../utils/firebase";
 
@@ -32,6 +33,7 @@ export const useInitFirebaseNotify = () => {
         .catch((err) => {
           console.error("An error occurred while retrieving token. ", err);
           setIsToken(false);
+          router.reload();
         });
     };
     requestNotificationPermission();
