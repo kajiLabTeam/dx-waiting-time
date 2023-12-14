@@ -18,25 +18,20 @@ import (
 func GetCustomer(c *gin.Context) {
 	token := c.Query("deviceToken")
 	ownerId := c.Param("ownerId")
+
+	customer, _ := model.GetCustomer(ownerId, token)
+	if customer.FirebaseToken != "" {
+		c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position,})
+		return
+	}
+
 	customer, err := model.CreateCustomer(ownerId, token)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK,
-		gin.H{
-			"callNumber": customer.Position,
-		})
+	c.JSON(http.StatusOK,gin.H{"callNumber": customer.Position,})
 }
-
-// func GetFollowing(c *gin.Context) {
-// 	var info model.Customer
-// 	if c.ShouldBind(&info) == nil {
-// 		GetCustomerFollowing(c, info)
-// 	} else {
-// 		GetOwnerFollowing(c)
-// 	}
-// }
 
 // customerが自分の前にいる人の情報を取得する
 // 1. urlからownerIdを取得する
