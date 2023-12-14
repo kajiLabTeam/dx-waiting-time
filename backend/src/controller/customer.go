@@ -45,7 +45,7 @@ func GetCustomerFollowing(c *gin.Context) {
 
 	customer, _ := model.GetCustomerFollowing(ownerId, deviceToken)
 
-	if _, err := model.UpdateCustomerStatus(ownerId, "waiting", deviceToken); err != nil {
+	if _, err := model.UpdateCustomerStatus(ownerId, deviceToken, "waiting"); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
