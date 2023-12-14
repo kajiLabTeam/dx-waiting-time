@@ -1,5 +1,6 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GetOutButton } from "../../components/getout/GetOutButton";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
@@ -53,6 +54,13 @@ const ClientPage: FC = () => {
   const router = useRouter();
   const { ownerId } = router.query;
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
+  const [manifestLink, setManifestLink] = useState("/api/manifest?start_url=/user/undefined");
+
+  useEffect(() => {
+    if (ownerId) {
+      setManifestLink(`/api/manifest?start_url=/user/${ownerId}`);
+    }
+  }, [ownerId]);
 
   if (!isNotification) {
     return <NotificationErrorView />;
@@ -60,6 +68,11 @@ const ClientPage: FC = () => {
 
   return (
     <ClientPageContainer>
+      <Head>
+        <link rel="manifest" href={manifestLink} />
+      </Head>
+
+      {ownerId}
       <CircleContainer>
         {isToken ? (
           <MessageCricle message={positionResponseState?.callNumber} />
