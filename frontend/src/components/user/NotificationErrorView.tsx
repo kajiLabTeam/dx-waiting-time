@@ -1,6 +1,8 @@
-import { FC } from "react";
+import { getMessaging, getToken } from "firebase/messaging";
+import { FC, useState } from "react";
 import styled from "styled-components";
 import { MessageCricle } from "../../components/utils/MessageCricle";
+import { app } from "../../utils/firebase";
 import { theme } from "../../utils/theme";
 import { ErrorCard } from "./ErrorCard";
 
@@ -35,9 +37,42 @@ const Number = styled.p`
   color: ${theme.colors.red};
 `;
 
+const ButtonContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+`;
+
+const requestNotificationPermission = async () => {
+  Notification.requestPermission().then((permission) => {
+    if (permission !== "granted") {
+      console.error("Permission not granted for Notification");
+      return;
+    }
+  });
+  const messaging = getMessaging(app);
+  getToken(messaging, {
+    vapidKey:
+      "BDOU99-h67HcA6JeFXHbSNMu7e2yNNu3RzoMj8TM4W88jITfq7ZmPvIM1Iv-4_l2LxQcYwhqby2xGpWwzjfAnG4",
+  })
+    .then((currentToken) => {
+      console.log(currentToken);
+    })
+    .catch((err) => {
+      console.error("An error occurred while retrieving token. ", err);
+    });
+};
+
 export const NotificationErrorView: FC = () => {
+  const [isOpenPage, setIsOpenPage] = useState(false);
+  const setTrue = () => () => {
+    if (isOpenPage) return;
+    setIsOpenPage(true);
+    requestNotificationPermission();
+  };
+
   return (
-    <>
+    <ButtonContainer onClick={setTrue()}>
       <FalseContainer>
         <ClientPageContainer>
           <CircleContainer>
@@ -50,6 +85,6 @@ export const NotificationErrorView: FC = () => {
         </ClientPageContainer>
       </FalseContainer>
       <ErrorCard />
-    </>
+    </ButtonContainer>
   );
 };

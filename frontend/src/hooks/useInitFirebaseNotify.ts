@@ -24,7 +24,6 @@ export const useInitFirebaseNotify = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
-            localStorage.setItem("token", currentToken);
             setIsNotification(true);
             setIsToken(true);
           } else {
@@ -35,10 +34,6 @@ export const useInitFirebaseNotify = () => {
         .catch((err) => {
           console.error("An error occurred while retrieving token. ", err);
           setIsToken(false);
-          //3秒後にリロード
-          setTimeout(() => {
-            router.reload();
-          }, 3000);
         });
     };
     requestNotificationPermission();
