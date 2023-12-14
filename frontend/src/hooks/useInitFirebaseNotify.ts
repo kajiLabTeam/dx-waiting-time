@@ -41,7 +41,7 @@ export const useInitFirebaseNotify = () => {
 
   useEffect(() => {
     router.reload();
-  }, [isToken]);
+  }, [isNotification]);
 
   return [isNotification, isToken];
 };
