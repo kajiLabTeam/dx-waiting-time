@@ -54,18 +54,13 @@ const ClientPage: FC = () => {
   const router = useRouter();
   const { ownerId } = router.query;
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
-  const [manifestLink, setManifestLink] = useState("/api/manifest?start_url=/user/undefined");
+  const [manifestLink, setManifestLink] = useState(`/api/${ownerId}/queue/position?deviceToken=undefined`);
 
   useEffect(() => {
-    if (ownerId) {
-      setManifestLink(`/api/manifest?start_url=/user/${ownerId}`);
+    if (ownerId && deviceToken) {
+      setManifestLink(`/api/${ownerId}/queue/position?deviceToken=${deviceToken}`);
     }
   }, [ownerId]);
-
-  useEffect(() => {
-    //ローカルストレージにowenrIdを保存
-    localStorage.setItem("ownerId", ownerId as string);
-  }, []);
 
   if (!isNotification) {
     return <NotificationErrorView />;
