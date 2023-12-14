@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import { FollowingResponse, PositionResponse } from "../components/types";
 import { baseURL } from "../utils/api";
+
 export const useFetchQueueData = (
   ownerId: string | string[] | undefined,
   deviceToken: string | null
@@ -10,23 +11,34 @@ export const useFetchQueueData = (
   const [positionResponseState, setPositionResponseState] = useState<PositionResponse>();
   const [followingResponse, setFollowingResponse] = useState<FollowingResponse>();
 
+  // 最初のデータ取得
   useEffect(() => {
     const fetchAndSetPosition = async () => {
+      const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
+      console.log(effectedOwnerId);
       try {
         const positionResponse = await axios.get<PositionResponse>(
-          `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
+          `${baseURL}/${effectedOwnerId}/queue/position?deviceToken=${deviceToken}`
         );
         setPositionResponseState(positionResponse.data);
-        localStorage.setItem("dxWaitingTime", JSON.stringify(positionResponse.data));
       } catch (e) {
         console.error(e);
       }
     };
 
+    if (ownerId && deviceToken) {
+      fetchAndSetPosition();
+    }
+  }, [ownerId, deviceToken]); // このuseEffectはownerIdとdeviceTokenが変更された時のみ実行されます
+
+  // positionResponseStateが更新されたときに追加のデータを取得
+  useEffect(() => {
     const fetchAndSetFollowing = async () => {
       try {
+        const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
+        console.log(effectedOwnerId);
         const followingResponse = await axios.get<FollowingResponse>(
-          `${baseURL}/${ownerId}/queue/following?callNumber=${positionResponseState?.callNumber}`
+          `${baseURL}/${effectedOwnerId}/queue/following?deviceToken=${deviceToken}`
         );
         setFollowingResponse(followingResponse.data);
       } catch (e) {
@@ -34,25 +46,10 @@ export const useFetchQueueData = (
       }
     };
 
-    if (ownerId && deviceToken) {
-      const currentDate = new Date().toLocaleDateString("ja-JP").split("/").join("-");
-      const localDate = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").date;
-      const localOwnerId = JSON.parse(localStorage.getItem("dxWaitingTime") || "{}").ownerId;
-      if (
-        localDate == null ||
-        localDate !== currentDate ||
-        (localOwnerId && localOwnerId !== ownerId)
-      ) {
-        fetchAndSetPosition();
-      } else {
-        setPositionResponseState(JSON.parse(localStorage.getItem("dxWaitingTime") || "{}"));
-      }
-    }
-
-    if (positionResponseState?.callNumber && ownerId && deviceToken) {
+    if (positionResponseState?.callNumber && deviceToken) {
       fetchAndSetFollowing();
     }
-  }, [ownerId, deviceToken, positionResponseState?.callNumber]);
+  }, [positionResponseState?.callNumber]); // このuseEffectはpositionResponseState.callNumberが変更された時のみ実行されます
 
   return { positionResponseState, followingResponse };
 };

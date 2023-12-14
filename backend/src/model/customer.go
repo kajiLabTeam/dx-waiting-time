@@ -17,7 +17,7 @@ func CreateCustomer(ownerId, token string) (Customer, error) {
 	db.Where("owner_id = ?", ownerId).Last(&c)
 	nc := Customer{
 		Position:      c.Position + 1,
-		WaitingStatus: "waiting",
+		WaitingStatus: "provisionalRegistration",
 		Date:          service.GetTime(),
 		FirebaseToken: token,
 		OwnerId:       ownerId,
@@ -30,26 +30,26 @@ func CreateCustomer(ownerId, token string) (Customer, error) {
 }
 
 // customerの削除
-// 引数：OwnerId, position
+// 引数：OwnerId, deviceToken
 // 返り値：Customer, error
-// 1. OwnerIdとpositionを元に、Customerを検索
+// 1. OwnerIdとdeviceTokenを元に、Customerを検索
 // 2. Customerを削除
-func DeleteCustomer(ownerId string, position int) (Customer, error) {
+func DeleteCustomer(ownerId,deviceToken string) (Customer, error) {
 	c := Customer{}
-	if err := db.Where("owner_id = ? AND position = ?", ownerId, position).Delete(&c).Error; err != nil {
+	if err := db.Where("owner_id = ? AND firebase_token = ?", ownerId, deviceToken).Delete(&c).Error; err != nil {
 		fmt.Println(err)
 		return c, err
 	}
 	return c, nil
 }
 
-// customerをOwnerIdとPositionで検索
-// 引数：OwnerId, position
+// customerをOwnerIdとdeviceTokenで検索
+// 引数：OwnerId, deviceToken
 // 返り値：Customer, error
-// 1. OwnerIdとpositionを元に、Customerを検索
-func GetCustomer(ownerId string, position int) (Customer, error) {
+// 1. OwnerIdとdeviceTokenを元に、Customerを検索
+func GetCustomer(ownerId,deviceToken string) (Customer, error) {
 	c := Customer{}
-	if err := db.Where("owner_id = ? AND position = ?", ownerId, position).Find(&c).Error; err != nil {
+	if err := db.Where("owner_id = ? AND firebase_token = ?", ownerId, deviceToken).Find(&c).Error; err != nil {
 		fmt.Println(err)
 		return c, err
 	}
@@ -70,18 +70,27 @@ func GetFollowing(ownerId string) ([]Customer, error) {
 	return c, nil
 }
 
-// customerをOwnerIdを元に、「statusが'waiting'または'ignoreItOnce',かつpositionが引数のpositionより小さい」で条件付けて全て検索
-// 引数：OwnerId, position
-// 返り値：Customer, error
-// 1. OwnerIdを元に、statusが'waiting'または'ignoreItOnce'であるCustomerを全て検索
-// 2. positionが引数のpositionより小さいCustomerを全て検索
-func GetCustomerFollowing(ownerId string, position int) ([]Customer, error) {
-	c := []Customer{}
-	if err := db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce') AND position < ?", ownerId, position).Find(&c).Error; err != nil {
+// customerをOwnerIdとdeviceTokenで検索
+// customerをOwnerIdを元に、「statusが'waiting'または'ignoreItOnce',かつpositionが検索結果のpositionより小さい」で条件付けて全て検索
+// 引数：OwnerId, deviceToken
+// 返り値：[]Customer, error
+// 1. model.GetCustomerを実行
+// 2. OwnerIdを元に、statusが'waiting'または'ignoreItOnce'であるCustomerを全て検索
+// 2. positionが1での検索結果のpositionより小さいCustomerを全て検索
+func GetCustomerFollowing(ownerId,deviceToken string) ([]Customer, error) {
+	var customers []Customer
+	var c Customer
+	var err error
+	
+	if c,err = GetCustomer(ownerId,deviceToken); err != nil {
 		fmt.Println(err)
-		return c, err
+		return customers, err
 	}
-	return c, nil
+	if err = db.Where("owner_id = ? AND (waiting_status = 'waiting' OR waiting_status = 'ignoreItOnce') AND position < ?", ownerId, c.Position).Find(&customers).Error; err != nil {
+		fmt.Println(err)
+		return customers, err
+	}
+	return customers, nil
 }
 
 // customerをOwnerIdを元に、「statusが'waiting'または'ignoreItOnce',かつpositionが最も小さい」で条件付けて検索
@@ -112,16 +121,16 @@ func GetOwnerCustomer(ownerId string) ([]Customer, error) {
 }
 
 // customerのStatusを更新
-// 引数：OwnerId, position, status
+// 引数：OwnerId, deviceToken, status
 // 返り値：Customer, error
-// 1. OwnerIdとpositionを元に、Customerを検索
+// 1. OwnerIdとdevceTokenを元に、Customerを検索
 // 2. statusを引数のstatusに更新
 // 3. CustomerをDBに登録
-func UpdateCustomerStatus(ownerId, status string, position int) (Customer, error) {
-	c := Customer{}
+func UpdateCustomerStatus(ownerId, deviceToken, status string) (Customer, error) {
+	var c Customer
 	// db.Where("owner_id = ? AND position = ?", ownerId, position).First(&c)
 	// c.WaitingStatus = status
-	if err := db.Model(&Customer{}).Where("owner_id = ? AND position = ?", ownerId, position).Update("waiting_status", status).Error; err != nil {
+	if err := db.Model(&Customer{}).Where("owner_id = ? AND firebase_token = ?", ownerId, deviceToken).Update("waiting_status", status).Error; err != nil {
 		fmt.Println(err)
 		return c, err
 	}
@@ -149,11 +158,10 @@ func GetCustomerCount(ownerId string) (int64, error) {
 // 1. OwnerIdを元に、dateから1時間ごとの件数を取得する
 // 2. 1時間ごとの件数を返す
 func GetCustomerCountByHour(ownerId string, hour int) (int64, error) {
-    var result int64
-    if err := db.Model(&Customer{}).Where("owner_id = ? AND HOUR(date) = ?", ownerId, hour).Count(&result).Error; err != nil {
-        fmt.Println(err)
-        return result, err
-    }
-    return result, nil
+	var result int64
+	if err := db.Model(&Customer{}).Where("owner_id = ? AND HOUR(date) = ?", ownerId, hour).Count(&result).Error; err != nil {
+		fmt.Println(err)
+		return result, err
+	}
+	return result, nil
 }
-
