@@ -20,6 +20,8 @@ export const endpoints = {
   complete: "owner/queue/position/complete/(ユーザID)",
   // パス
   pass: "owner/queue/position/pass/(ユーザID)",
+  // リザルト
+  result: "owner/queue/result",
 } as const;
 
 export const useCustomSWR = <T>(url: string | null) => {

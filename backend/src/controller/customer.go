@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kajiLabTeam/dx-waiting-time/model"
@@ -10,27 +9,29 @@ import (
 
 // customerが自分の番号を取得する
 // 1. urlからownerIdを取得する
+// 2. urlからdeviceTokenを取得する
+// 3. オーナIDとデバイストークンを持っているユーザを検索
+//	1. 存在していた場合、番号と待ち人数を返す
+//	2. 存在していなかった場合、登録後に番号と待ち人数を返す
 // 4. customerの作成
+
 func GetCustomer(c *gin.Context) {
 	token := c.Query("deviceToken")
 	ownerId := c.Param("ownerId")
-	customer, _ := model.CreateCustomer(ownerId, token)
-	c.JSON(http.StatusOK,
-		gin.H{
-			"ownerId":   customer.OwnerId,
-			"date":       customer.Date.Format("2006-01-02"),
-			"callNumber": customer.Position,
-		})
-}
 
-// func GetFollowing(c *gin.Context) {
-// 	var info model.Customer
-// 	if c.ShouldBind(&info) == nil {
-// 		GetCustomerFollowing(c, info)
-// 	} else {
-// 		GetOwnerFollowing(c)
-// 	}
-// }
+	customer, _ := model.GetCustomer(ownerId, token)
+	if customer.FirebaseToken != "" {
+		c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position,})
+		return
+	}
+
+	customer, err := model.CreateCustomer(ownerId, token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK,gin.H{"callNumber": customer.Position,})
+}
 
 // customerが自分の前にいる人の情報を取得する
 // 1. urlからownerIdを取得する
@@ -40,11 +41,13 @@ func GetCustomer(c *gin.Context) {
 func GetCustomerFollowing(c *gin.Context) {
 	ownerId := c.Param("ownerId")
 
-	callNumber, _ := strconv.Atoi(c.Query("callNumber"))
+	deviceToken := c.Query("deviceToken")
 
-	customer, _ := model.GetCustomerFollowing(ownerId, callNumber)
+	customer, _ := model.GetCustomerFollowing(ownerId, deviceToken)
 
-	model.UpdateCustomerStatus(ownerId, "waiting", callNumber)
+	if _, err := model.UpdateCustomerStatus(ownerId, deviceToken, "waiting"); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
@@ -54,7 +57,10 @@ func GetCustomerFollowing(c *gin.Context) {
 // 2. ownerIdとinfo.positionを元にcustomerを削除する
 func DeleteCustomerPosition(c *gin.Context) {
 	ownerId := c.Param("ownerId")
-	callNumber, _ := strconv.Atoi(c.Query("callNumber"))
-	model.DeleteCustomer(ownerId, callNumber)
-	c.JSON(http.StatusOK, gin.H{"message": "delete customer" + strconv.Itoa(callNumber)})
+	deviceToken := c.Query("deviceToken")
+	if _, err := model.DeleteCustomer(ownerId, deviceToken); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "delete customer " + deviceToken + " success"})
 }

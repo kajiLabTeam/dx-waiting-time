@@ -46,7 +46,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         style={
           isMenuOpen
             ? {
-                maxWidth: "100%",
+                width: "100vw",
                 opacity: 0.5,
                 position: "absolute",
                 top: "6vh",

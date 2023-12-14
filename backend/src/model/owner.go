@@ -9,7 +9,9 @@ func CreateOwner(ownerId, ownerName string) (Owner, error) {
 	o := Owner{}
 	o.OwnerId = ownerId
 	o.OwnerName = ownerName
-	db.Create(&o)
+	if err := db.Create(&o).Error; err != nil {
+		return o, err
+	}
 	return o, nil
 }
 
@@ -20,8 +22,12 @@ func CreateOwner(ownerId, ownerName string) (Owner, error) {
 // 2. Ownerを削除
 func DeleteOwner(ownerId string) (Owner, error) {
 	o := Owner{}
-	db.Where("owner_id = ?", ownerId).Find(&o)
-	db.Delete(&o)
+	if err := db.Where("owner_id = ?", ownerId).Find(&o).Error; err != nil {
+		return o, err
+	}
+	if err := db.Delete(&o).Error; err != nil {
+		return o, err
+	}
 	return o, nil
 }
 
@@ -29,13 +35,12 @@ func DeleteOwner(ownerId string) (Owner, error) {
 // 引数：OwnerId
 // 返り値：Owner, error
 // 1. OwnerIdを元に、Ownerを検索
-func GetOwner(ownerId string) (*Owner, error) {
+func GetOwner(ownerId string) (Owner, error) {
 	o := Owner{}
-	err := db.Where("owner_id = ?", ownerId).Find(&o)
-	if err != nil {
-		return nil, err.Error
+	if err := db.Where("owner_id = ?", ownerId).Find(&o).Error; err != nil {
+		return o, err
 	}
-	return &o, nil
+	return o, nil
 }
 
 // Ownerを全件検索
@@ -44,6 +49,8 @@ func GetOwner(ownerId string) (*Owner, error) {
 // 1. Ownerを全件検索
 func GetAllOwner() ([]Owner, error) {
 	var o []Owner
-	db.Find(&o)
+	if err := db.Find(&o).Error; err != nil {
+		return o, err
+	}
 	return o, nil
 }
