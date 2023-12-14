@@ -17,7 +17,7 @@ func CreateCustomer(ownerId, token string) (Customer, error) {
 	db.Where("owner_id = ?", ownerId).Last(&c)
 	nc := Customer{
 		Position:      c.Position + 1,
-		WaitingStatus: "waiting",
+		WaitingStatus: "provisionalRegistration",
 		Date:          service.GetTime(),
 		FirebaseToken: token,
 		OwnerId:       ownerId,
