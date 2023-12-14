@@ -24,18 +24,19 @@ func PostOwner(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	o, _ := model.GetOwner(ownerId)
-	if o != nil {
-		fmt.Println(o)
-		c.JSON(http.StatusOK, gin.H{"owner_id": ownerId, "owner_name": ""})
+	var o model.Owner
+	o, _ = model.GetOwner(ownerId)
+	if o.OwnerName == "" {
+		nameInterfase := t.Claims["name"]
+		ownerName := nameInterfase.(string)
+
+		no, _ := model.CreateOwner(ownerId, ownerName)
+		c.JSON(http.StatusOK, no)
 		return
 	}
 
-	nameInterfase := t.Claims["name"]
-	ownerName := nameInterfase.(string)
-
-	owner, _ := model.CreateOwner(ownerId, ownerName)
-	c.JSON(http.StatusOK, owner)
+	fmt.Println(o)
+	c.JSON(http.StatusOK, o)
 }
 
 // 並んでいる人数を取得する
@@ -53,7 +54,11 @@ func GetFollowing(c *gin.Context) {
 	}
 
 	ownerId := t.UID
-	customer, _ := model.GetFollowing(ownerId)
+	customer, err := model.GetFollowing(ownerId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"following": len(customer)})
 }
 
@@ -72,9 +77,12 @@ func GetNextCustomer(c *gin.Context) {
 		return
 	}
 	OwnerId := t.UID
-	customer, _ := model.GetNextCustomer(OwnerId)
-	err = integrations.CallNotification(customer)
+	customer, err := model.GetNextCustomer(OwnerId)
 	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err = integrations.CallNotification(customer); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -86,7 +94,7 @@ func GetNextCustomer(c *gin.Context) {
 // 1. firebaseの認証をする
 // 2. tokenからownerIdを取得する
 // 3. リクエストbodyからcustomerを取得する
-// 4. ownerIdとpositionを元にcustomerのWaiting'statusを"complete"に変更する
+// 4. ownerIdとdeviceTokenを元にcustomerのWaiting'statusを"complete"に変更する
 // 5. customerの情報を返す
 func PutCustomerStatus(c *gin.Context) {
 	auth := c.Request.Header.Get("Authorization")
@@ -107,10 +115,52 @@ func PutCustomerStatus(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
 		return
 	}
-	_, err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.Position)
+	_, err = model.UpdateCustomerStatus(OwnerId, customer.WaitingStatus, customer.FirebaseToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position, "status": customer.WaitingStatus})
+}
+
+// customer
+// 1. firebaseの認証をする
+// 2. tokenからownerIdを取得する
+// 3. ownerIdを元に件数を取得する
+// 4. dateから1時間ごとの件数を取得する
+// 5. jsonにして返す
+func GetResult(c *gin.Context){
+	auth := c.Request.Header.Get("Authorization")
+	tId := strings.TrimPrefix(auth, "Bearer ")
+	t, err := integrations.VerifyIDToken(tId)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	OwnerId := t.UID
+	var counter int64
+	counter, err = model.GetCustomerCount(OwnerId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 0時から23時まで1時間毎の件数を取得する
+    var result []int64
+    for i := 0; i < 24; i++ {
+        var hourlyCounter int64
+        hourlyCounter, err = model.GetCustomerCountByHour(OwnerId, i)
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
+        result = append(result, hourlyCounter)
+    }
+    
+    var results []gin.H
+    for i, count := range result {
+        results = append(results, gin.H{"time": i, "count": count})
+    }
+    c.JSON(http.StatusOK, gin.H{"counter": counter, "result": results})
 }

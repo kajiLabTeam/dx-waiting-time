@@ -44,9 +44,9 @@ func RegularUpdateNotification() {
 				customers, _ := model.GetFollowing(owner.OwnerId)
 				for _, customer := range customers {
 					if customer.WaitingStatus == "ignoreItOnce" {
-						model.UpdateCustomerStatus(customer.OwnerId, "non-waiting", customer.Position)
+						model.UpdateCustomerStatus(customer.OwnerId, "non-waiting", customer.FirebaseToken)
 					} else {
-						model.UpdateCustomerStatus(customer.OwnerId, "ignoreItOnce", customer.Position)
+						model.UpdateCustomerStatus(customer.OwnerId, "ignoreItOnce", customer.FirebaseToken)
 					}
 
 					m := MakeMessage(customer.FirebaseToken, "お知らせ", "順番が更新されました")
