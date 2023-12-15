@@ -1,6 +1,8 @@
+import { useRouter } from "next/router";
 import { FC } from "react";
 import styled from "styled-components";
 import { theme } from "../../utils/theme";
+import { Button } from "../utils/Button";
 
 const CardContainer = styled.div`
   background-color: ${theme.colors.cream};
@@ -8,7 +10,7 @@ const CardContainer = styled.div`
   border: 0.5vh solid ${theme.colors.brown};
   padding: 2rem 1rem;
   margin: 1rem;
-  transform: translateY(-55vh);
+  transform: translateY(-65vh);
 `;
 
 const Titile = styled.p`
@@ -26,9 +28,21 @@ const Text = styled.textarea`
   font-size: 1rem;
   font-family: "Noto Sans JP", sans-serif;
   color: ${theme.colors.brown};
+  user-select: none;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: auto;
+  word-break: auto-phrase;
 `;
 
 export const ErrorCard: FC = () => {
+  const router = useRouter();
+  const onInitFirebase = () => {
+    router.reload();
+  };
   return (
     <CardContainer>
       <Titile>現在利用できません</Titile>
@@ -38,6 +52,10 @@ export const ErrorCard: FC = () => {
         }
       />
       <Text defaultValue={"このサービスではお客様の呼び出し以外に通知を送ることはありません。"} />
+      <ButtonContainer>
+        <Button message={"iPhoneの方はこちら"} onClick={onInitFirebase} />
+      </ButtonContainer>
+      <Text defaultValue={"※画面が切り替わらない場合は何度かタップしてください"} />
     </CardContainer>
   );
 };
