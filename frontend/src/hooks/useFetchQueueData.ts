@@ -18,7 +18,7 @@ export const useFetchQueueData = (
       console.log(effectedOwnerId);
       try {
         const positionResponse = await axios.get<PositionResponse>(
-          `${baseURL}/${effectedOwnerId}/queue/position?deviceToken=${deviceToken}`
+          `${baseURL}/${effectedOwnerId}/queue/following?deviceToken=${deviceToken}`
         );
         setPositionResponseState(positionResponse.data);
       } catch (e) {
