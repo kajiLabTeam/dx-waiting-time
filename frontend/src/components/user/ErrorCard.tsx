@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import styled from "styled-components";
+import { useNotiMutators } from "../../globalStates/isNotiState";
 import { theme } from "../../utils/theme";
 import { Button } from "../utils/Button";
 
@@ -39,10 +40,17 @@ const ButtonContainer = styled.div`
 `;
 
 export const ErrorCard: FC = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
+  // globalState の isNotiをtrueにする
+  const { setNotiPermissionState } = useNotiMutators();
+
   const router = useRouter();
   const onInitFirebase = () => {
-    Notification.requestPermission();
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        setNotiPermissionState(true);
+      }
+    });
     router.reload();
     setCount(count + 1);
   };

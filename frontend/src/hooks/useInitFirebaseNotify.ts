@@ -1,9 +1,13 @@
 import { getMessaging, getToken } from "firebase/messaging";
 import { useEffect, useState } from "react";
+import {} from "../globalStates/isNotiState";
+import { useNotiState } from "../globalStates/isNotiState";
 import { app } from "../utils/firebase";
 
 export const useInitFirebaseNotify = () => {
-  const [isNotification, setIsNotification] = useState(false);
+  // globalStates/isNoti.tsのuseIsNotiを使う
+  const isNoti = useNotiState();
+  const [isNotification, setIsNotification] = useState(isNoti);
   const [isToken, setIsToken] = useState(false);
 
   useEffect(() => {
