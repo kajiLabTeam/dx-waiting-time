@@ -82,10 +82,7 @@ func GetNextCustomer(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err = integrations.CallNotification(customer); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	integrations.CallNotification(customer)
 
 	c.JSON(http.StatusOK, gin.H{"callNumber": customer.Position})
 }
