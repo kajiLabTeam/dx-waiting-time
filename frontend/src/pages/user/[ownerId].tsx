@@ -55,7 +55,7 @@ const ClientPage: FC = () => {
   const { ownerId } = router.query;
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
   const [manifestLink, setManifestLink] = useState(
-    `/api/${ownerId}/queue/position?deviceToken=undefined`
+    `/api/${ownerId}/queue/position?deviceToken=${deviceToken}`
   );
 
   useEffect(() => {
