@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import { useNotiMutators } from "../../globalStates/isNotiState";
 import { theme } from "../../utils/theme";
@@ -29,7 +29,16 @@ const Text = styled.textarea`
   font-size: 1rem;
   font-family: "Noto Sans JP", sans-serif;
   color: ${theme.colors.brown};
-  user-select: none;
+`;
+
+const IPhoneText = styled.textarea`
+  resize: none;
+  margin-top: 2rem;
+  width: 100%;
+  height: 5rem;
+  font-size: 1.2rem;
+  font-family: "Noto Sans JP", sans-serif;
+  color: ${theme.colors.brown};
 `;
 
 const ButtonContainer = styled.div`
@@ -40,11 +49,9 @@ const ButtonContainer = styled.div`
 `;
 
 export const ErrorCard: FC = () => {
-  const [count, setCount] = useState(2);
-  // globalState の isNotiをtrueにする
   const { setNotiPermissionState } = useNotiMutators();
-
   const router = useRouter();
+
   const onInitFirebase = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
@@ -52,22 +59,25 @@ export const ErrorCard: FC = () => {
         router.reload();
       }
     });
-    setCount(count + 1);
   };
   return (
     <CardContainer>
-      {count}
       <Titile>現在利用できません</Titile>
       <Text
+        readOnly
         defaultValue={
           "通知が許可されていないため列に並ぶことができません。列に並ぶには設定から通知を許可してください。"
         }
       />
-      <Text defaultValue={"このサービスではお客様の呼び出し以外に通知を送ることはありません。"} />
+      <Text
+        readOnly
+        defaultValue={"このサービスではお客様の呼び出し以外に通知を送ることはありません。"}
+      />
+      <hr />
+      <IPhoneText readOnly defaultValue={"iPhoneの方は下のボタンより通知を許可してください"} />
       <ButtonContainer>
-        <Button message={"iPhoneの方はこちら"} onClick={onInitFirebase} />
+        <Button message={"通知を許可"} onClick={onInitFirebase} />
       </ButtonContainer>
-      <Text defaultValue={"※画面が切り替わらない場合は何度かタップしてください"} />
     </CardContainer>
   );
 };
