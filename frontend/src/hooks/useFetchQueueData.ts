@@ -10,12 +10,15 @@ export const useFetchQueueData = (
 ) => {
   const [positionResponseState, setPositionResponseState] = useState<PositionResponse>();
   const [followingResponse, setFollowingResponse] = useState<FollowingResponse>();
+
   // 最初のデータ取得
   useEffect(() => {
     const fetchAndSetPosition = async () => {
+      const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
+      console.log(effectedOwnerId);
       try {
         const positionResponse = await axios.get<PositionResponse>(
-          `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
+          `${baseURL}/${effectedOwnerId}/queue/following?deviceToken=${deviceToken}`
         );
         setPositionResponseState(positionResponse.data);
       } catch (e) {
@@ -32,8 +35,10 @@ export const useFetchQueueData = (
   useEffect(() => {
     const fetchAndSetFollowing = async () => {
       try {
+        const effectedOwnerId = ownerId || localStorage.getItem("ownerId");
+        console.log(effectedOwnerId);
         const followingResponse = await axios.get<FollowingResponse>(
-          `${baseURL}/${ownerId}/queue/following?deviceToken=${deviceToken}`
+          `${baseURL}/${effectedOwnerId}/queue/following?deviceToken=${deviceToken}`
         );
         setFollowingResponse(followingResponse.data);
       } catch (e) {
