@@ -40,7 +40,7 @@ const ButtonContainer = styled.div`
 `;
 
 export const ErrorCard: FC = () => {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(2);
   // globalState の isNotiをtrueにする
   const { setNotiPermissionState } = useNotiMutators();
 
@@ -49,9 +49,9 @@ export const ErrorCard: FC = () => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
         setNotiPermissionState(true);
+        router.reload();
       }
     });
-    router.reload();
     setCount(count + 1);
   };
   return (
