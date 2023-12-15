@@ -7,6 +7,7 @@ import { NotificationErrorView } from "../../components/user/NotificationErrorVi
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { useFetchQueueData } from "../../hooks/useFetchQueueData";
 import { useInitFirebaseNotify } from "../../hooks/useInitFirebaseNotify";
+import { baseURL } from "../../utils/api";
 import { theme } from "../../utils/theme";
 
 const ClientPageContainer = styled.div`
@@ -55,14 +56,14 @@ const ClientPage: FC = () => {
   const { ownerId } = router.query;
   const { positionResponseState, followingResponse } = useFetchQueueData(ownerId, deviceToken);
   const [manifestLink, setManifestLink] = useState(
-    `/api/${ownerId}/queue/position?deviceToken=${deviceToken}`
+    `${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`
   );
 
   useEffect(() => {
     if (ownerId && deviceToken) {
-      setManifestLink(`/api/${ownerId}/queue/position?deviceToken=${deviceToken}`);
+      setManifestLink(`${baseURL}/${ownerId}/queue/position?deviceToken=${deviceToken}`);
     }
-  }, [ownerId]);
+  }, [deviceToken]);
 
   if (!isNotification) {
     return <NotificationErrorView />;
