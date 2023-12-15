@@ -1,7 +1,8 @@
 import useSWR from "swr";
 
 // envファイルから取得
-export const baseURL = `${process.env.NEXT_PUBLIC_BASE_URL}/api`;
+// export const baseURL = `${process.env.NEXT_PUBLIC_BASE_URL}/api`;
+export const baseURL = "https://dxwaitingtime-backend.kajilab.tk/api";
 
 export const endpoints = {
   // user
