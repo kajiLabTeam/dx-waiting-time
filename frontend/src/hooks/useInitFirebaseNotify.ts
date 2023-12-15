@@ -24,6 +24,7 @@ export const useInitFirebaseNotify = () => {
       })
         .then((currentToken) => {
           if (currentToken) {
+            localStorage.setItem("token", currentToken);
             setIsNotification(true);
             setIsToken(true);
           } else {
