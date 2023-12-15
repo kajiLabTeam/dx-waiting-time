@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
-import { FC } from "react";
+// import { useRouter } from "next/router";
+import { FC, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../utils/theme";
 import { Button } from "../utils/Button";
@@ -39,12 +39,16 @@ const ButtonContainer = styled.div`
 `;
 
 export const ErrorCard: FC = () => {
-  const router = useRouter();
+  const [count, setCount] = useState(0);
+  // const router = useRouter();
   const onInitFirebase = () => {
-    router.reload();
+    Notification.requestPermission();
+    // router.reload();
+    setCount(count + 1);
   };
   return (
     <CardContainer>
+      {count}
       <Titile>現在利用できません</Titile>
       <Text
         defaultValue={
