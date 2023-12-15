@@ -1,4 +1,4 @@
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../utils/theme";
@@ -40,10 +40,10 @@ const ButtonContainer = styled.div`
 
 export const ErrorCard: FC = () => {
   const [count, setCount] = useState(0);
-  // const router = useRouter();
+  const router = useRouter();
   const onInitFirebase = () => {
     Notification.requestPermission();
-    // router.reload();
+    router.reload();
     setCount(count + 1);
   };
   return (
