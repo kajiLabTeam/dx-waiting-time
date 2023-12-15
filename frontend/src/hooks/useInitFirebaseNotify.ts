@@ -1,5 +1,4 @@
 import { getMessaging, getToken } from "firebase/messaging";
-import router from "next/dist/client/router";
 import { useEffect, useState } from "react";
 import { app } from "../utils/firebase";
 
@@ -29,7 +28,6 @@ export const useInitFirebaseNotify = () => {
           } else {
             console.error("No registration token available. Request permission to generate one.");
             setIsToken(false);
-            router.reload();
           }
         })
         .catch((err) => {
