@@ -126,11 +126,23 @@ func GetOwnerCustomer(ownerId string) ([]Customer, error) {
 // 1. OwnerIdとdevceTokenを元に、Customerを検索
 // 2. statusを引数のstatusに更新
 // 3. CustomerをDBに登録
-func UpdateCustomerStatus(ownerId, deviceToken, status string) (Customer, error) {
+func UpdateCustomerStatusByToken(ownerId, deviceToken, status string) (Customer, error) {
 	var c Customer
 	// db.Where("owner_id = ? AND position = ?", ownerId, position).First(&c)
 	// c.WaitingStatus = status
 	if err := db.Model(&Customer{}).Where("owner_id = ? AND firebase_token = ?", ownerId, deviceToken).Update("waiting_status", status).Error; err != nil {
+		fmt.Println(err)
+		return c, err
+	}
+	// fmt.Println(c)
+	return c, nil
+}
+
+func UpdateCustomerStatusByPosition(ownerId, status string,position int) (Customer, error) {
+	var c Customer
+	// db.Where("owner_id = ? AND position = ?", ownerId, position).First(&c)
+	// c.WaitingStatus = status
+	if err := db.Model(&Customer{}).Where("owner_id = ? AND position = ?", ownerId, position).Update("waiting_status", status).Error; err != nil {
 		fmt.Println(err)
 		return c, err
 	}
