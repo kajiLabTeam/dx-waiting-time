@@ -44,11 +44,10 @@ func RegularUpdateNotification() {
 				customers, _ := model.GetFollowing(owner.OwnerId)
 				for _, customer := range customers {
 					if customer.WaitingStatus == "ignoreItOnce" {
-						model.UpdateCustomerStatus(customer.OwnerId, customer.FirebaseToken, "non-waiting")
+						model.UpdateCustomerStatusByToken(customer.OwnerId, customer.FirebaseToken, "non-waiting")
 					} else {
-						model.UpdateCustomerStatus(customer.OwnerId, customer.FirebaseToken, "ignoreItOnce")
+						model.UpdateCustomerStatusByToken(customer.OwnerId, customer.FirebaseToken, "ignoreItOnce")
 					}
-
 					m := MakeMessage(customer.FirebaseToken, "お知らせ", "順番が更新されました")
 					WebPushNotification(m)
 				}

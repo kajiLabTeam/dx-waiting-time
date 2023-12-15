@@ -112,7 +112,7 @@ func PutCustomerStatus(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status"})
 		return
 	}
-	_, err = model.UpdateCustomerStatus(OwnerId, customer.FirebaseToken, customer.WaitingStatus)
+	_, err = model.UpdateCustomerStatusByPosition(OwnerId, customer.WaitingStatus, customer.Position)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
