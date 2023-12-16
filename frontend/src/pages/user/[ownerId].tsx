@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
-import { GetOutButton } from "../../components/getout/GetOutButton";
 import { NotificationErrorView } from "../../components/user/NotificationErrorView";
 import { MessageCricle } from "../../components/utils/MessageCricle";
 import { useFetchQueueData } from "../../hooks/useFetchQueueData";
@@ -44,11 +43,6 @@ const Number = styled.p`
   color: ${theme.colors.red};
 `;
 
-const ButtonContainer = styled.div`
-  display: block;
-  width: 100%;
-`;
-
 const ClientPage: FC = () => {
   const [isNotification, isToken] = useInitFirebaseNotify();
   const deviceToken = localStorage.getItem("token");
@@ -74,7 +68,6 @@ const ClientPage: FC = () => {
       <Head>
         <link rel="manifest" href={manifestLink} />
       </Head>
-      {ownerId}
       <CircleContainer>
         {isToken ? (
           <MessageCricle message={positionResponseState?.callNumber} />
@@ -93,9 +86,6 @@ const ClientPage: FC = () => {
           <Text>お使いのブラウザでは番号が発行できません</Text>
         </WaitingContainer>
       )}
-      <ButtonContainer>
-        <GetOutButton />
-      </ButtonContainer>
     </ClientPageContainer>
   );
 };
